@@ -37,7 +37,7 @@ let mouseIsReleased = false;
 
 
 function preload(){
-    fontStyle = loadFont('../fonts/PrintClearly.otf');
+    fontStyle = loadFont('./fonts/PrintClearly.otf');
 }
 
 function setup() {
