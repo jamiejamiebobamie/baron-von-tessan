@@ -8,13 +8,20 @@ class App extends Component {
         // testing
         this.state = {
             drawingDescriptor: "cow",
-            drawingData: [1,2]
+            drawingData: [1,2],
+            response:[]
         }
         this.myRef = React.createRef()
         this.handleSubmitDrawing = this.handleSubmitDrawing.bind(this);
+        this.handleAddToResponseArrayForTesting = this.handleAddToResponseArrayForTesting.bind(this);
+
     }
     handleSubmitDrawing(drawingData) {
         this.setState({drawingData:drawingData})
+    }
+    handleAddToResponseArrayForTesting(response) {
+        this.setState({response:[...this.state.response, response]})
+        console.log(this.state.response)
     }
     componentDidMount() {
         this.myP5 = new p5(this.Sketch, this.myRef.current)
@@ -33,6 +40,7 @@ class App extends Component {
         let _ui = [];
         let drawingSpace;
         let buttons;
+        let button0;
         let button1;
         let button2;
         let button3;
@@ -112,6 +120,19 @@ class App extends Component {
         function setUI(shouldDisplayDrawingView){
             _ui = [];
 
+            button0 = new Container({row:w>h, len:10, index: 7, width:100,height:100})
+            _ui.push(button0)
+            let test = new TextBox({parent:button0,row:true,color:"white",mouseClickfunc:beginRedrawingStrokes});
+            test.setString("test slideshow");
+            test.setTextColor("black")
+            test.setFontStyle(fontStyle);
+            test.setInteractivity(true);
+            test.setStroke(true)
+            let performClickOnce = true;
+            test.setClickType(performClickOnce)
+
+            _ui.push(test)
+
             if (shouldDisplayDrawingView){
                 let drawingSpaceWidth = w > h ? w*(2/3) : w;
                 let drawingSpaceHeight = w > h ? h : h*(2/3);
@@ -126,7 +147,7 @@ class App extends Component {
                 drawingSpace.setCurrentStroke(currentStroke);
                 drawingSpace.setStrokes(strokes);
                 drawingSpace.setFill(true)
-                let performClickOnce = false;
+                performClickOnce = false;
                 drawingSpace.setClickType(performClickOnce)
                 drawingSpace.drawingData = drawingData;
                 if (drawingMode){
@@ -202,7 +223,6 @@ class App extends Component {
                 sketchSide = w > h ? drawingSpaceHeight : drawingSpaceWidth;
                 let longerSideOfScreen = w > h ? w : h;
                 sketchSide = sketchSide > longerSideOfScreen*(2/3) ? longerSideOfScreen*(2/3) : sketchSide;
-                // subclass DrawingContainer.
                 drawingSpace = new DrawingContainer({width:sketchSide,height:sketchSide,len:2,index:0,color:'lightgrey', mouseClickfunc:buildStroke})//,offsetX:offsetX,offsetY:offsetY})
                 drawingSpace.setCurrentStroke(currentStroke);
                 drawingSpace.setStrokes(strokes);
@@ -213,12 +233,9 @@ class App extends Component {
                 _ui.push(drawingSpace)
                 let offsetX = w>h ? w * .0063: -w * .0063;
                 let offsetY= w>h ? 0 : h-sketchSide;
-
-                // did i need to subclass here?
                 descriptionContainer = new DisplayDescriptionContainer({len:3,index:2,row:h>w,offsetX:offsetX,offsetY:offsetY, height:h-sketchSide, width:(w-sketchSide)/2.5})
                 descriptionContainer.setStroke(true)
                 _ui.push(descriptionContainer)
-                // remove mouseover/click features. subclass.
                 description = new TextBox({parent:descriptionContainer, row:true, color:"white"});
                 description.setString("how much text can be written in this box before it becomes too much text? i wonder. what a fun thing i am doing.");
                 description.setTextColor("black")
@@ -253,15 +270,46 @@ class App extends Component {
             drawingSpace.strokes.pop()
         }
 
-        function redrawStrokes(){
-            if (drawingSpace.submittedStrokeIndex < drawingSpace.submittedStrokes.length) {
-                drawingSpace.submittedStrokeIndex += 1
-                setTimeout(function(){redrawStrokes();}, 600/drawingSpace.submittedStrokes.length);
+        function redrawStrokes(pauseBetweenDrawings){
+            // parameter 'pauseBetweenDrawings' signals to recursive function
+                // that there has just been a pause after completing a drawing
+                // and that the variables need to be reset.
+            if (pauseBetweenDrawings) {
+                drawingSpace.submittedStrokeIndex = 0;
+                drawingSpace.responseIndex += 1;
+                // if (drawingSpace.responseIndex < scope.state.response.length){
+                    submittedStrokes = scope.state.response[drawingSpace.responseIndex]
+                    drawingSpace.setSubmittedStrokes(submittedStrokes)
+                // }
+            }
+            // check to make sure this isn't the first call to the redrawStrokes method
+            if (drawingSpace.submittedStrokes){
+                if (drawingSpace.submittedStrokeIndex < drawingSpace.submittedStrokes.length) {
+                    drawingSpace.submittedStrokeIndex += 1
+                    setTimeout(function(){redrawStrokes(false);}, 1000/drawingSpace.submittedStrokes.length);
+                } else {
+                    if (drawingSpace.responseIndex < scope.state.response.length){
+                        setTimeout(function(){redrawStrokes(true);}, 1500);
+                    }
+                }
+            // if it is the first call to the method, set the drawingSpace.submittedStrokes
+                // member variable. this is the current drawing to be drawn to the drawing space.
+            } else {
+                if (drawingSpace.responseIndex < scope.state.response.length){
+                    submittedStrokes = scope.state.response[drawingSpace.responseIndex]
+                    drawingSpace.setSubmittedStrokes(submittedStrokes)
+                    redrawStrokes(false)
+                }
             }
         }
 
         function beginRedrawingStrokes(){
+            clearStrokes() // maybe unnecessary...
             redrawStrokes()
+        }
+
+        function addToAPIResponseArrayForTesting(scope,submittedStrokes){
+            scope.handleAddToResponseArrayForTesting(submittedStrokes);
         }
 
         function toggleTool(){
@@ -272,7 +320,6 @@ class App extends Component {
         }
 
         function submitStrokes(){
-            // proof of concept. BROKEN.
             let submittedStrokes = [];
             for (let i = 0; i<drawingSpace.strokes.length; i++) {
                 for (let j = 0; j<drawingSpace.strokes[i].length; j++) {
@@ -280,9 +327,8 @@ class App extends Component {
                 }
             }
             this.scope.handleSubmitDrawing(submittedStrokes);
-            drawingSpace.setSubmittedStrokes(submittedStrokes)
             clearStrokes()
-            beginRedrawingStrokes();
+            addToAPIResponseArrayForTesting(this.scope,submittedStrokes);
         }
 
         class UIElement{
@@ -611,6 +657,7 @@ class App extends Component {
 
                 this.submittedStrokes = undefined
                 this.submittedStrokeIndex = 0
+                this.responseIndex = 0;
                 this.penMode = undefined; // false for eraserMode
             }
             setCurrentStroke(currentStroke){ this.currentStroke = currentStroke }
@@ -655,13 +702,6 @@ class App extends Component {
                     }
                     p.fill(0)
                     this.drawStrokes()
-
-
-                    // for (let i = 0; i < this.strokes.length;i++){
-                    //     for (let j = 0; j < this.strokes[i].length;j++){
-                    //         p.ellipse(this.strokes[i][j].x*sketchSide+this.x, this.strokes[i][j].y*sketchSide+this.y, sketchSide*.03,sketchSide*.03)
-                    //     }
-                    // }
                 }
             }
         }
@@ -682,4 +722,3 @@ class App extends Component {
 }
 
 export default App;
-// <div className="sketch-holder" id="sketch-holder"></div>
