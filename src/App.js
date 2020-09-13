@@ -1,13 +1,6 @@
 import React,{Component}  from 'react';
 import './App.css';
-// import _sketch from './scripts/uiClasses.js'
 let p5 = require("p5")
-
-// <div className="sketch-holder" id="sketch-holder"></div>
-// <h1>{this.state.drawingDescriptor} {this.state.drawingData}</h1>
-
-// import "./scripts/sketch";
-
 
 class App extends Component {
     constructor(props){
@@ -22,13 +15,11 @@ class App extends Component {
     }
     handleSubmitDrawing(drawingData) {
         this.setState({drawingData:drawingData})
-        console.log(this.state.drawingData)
     }
     componentDidMount() {
         this.myP5 = new p5(this.Sketch, this.myRef.current)
     }
     Sketch = (p) => {
-        // the p5.js canvas
         let canvas;
         let sketchSide;
         let w, h;
@@ -45,9 +36,14 @@ class App extends Component {
         let button1;
         let button2;
         let button3;
+        let button4;
+        let eraserOrPenButton;
         let undoButton;
         let clearButton;
         let submitButton;
+        let descriptionContainer;
+        let description;
+        let shouldDisplayDrawingView = true;
 
         // just for testing.
         let submittedStrokes = []
@@ -67,7 +63,9 @@ class App extends Component {
             canvas.parent('sketch-holder');
             p.frameRate(24);
             p.imageMode(p.CENTER);
-            setUI();
+            p.rectMode(p.CORNER);
+
+            setUI(shouldDisplayDrawingView);
         }
 
         p.draw = () => {
@@ -76,8 +74,6 @@ class App extends Component {
                 _ui[i].draw();
             }
             if (!doneOnce){
-                // console.log(this.handleSubmitDrawing)
-                console.log(this);
                 doneOnce = true;
             }
         }
@@ -110,97 +106,184 @@ class App extends Component {
             w = p.windowWidth - (p.windowWidth/10)
             h = p.windowHeight - (p.windowHeight/10)
             p.resizeCanvas(w, h);
-            setUI();
+            setUI(shouldDisplayDrawingView);
         }
 
-        function setUI(){
+        function setUI(shouldDisplayDrawingView){
             _ui = [];
-            let drawingSpaceWidth = w > h ? w*(2/3) : w;
-            let drawingSpaceHeight = w > h ? h : h*(2/3);
-            sketchSide = w > h ? drawingSpaceHeight : drawingSpaceWidth;
-            let longerSideOfScreen = w > h ? w : h;
-            sketchSide = sketchSide > longerSideOfScreen*(2/3) ? longerSideOfScreen*(2/3) : sketchSide;
 
-            drawingSpace = new DrawingContainer({width:sketchSide,height:sketchSide,len:3,index:0,color:'lightgrey', mouseClickfunc:buildStroke})//,offsetX:offsetX,offsetY:offsetY})
-            drawingSpace.setCurrentStroke(currentStroke);
-            drawingSpace.setStrokes(strokes);
-            drawingSpace.setFill(true)
-            let performClickOnce = false;
-            drawingSpace.setClickType(performClickOnce)
-            drawingSpace.drawingData = drawingData;
-            _ui.push(drawingSpace)
+            if (shouldDisplayDrawingView){
+                let drawingSpaceWidth = w > h ? w*(2/3) : w;
+                let drawingSpaceHeight = w > h ? h : h*(2/3);
+                sketchSide = w > h ? drawingSpaceHeight : drawingSpaceWidth;
+                let longerSideOfScreen = w > h ? w : h;
+                sketchSide = sketchSide > longerSideOfScreen*(2/3) ? longerSideOfScreen*(2/3) : sketchSide;
+                let drawingMode = true;
+                if (drawingSpace) {
+                    drawingMode = drawingSpace.getPenMode()
+                }
+                drawingSpace = new DrawingContainer({width:sketchSide,height:sketchSide,len:3,index:0,color:'lightgrey', mouseClickfunc:buildStroke})//,offsetX:offsetX,offsetY:offsetY})
+                drawingSpace.setCurrentStroke(currentStroke);
+                drawingSpace.setStrokes(strokes);
+                drawingSpace.setFill(true)
+                let performClickOnce = false;
+                drawingSpace.setClickType(performClickOnce)
+                drawingSpace.drawingData = drawingData;
+                if (drawingMode){
+                    drawingSpace.setPenMode(drawingMode);
+                }
+                _ui.push(drawingSpace)
 
-            buttons = new Container({len:3,index:2,row:h>w,offsetX:w *.0063,offsetY:h *.05})//offsetX:-(w * (.05)), offsetY:-(h * (.05))
-            _ui.push(buttons)
+                buttons = new Container({len:3,index:2,row:h>w,offsetX:w *.0063,offsetY:h *.05})
+                _ui.push(buttons)
+                let buttonsInteractOffsetX = h > w ? buttons.width*(.01) : buttons.width*(.01);
+                let buttonsInteractHOffsetY = h > w ? buttons.height*(.01) : buttons.height*(.01);
+                let buttonsInteractWidth = h > w ? buttons.width*(2/3) : 0;
+                let buttonsInteractHeight = h > w ? 0 : buttons.height*(2/3);
+                let buttonsInteract = new Container({len:3,index:0,row:w>h, offsetX:buttonsInteractOffsetX,offsetY:buttonsInteractHOffsetY, width:buttonsInteractWidth, height:buttonsInteractHeight, parent:buttons})
+                _ui.push(buttonsInteract)
 
-            button1 = new Container({parent:buttons,len:3,index:0,row:w>h})
-            _ui.push(button1)
-            undoButton = new TextBox({parent:button1,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:undoLastStroke});
-            undoButton.setString("UNDO");
-            undoButton.setFontStyle(fontStyle);
-            undoButton.setTextColor("black")
-            undoButton.setStroke(true)
-            performClickOnce = true;
-            undoButton.setClickType(performClickOnce)
+                let buttonsSubmit = new Container({len:3,index:2,row:w>h, offsetX:buttonsInteractOffsetX,offsetY:buttonsInteractHOffsetY, parent:buttons})
+                _ui.push(buttonsSubmit)
 
-            _ui.push(undoButton)
+                button1 = new Container({parent:buttonsInteract,len:3,index:0,row:w>h})
+                _ui.push(button1)
+                eraserOrPenButton = new TextBox({parent:button1,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:toggleTool});
+                let buttonString = drawingSpace.penMode ? "ERASER" : "PEN";
+                eraserOrPenButton.setString(buttonString);
+                eraserOrPenButton.setTextColor("black")
+                eraserOrPenButton.setFontStyle(fontStyle);
+                eraserOrPenButton.setInteractivity(true);
+                eraserOrPenButton.setStroke(true)
+                performClickOnce = true;
+                eraserOrPenButton.setClickType(performClickOnce)
 
-            button2 = new Container({parent:buttons,len:3,index:1,row:w>h})
-            _ui.push(button2)
-            clearButton = new TextBox({parent:button2,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:clearStrokes});
-            clearButton.setString("CLEAR");
-            clearButton.setTextColor("black")
-            clearButton.setStroke(true)
-            performClickOnce = true;
-            clearButton.setClickType(performClickOnce)
+                _ui.push(eraserOrPenButton)
 
-            _ui.push(clearButton)
+                button2 = new Container({parent:buttonsInteract,len:3,index:1,row:w>h})
+                _ui.push(button2)
+                undoButton = new TextBox({parent:button2,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:undoLastStroke});
+                undoButton.setString("UNDO");
+                undoButton.setFontStyle(fontStyle);
+                undoButton.setTextColor("black")
+                undoButton.setInteractivity(true);
+                undoButton.setStroke(true)
+                undoButton.setClickType(performClickOnce) // true
 
-            button3 = new Container({parent:buttons,len:3,index:2,row:w>h})
-            _ui.push(button3)
-            submitButton = new TextBox({parent:button3,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:submitStrokes});
-            submitButton.setString("SUBMIT");
-            submitButton.setTextColor("black")
-            submitButton.setStroke(true)
-            submitButton.setScope(scope);
-            performClickOnce = true;
-            submitButton.setClickType(performClickOnce)
+                _ui.push(undoButton)
 
-            _ui.push(submitButton)
+                button3 = new Container({parent:buttonsInteract,len:3,index:2,row:w>h})
+                _ui.push(button3)
+                clearButton = new TextBox({parent:button3,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:clearStrokes});
+                clearButton.setString("CLEAR");
+                clearButton.setFontStyle(fontStyle);
+                clearButton.setTextColor("black")
+                clearButton.setInteractivity(true);
+                clearButton.setStroke(true)
+                clearButton.setClickType(performClickOnce) // true
+
+                _ui.push(clearButton)
+
+                button4 = new Container({parent:buttonsSubmit,row:w>h})
+                _ui.push(button4)
+                submitButton = new TextBox({parent:button4,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:submitStrokes});
+                submitButton.setString("SUBMIT");
+                submitButton.setFontStyle(fontStyle);
+                submitButton.setTextColor("black")
+                submitButton.setInteractivity(true);
+                submitButton.setStroke(true)
+                submitButton.setScope(scope);
+                submitButton.setClickType(performClickOnce) // true
+
+                _ui.push(submitButton)
+            } else {
+                let drawingSpaceWidth = w > h ? w*(2/3) : w;
+                let drawingSpaceHeight = w > h ? h : h*(2/3);
+                sketchSide = w > h ? drawingSpaceHeight : drawingSpaceWidth;
+                let longerSideOfScreen = w > h ? w : h;
+                sketchSide = sketchSide > longerSideOfScreen*(2/3) ? longerSideOfScreen*(2/3) : sketchSide;
+                // subclass DrawingContainer.
+                drawingSpace = new DrawingContainer({width:sketchSide,height:sketchSide,len:2,index:0,color:'lightgrey', mouseClickfunc:buildStroke})//,offsetX:offsetX,offsetY:offsetY})
+                drawingSpace.setCurrentStroke(currentStroke);
+                drawingSpace.setStrokes(strokes);
+                drawingSpace.setFill(true)
+                let performClickOnce = false;
+                drawingSpace.setClickType(performClickOnce)
+                drawingSpace.drawingData = drawingData;
+                _ui.push(drawingSpace)
+                let offsetX = w>h ? w * .0063: -w * .0063;
+                let offsetY= w>h ? 0 : h-sketchSide;
+
+                // did i need to subclass here?
+                descriptionContainer = new DisplayDescriptionContainer({len:3,index:2,row:h>w,offsetX:offsetX,offsetY:offsetY, height:h-sketchSide, width:(w-sketchSide)/2.5})
+                descriptionContainer.setStroke(true)
+                _ui.push(descriptionContainer)
+                // remove mouseover/click features. subclass.
+                description = new TextBox({parent:descriptionContainer, row:true, color:"white"});
+                description.setString("how much text can be written in this box before it becomes too much text? i wonder. what a fun thing i am doing.");
+                description.setTextColor("black")
+                description.setFontStyle(fontStyle);
+                _ui.push(description)
+            }
         }
 
         function buildStroke(){
             drawingSpace.currentStroke.push({x:p.mouseX/sketchSide,y:p.mouseY/sketchSide})
         }
 
+        function removeStroke(){
+            for (let i = 0; i < drawingSpace.strokes.length; i++ ){
+                for (let j = 0; j < drawingSpace.strokes[i].length; j++ ){
+                    if ( p.mouseX > drawingSpace.strokes[i][j].x*sketchSide-sketchSide*.01
+                        && p.mouseX < drawingSpace.strokes[i][j].x*sketchSide+sketchSide*.01
+                        && p.mouseY > drawingSpace.strokes[i][j].y*sketchSide-sketchSide*.01
+                        && p.mouseY < drawingSpace.strokes[i][j].y*sketchSide+sketchSide*.01 ){
+                            console.log("Should erase.")
+                            drawingSpace.strokes[i].splice(j,1)
+                        }
+                }
+            }
+        }
+
         function clearStrokes(){
-            strokes = []
             drawingSpace.strokes = []
         }
 
         function undoLastStroke(){
-            strokes.pop()
             drawingSpace.strokes.pop()
         }
 
         function redrawStrokes(){
-            if (drawingSpace.submittedStrokeIndex < drawingSpace.submittedStrokes.length ) {
-                drawingSpace.strokes.push(drawingSpace.submittedStrokes[drawingSpace.submittedStrokeIndex])
+            if (drawingSpace.submittedStrokeIndex < drawingSpace.submittedStrokes.length) {
                 drawingSpace.submittedStrokeIndex += 1
-                setTimeout(function(){redrawStrokes();}, 200);
+                setTimeout(function(){redrawStrokes();}, 600/drawingSpace.submittedStrokes.length);
             }
         }
 
-        // I should pass in the strokes to draw as a parameter
-            // just testing functionality.
         function beginRedrawingStrokes(){
-            submittedStrokes = strokes
-            clearStrokes()
-            drawingSpace.setSubmittedStrokes(submittedStrokes)
             redrawStrokes()
         }
 
-        function submitStrokes(){this.scope.handleSubmitDrawing(strokes); console.log(this.scope.state)}//this.handleSubmitDrawing(strokes)}
+        function toggleTool(){
+            drawingSpace.penMode = !drawingSpace.penMode;
+            let buttonString = drawingSpace.penMode ? "ERASER" : "PEN";
+            eraserOrPenButton.setString(buttonString);
+            drawingSpace.mouseClickfunc = drawingSpace.penMode ? buildStroke : removeStroke;
+        }
+
+        function submitStrokes(){
+            // proof of concept. BROKEN.
+            let submittedStrokes = [];
+            for (let i = 0; i<drawingSpace.strokes.length; i++) {
+                for (let j = 0; j<drawingSpace.strokes[i].length; j++) {
+                    submittedStrokes.push(drawingSpace.strokes[i][j])
+                }
+            }
+            this.scope.handleSubmitDrawing(submittedStrokes);
+            drawingSpace.setSubmittedStrokes(submittedStrokes)
+            clearStrokes()
+            beginRedrawingStrokes();
+        }
 
         class UIElement{
             constructor(parameterObject){
@@ -343,9 +426,12 @@ class App extends Component {
                 this.scope = undefined
                 // some UI_elements respond to a single click, others to a mouse press
                     // (a single click held down over a period of time.)
-                this.growAmount = 1.1
+                this.isInteractive = false;
+                this.growAmount = 1.3
                 this.mouseOverWidthSize = this.width * this.growAmount
                 this.mouseOverHeightSize = this.height * this.growAmount
+                this.screenHasSettled = false;
+                setTimeout(()=>{this.screenHasSettled = true;},500);
             }
             setScope(scope){this.scope = scope}
             testForClick(){
@@ -382,29 +468,39 @@ class App extends Component {
             setClickType(bool){
                 this.doOnce = bool;
             }
+            setInteractivity(bool){
+                this.isInteractive = bool;
+            }
             enlargeButton(){
-                if (this.width < this.mouseOverWidthSize){
-                    this.width = p.lerp(this.width, this.mouseOverWidthSize, 0.05);
-                if (this.height < this.mouseOverHeightSize)
-                    this.height = p.lerp(this.height, this.mouseOverHeightSize, 0.05);
+                if (this.isInteractive){
+                    if (this.width < this.mouseOverWidthSize){
+                        this.width = p.lerp(this.width, this.mouseOverWidthSize, 0.05);
+                    if (this.height < this.mouseOverHeightSize)
+                        this.height = p.lerp(this.height, this.mouseOverHeightSize, 0.05);
+                    }
                 }
             }
-            shrinkButton(){
-                if (this.width > this.mouseOverWidthSize/1.5){
-                    this.width = p.lerp(this.width, this.mouseOverWidthSize/1.5, 0.05);
-                if (this.height > this.mouseOverHeightSize/1.5)
-                    this.height = p.lerp(this.height, this.mouseOverHeightSize/1.5, 0.05);
+            shrinkButton(shrinkSpeed){
+                if (this.isInteractive){
+                    if (this.width > this.mouseOverWidthSize/1.5){
+                        this.width = p.lerp(this.width, this.mouseOverWidthSize/1.5, shrinkSpeed);
+                    if (this.height > this.mouseOverHeightSize/1.5)
+                        this.height = p.lerp(this.height, this.mouseOverHeightSize/1.5, shrinkSpeed);
+                    }
                 }
             }
             draw() {
                 if(this.testForClick()){
                     if (this.clicked){
                         this.performClickFunctionality();
+                        this.shrinkButton(.5)
                     } else {
                         this.enlargeButton()
                     }
                 }
-                this.shrinkButton()
+                if (this.screenHasSettled){
+                    this.shrinkButton(.1)
+                }
                 this.hasStroke ? p.stroke(45) : p.noStroke();
                 this.hasFill ? p.fill(45) : p.noFill();
                 this.color ? p.fill(this.color) : p.noFill();
@@ -500,6 +596,8 @@ class App extends Component {
                     p.text(this.text, this.x, this.y, this.width, this.height)
                 }
             }
+            // enlargeButton(){}
+            // shrinkButton(){}
             draw() {
                 this.row ? this.drawNormalTextBox() : this.drawRotatedTextBox()
             }
@@ -513,17 +611,30 @@ class App extends Component {
 
                 this.submittedStrokes = undefined
                 this.submittedStrokeIndex = 0
+                this.penMode = undefined; // false for eraserMode
             }
-
             setCurrentStroke(currentStroke){ this.currentStroke = currentStroke }
-            setStrokes(strokes){ this.strokes = strokes; console.log(this.strokes) }
+            setStrokes(strokes){ this.strokes = strokes; }
             // just for testing.
             setSubmittedStrokes(submittedStrokes){
                 this.submittedStrokes = submittedStrokes
             }
+            getPenMode(){return this.penMode}
+            setPenMode(penMode){this.penMode=penMode;}
             enlargeButton(){}
             shrinkButton(){}
-
+            drawStrokes(){
+                for (let i = 0; i < this.strokes.length;i++){
+                    for (let j = 0; j < this.strokes[i].length;j++){
+                        p.ellipse(this.strokes[i][j].x*sketchSide+this.x, this.strokes[i][j].y*sketchSide+this.y, sketchSide*.025,sketchSide*.025)
+                    }
+                }
+            }
+            drawSubmittedStrokes(){
+                for (let i = 0; i < this.submittedStrokeIndex; i++){
+                    p.ellipse(this.submittedStrokes[i].x*sketchSide+this.x, this.submittedStrokes[i].y*sketchSide+this.y, sketchSide*.025,sketchSide*.025)
+                }
+            }
             draw() {
                 super.draw()
                 p.noStroke()
@@ -536,24 +647,29 @@ class App extends Component {
                     // 1/4 of the time with a fully-formed drawing for viewing
 
                     p.fill(0)
-                    for (let i = 0; i < this.strokes.length;i++){
-                        for (let j = 0; j < this.strokes[i].length;j++){
-                            p.ellipse(this.strokes[i][j].x*sketchSide+this.x, this.strokes[i][j].y*sketchSide+this.y, sketchSide*.03,sketchSide*.03)
-                        }
-                    }
+                    this.drawSubmittedStrokes()
                 } else {
                     p.fill(100,0,0)
                     for (let i = 0; i < this.currentStroke.length;i++){
-                        p.ellipse(this.currentStroke[i].x*sketchSide+this.x, this.currentStroke[i].y*sketchSide+this.y, sketchSide*.03,sketchSide*.03)
+                        p.ellipse(this.currentStroke[i].x*sketchSide+this.x, this.currentStroke[i].y*sketchSide+this.y, sketchSide*.025,sketchSide*.025)
                     }
                     p.fill(0)
-                    for (let i = 0; i < this.strokes.length;i++){
-                        for (let j = 0; j < this.strokes[i].length;j++){
-                            p.ellipse(this.strokes[i][j].x*sketchSide+this.x, this.strokes[i][j].y*sketchSide+this.y, sketchSide*.03,sketchSide*.03)
-                        }
-                    }
+                    this.drawStrokes()
+
+
+                    // for (let i = 0; i < this.strokes.length;i++){
+                    //     for (let j = 0; j < this.strokes[i].length;j++){
+                    //         p.ellipse(this.strokes[i][j].x*sketchSide+this.x, this.strokes[i][j].y*sketchSide+this.y, sketchSide*.03,sketchSide*.03)
+                    //     }
+                    // }
                 }
             }
+        }
+        class DisplayDescriptionContainer extends Container{
+            constructor(parameterObject){ super(parameterObject) }
+            enlargeButton(){}
+            shrinkButton(){}
+            draw() { super.draw() }
         }
     };
     render(){
