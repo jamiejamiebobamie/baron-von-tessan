@@ -38,6 +38,7 @@ class App extends Component {
         let strokes = [];
 
         let _ui = [];
+        let inputTextBox;
         let drawingSpace;
         let buttons;
         let button0;
@@ -72,6 +73,12 @@ class App extends Component {
             p.frameRate(24);
             p.imageMode(p.CENTER);
             p.rectMode(p.CORNER);
+
+            // ( horizAlign: LEFT, CENTER, or RIGHT,
+            //   vertAlign:  TOP, BOTTOM, CENTER, or BASELINE )
+            // can text alignment options be set on a per object basis?
+                // (it doesn't seem so)
+            p.textAlign(p.CENTER,p.CENTER);
 
             setUI(shouldDisplayDrawingView);
         }
@@ -110,6 +117,10 @@ class App extends Component {
             }
         }
 
+        p.keyPressed = () => {
+            inputTextBox.handleTyping(p.keyCode)
+        }
+
         p.windowResized = () => {
             w = p.windowWidth - (p.windowWidth/10)
             h = p.windowHeight - (p.windowHeight/10)
@@ -120,6 +131,7 @@ class App extends Component {
         function setUI(shouldDisplayDrawingView){
             _ui = [];
 
+            // a button to test the slideshow ***
             button0 = new Container({row:w>h, len:10, index: 7, width:100,height:100})
             _ui.push(button0)
             let test = new TextBox({parent:button0,row:true,color:"white",mouseClickfunc:beginRedrawingStrokes});
@@ -130,8 +142,15 @@ class App extends Component {
             test.setStroke(true)
             let performClickOnce = true;
             test.setClickType(performClickOnce)
-
             _ui.push(test)
+            // ****
+
+            // test for input textbox ***
+            inputTextBox = new TextInput({parent:button0,row:w>h,color:"white",width:w/2,offsetY:button0.height})
+            inputTextBox.setClickType(performClickOnce)
+            _ui.push(inputTextBox)
+            // ****
+
 
             if (shouldDisplayDrawingView){
                 let drawingSpaceWidth = w > h ? w*(2/3) : w;
@@ -231,15 +250,18 @@ class App extends Component {
                 drawingSpace.setClickType(performClickOnce)
                 drawingSpace.drawingData = drawingData;
                 _ui.push(drawingSpace)
-                let offsetX = w>h ? w * .0063: -w * .0063;
-                let offsetY= w>h ? 0 : h-sketchSide;
-                descriptionContainer = new DisplayDescriptionContainer({len:3,index:2,row:h>w,offsetX:offsetX,offsetY:offsetY, height:h-sketchSide, width:(w-sketchSide)/2.5})
-                descriptionContainer.setStroke(true)
+
+                descriptionContainer = new DisplayDescriptionContainer({len:3,index:2,row:h>w})
+                descriptionContainer.setInteractivity(false)
                 _ui.push(descriptionContainer)
-                description = new TextBox({parent:descriptionContainer, row:true, color:"white"});
-                description.setString("how much text can be written in this box before it becomes too much text? i wonder. what a fun thing i am doing.");
+                let descriptionOffsetX = h > w ? descriptionContainer.width*(.1) : descriptionContainer.width*(-.15);
+                let descriptionOffsetY = h > w ? descriptionContainer.height*(-.2) : descriptionContainer.height*(.2);
+                description = new TextBox({parent:descriptionContainer, width:descriptionContainer.width*.7,height:descriptionContainer.height*.5,offsetX:descriptionOffsetX,offsetY:descriptionOffsetY, row:true, color:"white"});
+                description.setString("hello. how are you? i am well. just hanging out."); // 48 characters.
                 description.setTextColor("black")
                 description.setFontStyle(fontStyle);
+                description.setInteractivity(false)
+
                 _ui.push(description)
             }
         }
@@ -601,12 +623,6 @@ class App extends Component {
                 this.textSize = this.row ? this.width / 5 : this.height / 10
                 if (this.textSize * 2.5 > this.height && this.row){this.textSize = this.width / 10}
                 p.textSize(this.textSize);
-                // alignement options cannot be set after instantiation.
-                    // subclass to change the alignment:
-                    // ( horizAlign: LEFT, CENTER, or RIGHT,
-                    //   vertAlign:  TOP, BOTTOM, CENTER, or BASELINE )
-                // this.align = [CENTER,CENTER]
-                p.textAlign(p.CENTER,p.CENTER);
                 this.fontStyle = undefined
             }
             // call this after instantiating the object to set the text
@@ -668,8 +684,8 @@ class App extends Component {
             }
             getPenMode(){return this.penMode}
             setPenMode(penMode){this.penMode=penMode;}
-            enlargeButton(){}
-            shrinkButton(){}
+            // enlargeButton(){}
+            // shrinkButton(){}
             drawStrokes(){
                 for (let i = 0; i < this.strokes.length;i++){
                     for (let j = 0; j < this.strokes[i].length;j++){
@@ -710,6 +726,93 @@ class App extends Component {
             enlargeButton(){}
             shrinkButton(){}
             draw() { super.draw() }
+        }
+        class TextInput extends Container{
+            constructor(parameterObject){
+                super(parameterObject)
+                this.text = "Click here to enter a description of your drawing."
+                this.height = 100;
+                this.displayText = new TextBox({row:true,parent:this})
+
+                this.displayText.setInteractivity(true)
+
+                this.displayText.setStroke(true)
+                this.displayText.setString(this.text)
+                this.textBoxSelected = false;
+                this.showCursor = false;
+                // this.toggleShowCursor(this);
+                this.mouseClickfunc = this.toggleTextBoxSelected
+                this.setTimeoutVariable = undefined
+            }
+            toggleShowCursor(scope){
+                scope.showCursor = !scope.showCursor
+                if (scope.showCursor){
+                    scope.text += "|"
+                    scope.displayText.setString(scope.text)
+                } else {
+                    // scope.text = scope.text.substring(0, scope.text.length - 1);
+                    this.text = this.text.replace("|","")
+                    scope.displayText.setString(scope.text)
+                }
+                scope.setTimeoutVariable = setTimeout(function(){scope.toggleShowCursor(scope)},800)
+            }
+            // it works but it's ugly.
+            // if the user clicks on the TextInputBox the cursor will begin to show
+            // if the user clicks on the TextInputBox again. nothing changes.
+            // if the user clicks off the TextInputBox, the cursor goes away.
+
+                // need to rename methods and variables
+                    // this.testForClick() -> this.testForMouseOver
+                    // this.clicked -> this.userClickedOnScreen
+                    // etc.
+            toggleTextBoxSelected(){
+                if (this.testForClick() && !this.textBoxSelected && this.setTimeoutVariable === undefined ){
+                    this.textBoxSelected = true;
+                    this.text = ""
+                    // start cursor playing
+                    this.toggleShowCursor(this);
+                } else if (!this.testForClick()) {
+                        if (this.showCursor) {
+                            this.showCursor = false;
+                            this.text = this.text.replace("|","")
+                            this.displayText.setString(this.text)
+                        }
+                        this.textBoxSelected = false;
+                        clearTimeout(this.setTimeoutVariable);
+                        this.setTimeoutVariable = undefined
+                    }
+                }
+            handleTyping(keyCode){
+                const BACKSPACE = keyCode === 8
+                const ENTER = keyCode === 13
+                const SPACE = keyCode === 32
+                console.log(keyCode)
+                if (ENTER) {
+                    console.log(this.text, "SUBMITTED",this.text.length)
+                } else if (BACKSPACE) {
+                    this.text = this.text.replace("|","")
+                    this.text = this.text.substring(0, this.text.length - 1);
+                } else if (SPACE) {
+                    this.text = this.text.replace("|","") + " "
+                    this.displayText.setString(this.text)
+                } else if (keyCode>=65 &&keyCode<=90) {
+                    if (this.text.length < 100){
+                        let newChar = String.fromCharCode(keyCode);
+                        this.text = this.text.replace("|","") + newChar.toLowerCase()
+                        this.displayText.setString(this.text)
+                    }
+                }
+            }
+            draw() {
+                super.draw()
+                // toggle off if user clicks off the TextInputBox
+                if (this.clicked && !this.testForClick() && this.textBoxSelected){
+                    this.toggleTextBoxSelected()
+                    this.text = "Click here to enter a description of your drawing."
+                    this.displayText.setString(this.text)
+                }
+                this.displayText.draw();
+            }
         }
     };
     render(){
