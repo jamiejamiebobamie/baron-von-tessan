@@ -1,4 +1,5 @@
 import React,{Component}  from 'react';
+import {isMobile} from 'react-device-detect';
 import './App.css';
 let p5 = require("p5")
 
@@ -89,7 +90,11 @@ class App extends Component {
         }
 
         p.draw = () => {
-            p.background(255);
+            if (isMobile)
+                p.background(0);
+            else
+                p.background(255);
+
             for (let i = 0; i < _ui.length; i++){
                 _ui[i].draw();
             }

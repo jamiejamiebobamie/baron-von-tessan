@@ -9,6 +9,7 @@
     "app-b-dashboard": "file:./public/scripts/sketch",
     "p5": "^1.1.9",
     "react": "^16.13.1",
+    "react-device-detect": "^1.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3"
   },
