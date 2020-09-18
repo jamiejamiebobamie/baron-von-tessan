@@ -285,9 +285,12 @@ class App extends Component {
                 }
                 _ui.push(inputTextBox)
 
-                let mobileKeyboard = new Keyboard({row:true,len:3,index:2,height:h/2.5,offsetY:-h/4,width:w})
-                mobileKeyboard.setReferenceToInputBox(inputTextBox)
-                _ui.push(mobileKeyboard)
+                if (isMobile){
+                    let mobileKeyboard = new Keyboard({row:true,len:3,index:2,height:h/2.5,offsetY:-h/4,width:w})
+                    mobileKeyboard.setReferenceToInputBox(inputTextBox)
+                    _ui.push(mobileKeyboard)
+                    inputTextBox.setMobileKeyboardReference(mobileKeyboard)
+                }
 
                 // let descriptionOffsetX = h > w ? descriptionContainer.width*(.1) : descriptionContainer.width*(-.15);
                 // let descriptionOffsetY = h > w ? descriptionContainer.height*(-.2) : descriptionContainer.height*(.2);
@@ -796,11 +799,15 @@ class App extends Component {
                 this.mouseClickfunc = this.toggleTextBoxSelected
                 this.setTimeoutVariable = undefined
                 this.setStroke(true)
+                this.referenceToMobileKeyboard = undefined
             }
             setDisplayText(text){
                 // I'm not sure if I need a reference outside of this.displayText
                 this.text = text
                 this.displayText.setString(this.text)
+            }
+            setMobileKeyboardReference(ref){
+                this.referenceToMobileKeyboard = ref
             }
             toggleShowCursor(scope){
                 scope.showCursor = !scope.showCursor
@@ -826,7 +833,7 @@ class App extends Component {
             toggleTextBoxSelected(resetDisplayText){
                 if (this.testForClick() && !this.textBoxSelected && this.setTimeoutVariable === undefined ){
                     this.textBoxSelected = true;
-                    this.text = ""
+                        this.text = ""
                     // start cursor playing
                     this.toggleShowCursor(this);
                 } else if (!this.testForClick() || resetDisplayText) {
@@ -873,9 +880,12 @@ class App extends Component {
             draw() {
                 super.draw()
                 // toggle off if user clicks off the TextInputBox
-                // if (this.clicked && !this.testForClick() && this.textBoxSelected){
-                //     this.toggleTextBoxSelected()
-                // }
+                if ( this.clicked &&
+                    ( !this.testForClick() && !this.referenceToMobileKeyboard.testForClick() ) &&
+                    this.textBoxSelected) {
+                        let text = this.text.replace("|","")
+                        this.toggleTextBoxSelected(text)
+                }
                 this.displayText.draw();
             }
         }
@@ -896,6 +906,7 @@ class App extends Component {
                     }
                 }
 
+                // need backspace, space, and enter/submit keys
                 this.keyLetters = ["qwertyuiop","asdfghjkl","zxcvbnm"]
                 {
                     let doOnce = true;
@@ -939,7 +950,11 @@ class App extends Component {
                 if (this.referenceToInputTextBox){
                     if (newChar){
                         if(!this.referenceToInputTextBox.textBoxSelected){
-                            this.referenceToInputTextBox.toggleTextBoxSelected()
+                            let text = null;
+                            if(this.referenceToInputTextBox.text){
+                                text = this.referenceToInputTextBox.text.replace("|","")
+                            }
+                            this.referenceToInputTextBox.toggleTextBoxSelected(this.referenceToInputTextBox.text)
                         }
                         newChar = newChar.toUpperCase()
                         let keyCode = newChar.charCodeAt(0);
