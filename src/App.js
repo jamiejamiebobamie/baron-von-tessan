@@ -90,10 +90,14 @@ class App extends Component {
         }
 
         p.draw = () => {
-            if (isMobile)
+
+            // not sure if this is working...
+                // won't know until i push to heroku
+            if (isMobile){
                 p.background(0);
-            else
+            } else {
                 p.background(255);
+            }
 
             for (let i = 0; i < _ui.length; i++){
                 _ui[i].draw();
@@ -255,10 +259,8 @@ class App extends Component {
                 console.log(submittedStrokes)
                 drawingSpace = new DrawingContainer({width:sketchSide,height:sketchSide,len:2,index:0,color:'lightgrey'})
                 drawingSpace.setFill(true)
-                // drawingSpace.submittedStrokes = submittedStrokes;
-                // drawingSpace.submittedStrokeIndex = submittedStrokes.length
                 drawingSpace.shouldLoopFinishedDrawing();
-                let shouldLoopFinishedDrawing = true;
+                let shouldLoopFinishedDrawing = false;
                 beginRedrawingStrokes(shouldLoopFinishedDrawing)
                 _ui.push(drawingSpace)
 
@@ -267,10 +269,25 @@ class App extends Component {
                 _ui.push(descriptionContainer)
                 let descriptionOffsetX = h > w ? descriptionContainer.width*(.1) : descriptionContainer.width*(-.15);
                 let descriptionOffsetY = h > w ? descriptionContainer.height*(-.1) : descriptionContainer.height*(.1);
+                let previouslySubmittedText = null;
+                if (inputTextBox){
+                    if (inputTextBox.text !== undefined) {
+                        previouslySubmittedText = inputTextBox.text
+                    }
+                }
                 inputTextBox = new TextInput({parent:descriptionContainer,row:w>h,color:"white",width:descriptionContainer.width*.7,offsetY:descriptionOffsetY,offsetX:descriptionOffsetX})
                 inputTextBox.setClickType(performClickOnce)
                 inputTextBox.setInteractivity(false)
+                if (previouslySubmittedText){
+                    inputTextBox.setDisplayText(previouslySubmittedText)
+                } else {
+                    inputTextBox.setDisplayText("I drew a... \n(click to finish the sentence).")
+                }
                 _ui.push(inputTextBox)
+
+                let mobileKeyboard = new Keyboard({row:true,len:3,index:2,height:h/2.5,offsetY:-h/4,width:w})
+                mobileKeyboard.setReferenceToInputBox(inputTextBox)
+                _ui.push(mobileKeyboard)
 
                 // let descriptionOffsetX = h > w ? descriptionContainer.width*(.1) : descriptionContainer.width*(-.15);
                 // let descriptionOffsetY = h > w ? descriptionContainer.height*(-.2) : descriptionContainer.height*(.2);
@@ -728,7 +745,6 @@ class App extends Component {
             }
             drawSubmittedStrokes(){
                 if (this.loop){
-                    console.log('hi')
                     for (let i = 0; i < this.submittedStrokeIndex; i++){
                         if (i === this.submittedStrokeIndex) { i = 0; }
                         p.ellipse(this.submittedStrokes[i].x*sketchSide+this.x, this.submittedStrokes[i].y*sketchSide+this.y, sketchSide*.025,sketchSide*.025)
@@ -765,7 +781,7 @@ class App extends Component {
         class TextInput extends Container{
             constructor(parameterObject){
                 super(parameterObject)
-                this.text = "Click here to enter a description of your drawing."
+                this.text = undefined//"I drew a... (click me and finish the sentence)."
                 this.height = this.width / 3;
                 this.displayText = new TextBox({row:true,parent:this})
 
@@ -779,6 +795,12 @@ class App extends Component {
                 // this.toggleShowCursor(this);
                 this.mouseClickfunc = this.toggleTextBoxSelected
                 this.setTimeoutVariable = undefined
+                this.setStroke(true)
+            }
+            setDisplayText(text){
+                // I'm not sure if I need a reference outside of this.displayText
+                this.text = text
+                this.displayText.setString(this.text)
             }
             toggleShowCursor(scope){
                 scope.showCursor = !scope.showCursor
@@ -819,7 +841,7 @@ class App extends Component {
                         if (resetDisplayText){
                             this.text = resetDisplayText
                         } else {
-                            this.text = "Click here to enter a description of your drawing."
+                            this.text = "I drew a... \n(click to finish the sentence)."
                         }
                         this.displayText.setString(this.text)
                     }
@@ -833,7 +855,7 @@ class App extends Component {
                     let drawingDescriptor = this.text.replace("|","")
                     REACT.handleSubmitDescription_React(drawingDescriptor)
                     this.toggleTextBoxSelected(drawingDescriptor)
-                    this.mouseClickfunc = null;
+                    // this.mouseClickfunc = null;
                 } else if (BACKSPACE) {
                     this.text = this.text.replace("|","")
                     this.text = this.text.substring(0, this.text.length - 1);
@@ -851,10 +873,107 @@ class App extends Component {
             draw() {
                 super.draw()
                 // toggle off if user clicks off the TextInputBox
-                if (this.clicked && !this.testForClick() && this.textBoxSelected){
-                    this.toggleTextBoxSelected()
-                }
+                // if (this.clicked && !this.testForClick() && this.textBoxSelected){
+                //     this.toggleTextBoxSelected()
+                // }
                 this.displayText.draw();
+            }
+        }
+
+        class Keyboard extends TextBox{
+            constructor(parameterObject){
+                super(parameterObject)
+                this.mouseClickfunc = this.searchClickedKey;
+                this.setClickType(true); // doOnce
+                this.referenceToInputTextBox = undefined
+
+                this.rowsOfKeys = []
+                {
+                    let row;
+                    for (let i = 0; i < 3; i++){
+                        row = new Container({parent:this,width:this.width-i*10,len:3,index:i,row:true, offsetX:i*10})
+                        this.rowsOfKeys.push(row)
+                    }
+                }
+
+                this.keyLetters = ["qwertyuiop","asdfghjkl","zxcvbnm"]
+                {
+                    let doOnce = true;
+                    let parameters;
+                    let keyboardButton;
+                for (let i = 0; i < this.keyLetters.length; i++){
+                    for (let j = 0; j < this.keyLetters[i].length; j++){
+                        parameters = {
+                                           parent:this.rowsOfKeys[i],
+                                           len:this.keyLetters[i].length,
+                                           index:j,
+                                           row:false,
+                                           color:"white"
+                                         }
+                        keyboardButton = new KeyboardKey(parameters)
+                        keyboardButton.letter = this.keyLetters[i][j]
+
+                        // i only want these to react to
+                            // click events not mouseover events...
+                        keyboardButton.setInteractivity(true)
+                        keyboardButton.setStroke(true)
+                        keyboardButton.setClickType(doOnce)
+                        keyboardButton.setKeyLetterToDisplay(this.keyLetters[i][j])
+
+                        this.rowsOfKeys.push(keyboardButton)
+                    }
+                }
+            }
+
+            }
+            setReferenceToInputBox(ref){
+                this.referenceToInputTextBox = ref;
+            }
+            searchClickedKey(){
+                let newChar = undefined
+                for (let i = 3; i < this.rowsOfKeys.length; i++){
+                    if(this.rowsOfKeys[i].testForClick()){
+                        newChar = this.rowsOfKeys[i].pressKey();
+                    }
+                }
+                if (this.referenceToInputTextBox){
+                    if (newChar){
+                        if(!this.referenceToInputTextBox.textBoxSelected){
+                            this.referenceToInputTextBox.toggleTextBoxSelected()
+                        }
+                        newChar = newChar.toUpperCase()
+                        let keyCode = newChar.charCodeAt(0);
+                        this.referenceToInputTextBox.handleTyping(keyCode)
+                    }
+                }
+            }
+            draw(){
+                super.draw()
+                for (let i = 0; i < this.rowsOfKeys.length; i++){
+                    this.rowsOfKeys[i].draw();
+                }
+            }
+        }
+        class KeyboardKey extends Container{
+            constructor(parameterObject){
+                super(parameterObject)
+                this.letter = undefined;
+                this.displayText = new TextBox({row:true,parent:this})
+                this.displayText.setStroke(true)
+                this.displayText.setInteractivity(true)
+                this.mouseClickfunc = this.pressKey
+            }
+            setKeyLetterToDisplay(letter){
+                this.letter = letter
+                this.displayText.setString(letter)
+            }
+            pressKey(){
+                console.log(this.letter)
+                return this.letter
+            }
+            draw(){
+                super.draw()
+                this.displayText.draw()
             }
         }
     };
