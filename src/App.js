@@ -12,12 +12,17 @@ class App extends Component {
             response:[]
         }
         this.myRef = React.createRef()
-        this.handleSubmitDrawing = this.handleSubmitDrawing.bind(this);
+        this.handleSubmitDrawing_React = this.handleSubmitDrawing_React.bind(this);
+        this.handleSubmitDescription_React = this.handleSubmitDescription_React.bind(this);
         this.handleAddToResponseArrayForTesting = this.handleAddToResponseArrayForTesting.bind(this);
 
     }
-    handleSubmitDrawing(drawingData) {
+    handleSubmitDrawing_React(drawingData) {
         this.setState({drawingData:drawingData})
+    }
+    handleSubmitDescription_React(drawingDescriptor){
+        this.setState({drawingDescriptor:drawingDescriptor})
+        console.log(this.state)
     }
     handleAddToResponseArrayForTesting(response) {
         this.setState({response:[...this.state.response, response]})
@@ -32,7 +37,7 @@ class App extends Component {
         let w, h;
         let fontStyle;
 
-        let scope = this;
+        const REACT = this;
 
         let currentStroke = [];
         let strokes = [];
@@ -132,23 +137,23 @@ class App extends Component {
             _ui = [];
 
             // a button to test the slideshow ***
-            button0 = new Container({row:w>h, len:10, index: 7, width:100,height:100})
-            _ui.push(button0)
-            let test = new TextBox({parent:button0,row:true,color:"white",mouseClickfunc:beginRedrawingStrokes});
-            test.setString("test slideshow");
-            test.setTextColor("black")
-            test.setFontStyle(fontStyle);
-            test.setInteractivity(true);
-            test.setStroke(true)
+            // button0 = new Container({row:w>h, len:10, index: 7, width:100,height:100})
+            // _ui.push(button0)
+            // let test = new TextBox({parent:button0,row:true,color:"white",mouseClickfunc:beginRedrawingStrokes});
+            // test.setString("test slideshow");
+            // test.setTextColor("black")
+            // test.setFontStyle(fontStyle);
+            // test.setInteractivity(true);
+            // test.setStroke(true)
             let performClickOnce = true;
-            test.setClickType(performClickOnce)
-            _ui.push(test)
+            // test.setClickType(performClickOnce)
+            // _ui.push(test)
             // ****
 
             // test for input textbox ***
-            inputTextBox = new TextInput({parent:button0,row:w>h,color:"white",width:w/2,offsetY:button0.height})
-            inputTextBox.setClickType(performClickOnce)
-            _ui.push(inputTextBox)
+            // inputTextBox = new TextInput({parent:button0,row:w>h,color:"white",width:w/2,offsetY:button0.height})
+            // inputTextBox.setClickType(performClickOnce)
+            // _ui.push(inputTextBox)
             // ****
 
 
@@ -226,13 +231,12 @@ class App extends Component {
 
                 button4 = new Container({parent:buttonsSubmit,row:w>h})
                 _ui.push(button4)
-                submitButton = new TextBox({parent:button4,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:submitStrokes});
+                submitButton = new TextBox({parent:button4,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:handleSubmitDrawing_p5});
                 submitButton.setString("SUBMIT");
                 submitButton.setFontStyle(fontStyle);
                 submitButton.setTextColor("black")
                 submitButton.setInteractivity(true);
                 submitButton.setStroke(true)
-                submitButton.setScope(scope);
                 submitButton.setClickType(performClickOnce) // true
 
                 _ui.push(submitButton)
@@ -242,27 +246,36 @@ class App extends Component {
                 sketchSide = w > h ? drawingSpaceHeight : drawingSpaceWidth;
                 let longerSideOfScreen = w > h ? w : h;
                 sketchSide = sketchSide > longerSideOfScreen*(2/3) ? longerSideOfScreen*(2/3) : sketchSide;
-                drawingSpace = new DrawingContainer({width:sketchSide,height:sketchSide,len:2,index:0,color:'lightgrey', mouseClickfunc:buildStroke})//,offsetX:offsetX,offsetY:offsetY})
-                drawingSpace.setCurrentStroke(currentStroke);
-                drawingSpace.setStrokes(strokes);
+                let submittedStrokes = REACT.state.drawingData;
+                console.log(submittedStrokes)
+                drawingSpace = new DrawingContainer({width:sketchSide,height:sketchSide,len:2,index:0,color:'lightgrey'})
                 drawingSpace.setFill(true)
-                let performClickOnce = false;
-                drawingSpace.setClickType(performClickOnce)
-                drawingSpace.drawingData = drawingData;
+                // drawingSpace.submittedStrokes = submittedStrokes;
+                // drawingSpace.submittedStrokeIndex = submittedStrokes.length
+                drawingSpace.shouldLoopFinishedDrawing();
+                let shouldLoopFinishedDrawing = true;
+                beginRedrawingStrokes(shouldLoopFinishedDrawing)
                 _ui.push(drawingSpace)
 
-                descriptionContainer = new DisplayDescriptionContainer({len:3,index:2,row:h>w})
+                descriptionContainer = new Container({len:3,index:2,row:h>w})
                 descriptionContainer.setInteractivity(false)
                 _ui.push(descriptionContainer)
                 let descriptionOffsetX = h > w ? descriptionContainer.width*(.1) : descriptionContainer.width*(-.15);
-                let descriptionOffsetY = h > w ? descriptionContainer.height*(-.2) : descriptionContainer.height*(.2);
-                description = new TextBox({parent:descriptionContainer, width:descriptionContainer.width*.7,height:descriptionContainer.height*.5,offsetX:descriptionOffsetX,offsetY:descriptionOffsetY, row:true, color:"white"});
-                description.setString("hello. how are you? i am well. just hanging out."); // 48 characters.
-                description.setTextColor("black")
-                description.setFontStyle(fontStyle);
-                description.setInteractivity(false)
+                let descriptionOffsetY = h > w ? descriptionContainer.height*(-.1) : descriptionContainer.height*(.1);
+                inputTextBox = new TextInput({parent:descriptionContainer,row:w>h,color:"white",width:descriptionContainer.width*.7,offsetY:descriptionOffsetY,offsetX:descriptionOffsetX})
+                inputTextBox.setClickType(performClickOnce)
+                inputTextBox.setInteractivity(false)
+                _ui.push(inputTextBox)
 
-                _ui.push(description)
+                // let descriptionOffsetX = h > w ? descriptionContainer.width*(.1) : descriptionContainer.width*(-.15);
+                // let descriptionOffsetY = h > w ? descriptionContainer.height*(-.2) : descriptionContainer.height*(.2);
+                // description = new TextBox({parent:descriptionContainer, width:descriptionContainer.width*.7,height:descriptionContainer.height*.5,offsetX:descriptionOffsetX,offsetY:descriptionOffsetY, row:true, color:"white"});
+                // description.setString("hello. how are you? i am well. just hanging out."); // 48 characters.
+                // description.setTextColor("black")
+                // description.setFontStyle(fontStyle);
+                // description.setInteractivity(false)
+
+                // _ui.push(description)
             }
         }
 
@@ -292,46 +305,52 @@ class App extends Component {
             drawingSpace.strokes.pop()
         }
 
-        function redrawStrokes(pauseBetweenDrawings){
+        function redrawStrokes(pauseBetweenDrawings,shouldLoop){
+            // this loops the drawing that the user just submitted as they enter the
+                // a description of the drawing. it be nice if there was a pause...
+            if (shouldLoop){
+                if (REACT.state.drawingData.length === drawingSpace.submittedStrokeIndex){
+                    drawingSpace.submittedStrokeIndex = 0;
+                }
+            }
             // parameter 'pauseBetweenDrawings' signals to recursive function
                 // that there has just been a pause after completing a drawing
                 // and that the variables need to be reset.
             if (pauseBetweenDrawings) {
                 drawingSpace.submittedStrokeIndex = 0;
                 drawingSpace.responseIndex += 1;
-                // if (drawingSpace.responseIndex < scope.state.response.length){
-                    submittedStrokes = scope.state.response[drawingSpace.responseIndex]
-                    drawingSpace.setSubmittedStrokes(submittedStrokes)
-                // }
+                submittedStrokes = REACT.state.response[drawingSpace.responseIndex]
+                drawingSpace.setSubmittedStrokes(submittedStrokes)
             }
             // check to make sure this isn't the first call to the redrawStrokes method
             if (drawingSpace.submittedStrokes){
                 if (drawingSpace.submittedStrokeIndex < drawingSpace.submittedStrokes.length) {
                     drawingSpace.submittedStrokeIndex += 1
-                    setTimeout(function(){redrawStrokes(false);}, 1000/drawingSpace.submittedStrokes.length);
+                    setTimeout(function(){redrawStrokes(false,shouldLoop);}, 1000/drawingSpace.submittedStrokes.length);
                 } else {
-                    if (drawingSpace.responseIndex < scope.state.response.length){
-                        setTimeout(function(){redrawStrokes(true);}, 1500);
+                    if (drawingSpace.responseIndex < REACT.state.response.length){
+                        setTimeout(function(){redrawStrokes(true,shouldLoop);}, 1500);
                     }
                 }
             // if it is the first call to the method, set the drawingSpace.submittedStrokes
                 // member variable. this is the current drawing to be drawn to the drawing space.
             } else {
-                if (drawingSpace.responseIndex < scope.state.response.length){
-                    submittedStrokes = scope.state.response[drawingSpace.responseIndex]
+                if (drawingSpace.responseIndex < REACT.state.response.length){
+                    submittedStrokes = REACT.state.response[drawingSpace.responseIndex]
                     drawingSpace.setSubmittedStrokes(submittedStrokes)
-                    redrawStrokes(false)
+                    redrawStrokes(false,shouldLoop)
                 }
             }
         }
 
-        function beginRedrawingStrokes(){
+        function beginRedrawingStrokes(shouldLoop){
             clearStrokes() // maybe unnecessary...
-            redrawStrokes()
+            let pauseBetweenDrawings = false;
+            redrawStrokes(pauseBetweenDrawings,shouldLoop)
         }
 
-        function addToAPIResponseArrayForTesting(scope,submittedStrokes){
-            scope.handleAddToResponseArrayForTesting(submittedStrokes);
+        function addToAPIResponseArrayForTesting(submittedStrokes){
+            REACT.handleAddToResponseArrayForTesting(submittedStrokes);
         }
 
         function toggleTool(){
@@ -341,6 +360,12 @@ class App extends Component {
             drawingSpace.mouseClickfunc = drawingSpace.penMode ? buildStroke : removeStroke;
         }
 
+        function handleSubmitDrawing_p5(){
+            submitStrokes()
+            shouldDisplayDrawingView = false;
+            setUI(shouldDisplayDrawingView);
+        }
+
         function submitStrokes(){
             let submittedStrokes = [];
             for (let i = 0; i<drawingSpace.strokes.length; i++) {
@@ -348,9 +373,11 @@ class App extends Component {
                     submittedStrokes.push(drawingSpace.strokes[i][j])
                 }
             }
-            this.scope.handleSubmitDrawing(submittedStrokes);
+            REACT.handleSubmitDrawing_React(submittedStrokes);
             clearStrokes()
-            addToAPIResponseArrayForTesting(this.scope,submittedStrokes);
+
+            // testing
+            addToAPIResponseArrayForTesting(submittedStrokes);
         }
 
         class UIElement{
@@ -491,7 +518,6 @@ class App extends Component {
                 this.clicked = false;
                 this.clickPerformed = false;
                 this.doOnce = false;
-                this.scope = undefined
                 // some UI_elements respond to a single click, others to a mouse press
                     // (a single click held down over a period of time.)
                 this.isInteractive = false;
@@ -501,7 +527,6 @@ class App extends Component {
                 this.screenHasSettled = false;
                 setTimeout(()=>{this.screenHasSettled = true;},500);
             }
-            setScope(scope){this.scope = scope}
             testForClick(){
                 if (p.mouseX > this.x
                     && p.mouseX < this.x + this.width
@@ -675,6 +700,8 @@ class App extends Component {
                 this.submittedStrokeIndex = 0
                 this.responseIndex = 0;
                 this.penMode = undefined; // false for eraserMode
+                // loops the drawing animation
+                this.loop = false;
             }
             setCurrentStroke(currentStroke){ this.currentStroke = currentStroke }
             setStrokes(strokes){ this.strokes = strokes; }
@@ -684,8 +711,6 @@ class App extends Component {
             }
             getPenMode(){return this.penMode}
             setPenMode(penMode){this.penMode=penMode;}
-            // enlargeButton(){}
-            // shrinkButton(){}
             drawStrokes(){
                 for (let i = 0; i < this.strokes.length;i++){
                     for (let j = 0; j < this.strokes[i].length;j++){
@@ -693,9 +718,20 @@ class App extends Component {
                     }
                 }
             }
+            shouldLoopFinishedDrawing(){
+                this.loop = true;
+            }
             drawSubmittedStrokes(){
-                for (let i = 0; i < this.submittedStrokeIndex; i++){
-                    p.ellipse(this.submittedStrokes[i].x*sketchSide+this.x, this.submittedStrokes[i].y*sketchSide+this.y, sketchSide*.025,sketchSide*.025)
+                if (this.loop){
+                    console.log('hi')
+                    for (let i = 0; i < this.submittedStrokeIndex; i++){
+                        if (i === this.submittedStrokeIndex) { i = 0; }
+                        p.ellipse(this.submittedStrokes[i].x*sketchSide+this.x, this.submittedStrokes[i].y*sketchSide+this.y, sketchSide*.025,sketchSide*.025)
+                    }
+                } else {
+                    for (let i = 0; i < this.submittedStrokeIndex; i++){
+                        p.ellipse(this.submittedStrokes[i].x*sketchSide+this.x, this.submittedStrokes[i].y*sketchSide+this.y, sketchSide*.025,sketchSide*.025)
+                    }
                 }
             }
             draw() {
@@ -721,20 +757,15 @@ class App extends Component {
                 }
             }
         }
-        class DisplayDescriptionContainer extends Container{
-            constructor(parameterObject){ super(parameterObject) }
-            enlargeButton(){}
-            shrinkButton(){}
-            draw() { super.draw() }
-        }
         class TextInput extends Container{
             constructor(parameterObject){
                 super(parameterObject)
                 this.text = "Click here to enter a description of your drawing."
-                this.height = 100;
+                this.height = this.width / 3;
                 this.displayText = new TextBox({row:true,parent:this})
 
-                this.displayText.setInteractivity(true)
+                // should enlarge when selected and shrink when deselected.
+                this.displayText.setInteractivity(false)
 
                 this.displayText.setStroke(true)
                 this.displayText.setString(this.text)
@@ -765,13 +796,13 @@ class App extends Component {
                     // this.testForClick() -> this.testForMouseOver
                     // this.clicked -> this.userClickedOnScreen
                     // etc.
-            toggleTextBoxSelected(){
+            toggleTextBoxSelected(resetDisplayText){
                 if (this.testForClick() && !this.textBoxSelected && this.setTimeoutVariable === undefined ){
                     this.textBoxSelected = true;
                     this.text = ""
                     // start cursor playing
                     this.toggleShowCursor(this);
-                } else if (!this.testForClick()) {
+                } else if (!this.testForClick() || resetDisplayText) {
                         if (this.showCursor) {
                             this.showCursor = false;
                             this.text = this.text.replace("|","")
@@ -779,7 +810,13 @@ class App extends Component {
                         }
                         this.textBoxSelected = false;
                         clearTimeout(this.setTimeoutVariable);
-                        this.setTimeoutVariable = undefined
+                        this.setTimeoutVariable = undefined;
+                        if (resetDisplayText){
+                            this.text = resetDisplayText
+                        } else {
+                            this.text = "Click here to enter a description of your drawing."
+                        }
+                        this.displayText.setString(this.text)
                     }
                 }
             handleTyping(keyCode){
@@ -788,7 +825,10 @@ class App extends Component {
                 const SPACE = keyCode === 32
                 console.log(keyCode)
                 if (ENTER) {
-                    console.log(this.text, "SUBMITTED",this.text.length)
+                    let drawingDescriptor = this.text.replace("|","")
+                    REACT.handleSubmitDescription_React(drawingDescriptor)
+                    this.toggleTextBoxSelected(drawingDescriptor)
+                    this.mouseClickfunc = null;
                 } else if (BACKSPACE) {
                     this.text = this.text.replace("|","")
                     this.text = this.text.substring(0, this.text.length - 1);
@@ -808,8 +848,6 @@ class App extends Component {
                 // toggle off if user clicks off the TextInputBox
                 if (this.clicked && !this.testForClick() && this.textBoxSelected){
                     this.toggleTextBoxSelected()
-                    this.text = "Click here to enter a description of your drawing."
-                    this.displayText.setString(this.text)
                 }
                 this.displayText.draw();
             }
