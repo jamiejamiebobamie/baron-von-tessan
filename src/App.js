@@ -8,26 +8,23 @@ class App extends Component {
         super(props)
         // testing
         this.state = {
-            drawingDescriptor: "cow",
-            drawingData: [1,2],
+            drawingDescriptor: "",
+            drawingData: [],
             response:[]
         }
         this.myRef = React.createRef()
         this.handleSubmitDrawing_React = this.handleSubmitDrawing_React.bind(this);
         this.handleSubmitDescription_React = this.handleSubmitDescription_React.bind(this);
         this.handleAddToResponseArrayForTesting = this.handleAddToResponseArrayForTesting.bind(this);
-
     }
     handleSubmitDrawing_React(drawingData) {
         this.setState({drawingData:drawingData})
     }
     handleSubmitDescription_React(drawingDescriptor){
         this.setState({drawingDescriptor:drawingDescriptor})
-        console.log(this.state)
     }
     handleAddToResponseArrayForTesting(response) {
         this.setState({response:[...this.state.response, response]})
-        console.log(this.state.response)
     }
     componentDidMount() {
         this.myP5 = new p5(this.Sketch, this.myRef.current)
@@ -250,16 +247,30 @@ class App extends Component {
 
                 _ui.push(submitButton)
             } else {
+                let button5 = new Container({len:3,index:1,row:true})//w>h})
+                _ui.push(button5)
+
+                let backButton = new TextBox({parent:button5,row:true,width:button5.width/3,height:button5.height/5,color:"white",mouseClickfunc:returnToDrawingView, offsetX:w/2,offsetY:h/2});
+                backButton.setString(" << BACK");
+                backButton.setFontStyle(fontStyle);
+                backButton.setTextColor("black")
+                backButton.setInteractivity(true);
+                backButton.setStroke(true)
+                backButton.setClickType(performClickOnce) // true
+
+                _ui.push(backButton)
+
                 let drawingSpaceWidth = w > h ? w*(2/3) : w;
                 let drawingSpaceHeight = w > h ? h : h*(2/3);
                 sketchSide = w > h ? drawingSpaceHeight : drawingSpaceWidth;
                 let longerSideOfScreen = w > h ? w : h;
                 sketchSide = sketchSide > longerSideOfScreen*(2/3) ? longerSideOfScreen*(2/3) : sketchSide;
                 let submittedStrokes = REACT.state.drawingData;
-                console.log(submittedStrokes)
+                let storeStrokeIndex = drawingSpace.submittedStrokeIndex
                 drawingSpace = new DrawingContainer({width:sketchSide,height:sketchSide,len:2,index:0,color:'lightgrey'})
+                drawingSpace.submittedStrokeIndex = storeStrokeIndex;
                 drawingSpace.setFill(true)
-                drawingSpace.shouldLoopFinishedDrawing();
+                // drawingSpace.shouldLoopFinishedDrawing();
                 let shouldLoopFinishedDrawing = false;
                 beginRedrawingStrokes(shouldLoopFinishedDrawing)
                 _ui.push(drawingSpace)
@@ -270,22 +281,34 @@ class App extends Component {
                 let descriptionOffsetX = h > w ? descriptionContainer.width*(.1) : descriptionContainer.width*(-.15);
                 let descriptionOffsetY = h > w ? descriptionContainer.height*(-.1) : descriptionContainer.height*(.1);
                 let previouslySubmittedText = null;
+                let previouslySelected = null;
+
                 if (inputTextBox){
                     if (inputTextBox.text !== undefined) {
                         previouslySubmittedText = inputTextBox.text
                     }
+                    if (inputTextBox.textBoxSelected !== false){
+                        previouslySelected = true
+                    }
                 }
-                inputTextBox = new TextInput({parent:descriptionContainer,row:w>h,color:"white",width:descriptionContainer.width*.7,offsetY:descriptionOffsetY,offsetX:descriptionOffsetX})
+                inputTextBox = new TextInput({parent:descriptionContainer,row:w>h,color:"white",width:descriptionContainer.width*.7,offsetY:descriptionOffsetY,offsetX:descriptionOffsetX,mouseClickfunc:toggleKeyboardForMobile})
                 inputTextBox.setClickType(performClickOnce)
                 inputTextBox.setInteractivity(false)
+
                 if (previouslySubmittedText){
                     inputTextBox.setDisplayText(previouslySubmittedText)
                 } else {
                     inputTextBox.setDisplayText("I drew a... \n(click to finish the sentence).")
                 }
-                _ui.push(inputTextBox)
 
-                if (isMobile){
+                if (previouslySelected){
+                    inputTextBox.textBoxSelected = true;
+                }
+
+                _ui.push(inputTextBox)
+                console.log(isMobile, inputTextBox.textBoxSelected)
+
+                if (isMobile && inputTextBox.textBoxSelected){
                     let mobileKeyboard = new Keyboard({row:true,len:3,index:2,height:h/2.5,offsetY:-h/4,width:w})
                     mobileKeyboard.setReferenceToInputBox(inputTextBox)
                     _ui.push(mobileKeyboard)
@@ -304,6 +327,11 @@ class App extends Component {
             }
         }
 
+        function returnToDrawingView(){
+            shouldDisplayDrawingView = true;
+            setUI(shouldDisplayDrawingView);
+        }
+
         function buildStroke(){
             drawingSpace.currentStroke.push({x:p.mouseX/sketchSide,y:p.mouseY/sketchSide})
         }
@@ -315,11 +343,14 @@ class App extends Component {
                         && p.mouseX < drawingSpace.strokes[i][j].x*sketchSide+sketchSide*.01
                         && p.mouseY > drawingSpace.strokes[i][j].y*sketchSide-sketchSide*.01
                         && p.mouseY < drawingSpace.strokes[i][j].y*sketchSide+sketchSide*.01 ){
-                            console.log("Should erase.")
                             drawingSpace.strokes[i].splice(j,1)
                         }
                 }
             }
+        }
+
+        function toggleKeyboardForMobile(){
+            setUI(shouldDisplayDrawingView);
         }
 
         function clearStrokes(){
@@ -724,7 +755,7 @@ class App extends Component {
                 this.submittedStrokes = undefined
                 this.submittedStrokeIndex = 0
                 this.responseIndex = 0;
-                this.penMode = undefined; // false for eraserMode
+                this.penMode = true; // false for eraserMode
                 // loops the drawing animation
                 this.loop = false;
             }
@@ -796,10 +827,10 @@ class App extends Component {
                 this.textBoxSelected = false;
                 this.showCursor = false;
                 // this.toggleShowCursor(this);
-                this.mouseClickfunc = this.toggleTextBoxSelected
+                // this.mouseClickfunc = this.toggleTextBoxSelected
                 this.setTimeoutVariable = undefined
                 this.setStroke(true)
-                this.referenceToMobileKeyboard = undefined
+                this.referenceToMobileKeyboard = new Container({width:0,height:0}) // dummy object
             }
             setDisplayText(text){
                 // I'm not sure if I need a reference outside of this.displayText
@@ -809,16 +840,22 @@ class App extends Component {
             setMobileKeyboardReference(ref){
                 this.referenceToMobileKeyboard = ref
             }
+            performClickFunctionality(){
+                this.toggleTextBoxSelected(this.text)
+                super.performClickFunctionality()
+            }
             toggleShowCursor(scope){
                 scope.showCursor = !scope.showCursor
                 if (scope.showCursor){
-                    scope.text += "|"
-                    scope.displayText.setString(scope.text)
+                    scope.text+="|"
+                    console.log("show",scope.text)
+
                 } else {
-                    // scope.text = scope.text.substring(0, scope.text.length - 1);
-                    this.text = this.text.replace("|","")
-                    scope.displayText.setString(scope.text)
+                    scope.text = scope.text.replace("|","")
+                    console.log("hide",scope.text)
+
                 }
+                scope.displayText.setString(scope.text)
                 scope.setTimeoutVariable = setTimeout(function(){scope.toggleShowCursor(scope)},800)
             }
             // it works but it's ugly.
@@ -833,7 +870,7 @@ class App extends Component {
             toggleTextBoxSelected(resetDisplayText){
                 if (this.testForClick() && !this.textBoxSelected && this.setTimeoutVariable === undefined ){
                     this.textBoxSelected = true;
-                        this.text = ""
+                    this.text = ""
                     // start cursor playing
                     this.toggleShowCursor(this);
                 } else if (!this.testForClick() || resetDisplayText) {
@@ -864,8 +901,10 @@ class App extends Component {
                     this.toggleTextBoxSelected(drawingDescriptor)
                     // this.mouseClickfunc = null;
                 } else if (BACKSPACE) {
+                    console.log('hey')
                     this.text = this.text.replace("|","")
                     this.text = this.text.substring(0, this.text.length - 1);
+                    this.displayText.setString(this.text)
                 } else if (SPACE) {
                     this.text = this.text.replace("|","") + " "
                     this.displayText.setString(this.text)
@@ -884,7 +923,7 @@ class App extends Component {
                     ( !this.testForClick() && !this.referenceToMobileKeyboard.testForClick() ) &&
                     this.textBoxSelected) {
                         let text = this.text.replace("|","")
-                        this.toggleTextBoxSelected(text)
+                        this.performClickFunctionality()
                 }
                 this.displayText.draw();
             }
@@ -983,7 +1022,6 @@ class App extends Component {
                 this.displayText.setString(letter)
             }
             pressKey(){
-                console.log(this.letter)
                 return this.letter
             }
             draw(){
