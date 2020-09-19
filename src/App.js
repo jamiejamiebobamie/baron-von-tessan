@@ -1,5 +1,6 @@
 import React,{Component}  from 'react';
 import {isMobile} from 'react-device-detect';
+
 import './App.css';
 let p5 = require("p5")
 
@@ -11,11 +12,10 @@ class App extends Component {
             drawingDescriptor: "",
             drawingData: [],
             response:[]
+            // consider storing timeOut variables here.
         }
         this.myRef = React.createRef()
-        this.handleSubmitDrawing_React = this.handleSubmitDrawing_React.bind(this);
-        this.handleSubmitDescription_React = this.handleSubmitDescription_React.bind(this);
-        this.handleAddToResponseArrayForTesting = this.handleAddToResponseArrayForTesting.bind(this);
+
     }
     handleSubmitDrawing_React(drawingData) {
         this.setState({drawingData:drawingData})
@@ -30,38 +30,27 @@ class App extends Component {
         this.myP5 = new p5(this.Sketch, this.myRef.current)
     }
     Sketch = (p) => {
-        let canvas;
-        let sketchSide;
+        // width and height of the canvas
         let w, h;
+        // the width and height of the drawingSpace
+        let sketchSide;
+        // the .otf fontstyle
         let fontStyle;
-
+        // the ui elements to be drawn
+            // changes with the view.
+        let _ui = [];
+        // reference to react
         const REACT = this;
 
-        let currentStroke = [];
-        let strokes = [];
-
-        let _ui = [];
+        // ui elements that need to be declared globally
         let inputTextBox;
         let drawingSpace;
-        let buttons;
-        let button0;
-        let button1;
-        let button2;
-        let button3;
-        let button4;
         let eraserOrPenButton;
-        let undoButton;
-        let clearButton;
-        let submitButton;
-        let descriptionContainer;
-        let description;
+
+        // testing. will remove.
         let shouldDisplayDrawingView = true;
 
-        // just for testing.
-        let submittedStrokes = []
-        let drawingData = []
-        let doneOnce = false;
-
+        // mouseClick boolean.
         let mouseIsClicked = false;
 
         p.preload = () => {
@@ -71,36 +60,17 @@ class App extends Component {
         p.setup = () => {
             w = p.windowWidth - (p.windowWidth/10)
             h = p.windowHeight - (p.windowHeight/10)
-            canvas = p.createCanvas(w, h);
+            let canvas = p.createCanvas(w, h);
             canvas.parent('sketch-holder');
             p.frameRate(24);
-            p.imageMode(p.CENTER);
-            p.rectMode(p.CORNER);
-
-            // ( horizAlign: LEFT, CENTER, or RIGHT,
-            //   vertAlign:  TOP, BOTTOM, CENTER, or BASELINE )
-            // can text alignment options be set on a per object basis?
-                // (it doesn't seem so)
             p.textAlign(p.CENTER,p.CENTER);
-
             setUI(shouldDisplayDrawingView);
         }
 
         p.draw = () => {
-
-            // not sure if this is working...
-                // won't know until i push to heroku
-            if (isMobile){
-                p.background(0);
-            } else {
-                p.background(255);
-            }
-
+            p.background(255)
             for (let i = 0; i < _ui.length; i++){
                 _ui[i].draw();
-            }
-            if (!doneOnce){
-                doneOnce = true;
             }
         }
 
@@ -141,37 +111,21 @@ class App extends Component {
 
         function setUI(shouldDisplayDrawingView){
             _ui = [];
-
-            // a button to test the slideshow ***
-            // button0 = new Container({row:w>h, len:10, index: 7, width:100,height:100})
-            // _ui.push(button0)
-            // let test = new TextBox({parent:button0,row:true,color:"white",mouseClickfunc:beginRedrawingStrokes});
-            // test.setString("test slideshow");
-            // test.setTextColor("black")
-            // test.setFontStyle(fontStyle);
-            // test.setInteractivity(true);
-            // test.setStroke(true)
             let performClickOnce = true;
-            // test.setClickType(performClickOnce)
-            // _ui.push(test)
-            // ****
-
-            // test for input textbox ***
-            // inputTextBox = new TextInput({parent:button0,row:w>h,color:"white",width:w/2,offsetY:button0.height})
-            // inputTextBox.setClickType(performClickOnce)
-            // _ui.push(inputTextBox)
-            // ****
-
-
             if (shouldDisplayDrawingView){
                 let drawingSpaceWidth = w > h ? w*(2/3) : w;
                 let drawingSpaceHeight = w > h ? h : h*(2/3);
                 sketchSide = w > h ? drawingSpaceHeight : drawingSpaceWidth;
                 let longerSideOfScreen = w > h ? w : h;
                 sketchSide = sketchSide > longerSideOfScreen*(2/3) ? longerSideOfScreen*(2/3) : sketchSide;
+
                 let drawingMode = true;
+                let currentStroke = [];
+                let strokes = [];
                 if (drawingSpace) {
                     drawingMode = drawingSpace.getPenMode()
+                    currentStroke = drawingSpace.currentStroke
+                    strokes = drawingSpace.strokes
                 }
                 drawingSpace = new DrawingContainer({width:sketchSide,height:sketchSide,len:3,index:0,color:'lightgrey', mouseClickfunc:buildStroke})//,offsetX:offsetX,offsetY:offsetY})
                 drawingSpace.setCurrentStroke(currentStroke);
@@ -179,13 +133,12 @@ class App extends Component {
                 drawingSpace.setFill(true)
                 performClickOnce = false;
                 drawingSpace.setClickType(performClickOnce)
-                drawingSpace.drawingData = drawingData;
                 if (drawingMode){
                     drawingSpace.setPenMode(drawingMode);
                 }
                 _ui.push(drawingSpace)
 
-                buttons = new Container({len:3,index:2,row:h>w,offsetX:w *.0063,offsetY:h *.05})
+                let buttons = new Container({len:3,index:2,row:h>w,offsetX:w *.0063,offsetY:h *.05})
                 _ui.push(buttons)
                 let buttonsInteractOffsetX = h > w ? buttons.width*(.01) : buttons.width*(.01);
                 let buttonsInteractHOffsetY = h > w ? buttons.height*(.01) : buttons.height*(.01);
@@ -197,7 +150,7 @@ class App extends Component {
                 let buttonsSubmit = new Container({len:3,index:2,row:w>h, offsetX:buttonsInteractOffsetX,offsetY:buttonsInteractHOffsetY, parent:buttons})
                 _ui.push(buttonsSubmit)
 
-                button1 = new Container({parent:buttonsInteract,len:3,index:0,row:w>h})
+                let button1 = new Container({parent:buttonsInteract,len:3,index:0,row:w>h})
                 _ui.push(button1)
                 eraserOrPenButton = new TextBox({parent:button1,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:toggleTool});
                 let buttonString = drawingSpace.penMode ? "ERASER" : "PEN";
@@ -211,9 +164,9 @@ class App extends Component {
 
                 _ui.push(eraserOrPenButton)
 
-                button2 = new Container({parent:buttonsInteract,len:3,index:1,row:w>h})
+                let button2 = new Container({parent:buttonsInteract,len:3,index:1,row:w>h})
                 _ui.push(button2)
-                undoButton = new TextBox({parent:button2,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:undoLastStroke});
+                let undoButton = new TextBox({parent:button2,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:undoLastStroke});
                 undoButton.setString("UNDO");
                 undoButton.setFontStyle(fontStyle);
                 undoButton.setTextColor("black")
@@ -223,9 +176,9 @@ class App extends Component {
 
                 _ui.push(undoButton)
 
-                button3 = new Container({parent:buttonsInteract,len:3,index:2,row:w>h})
+                let button3 = new Container({parent:buttonsInteract,len:3,index:2,row:w>h})
                 _ui.push(button3)
-                clearButton = new TextBox({parent:button3,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:clearStrokes});
+                let clearButton = new TextBox({parent:button3,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:clearStrokes});
                 clearButton.setString("CLEAR");
                 clearButton.setFontStyle(fontStyle);
                 clearButton.setTextColor("black")
@@ -235,9 +188,9 @@ class App extends Component {
 
                 _ui.push(clearButton)
 
-                button4 = new Container({parent:buttonsSubmit,row:w>h})
+                let button4 = new Container({parent:buttonsSubmit,row:w>h})
                 _ui.push(button4)
-                submitButton = new TextBox({parent:button4,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:handleSubmitDrawing_p5});
+                let submitButton = new TextBox({parent:button4,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:handleSubmitDrawing_p5});
                 submitButton.setString("SUBMIT");
                 submitButton.setFontStyle(fontStyle);
                 submitButton.setTextColor("black")
@@ -247,18 +200,7 @@ class App extends Component {
 
                 _ui.push(submitButton)
             } else {
-                let button5 = new Container({len:3,index:1,row:true})//w>h})
-                _ui.push(button5)
 
-                let backButton = new TextBox({parent:button5,row:true,width:button5.width/3,height:button5.height/5,color:"white",mouseClickfunc:returnToDrawingView, offsetX:w/2,offsetY:h/2});
-                backButton.setString(" << BACK");
-                backButton.setFontStyle(fontStyle);
-                backButton.setTextColor("black")
-                backButton.setInteractivity(true);
-                backButton.setStroke(true)
-                backButton.setClickType(performClickOnce) // true
-
-                _ui.push(backButton)
 
                 let drawingSpaceWidth = w > h ? w*(2/3) : w;
                 let drawingSpaceHeight = w > h ? h : h*(2/3);
@@ -269,14 +211,15 @@ class App extends Component {
                 let storeStrokeIndex = drawingSpace.submittedStrokeIndex
                 drawingSpace = new DrawingContainer({width:sketchSide,height:sketchSide,len:2,index:0,color:'lightgrey'})
                 drawingSpace.submittedStrokeIndex = storeStrokeIndex;
+                drawingSpace.submittedStrokes = submittedStrokes;
+
                 drawingSpace.setFill(true)
-                // drawingSpace.shouldLoopFinishedDrawing();
+                drawingSpace.shouldLoopFinishedDrawing();
                 let shouldLoopFinishedDrawing = false;
                 beginRedrawingStrokes(shouldLoopFinishedDrawing)
                 _ui.push(drawingSpace)
 
-                descriptionContainer = new Container({len:3,index:2,row:h>w})
-                descriptionContainer.setInteractivity(false)
+                let descriptionContainer = new Container({len:3,index:2,row:h>w})
                 _ui.push(descriptionContainer)
                 let descriptionOffsetX = h > w ? descriptionContainer.width*(.1) : descriptionContainer.width*(-.15);
                 let descriptionOffsetY = h > w ? descriptionContainer.height*(-.1) : descriptionContainer.height*(.1);
@@ -306,24 +249,28 @@ class App extends Component {
                 }
 
                 _ui.push(inputTextBox)
-                console.log(isMobile, inputTextBox.textBoxSelected)
+
+                let backButton = new TextBox({parent:inputTextBox,row:true,width:inputTextBox.width,height:inputTextBox.height/2,color:"white",offsetY:inputTextBox.height*1.1,mouseClickfunc:returnToDrawingView});
+                backButton.setString(" << BACK");
+                backButton.setFontStyle(fontStyle);
+                backButton.setTextColor("black")
+                backButton.setInteractivity(false);
+                backButton.setStroke(true)
+                backButton.setClickType(performClickOnce) // true
+                _ui.push(backButton)
 
                 if (isMobile && inputTextBox.textBoxSelected){
-                    let mobileKeyboard = new Keyboard({row:true,len:3,index:2,height:h/2.5,offsetY:-h/4,width:w})
+                    let mobileKeyboard = new Keyboard({row:true,len:4,index:2,height:h/3,width:w-w*.05,})
                     mobileKeyboard.setReferenceToInputBox(inputTextBox)
                     _ui.push(mobileKeyboard)
                     inputTextBox.setMobileKeyboardReference(mobileKeyboard)
                 }
+                // let button5 = new Container({row:true})
+                // _ui.push(button5)
 
-                // let descriptionOffsetX = h > w ? descriptionContainer.width*(.1) : descriptionContainer.width*(-.15);
-                // let descriptionOffsetY = h > w ? descriptionContainer.height*(-.2) : descriptionContainer.height*(.2);
-                // description = new TextBox({parent:descriptionContainer, width:descriptionContainer.width*.7,height:descriptionContainer.height*.5,offsetX:descriptionOffsetX,offsetY:descriptionOffsetY, row:true, color:"white"});
-                // description.setString("hello. how are you? i am well. just hanging out."); // 48 characters.
-                // description.setTextColor("black")
-                // description.setFontStyle(fontStyle);
-                // description.setInteractivity(false)
 
-                // _ui.push(description)
+
+                // _ui.push(backButton)
             }
         }
 
@@ -372,6 +319,7 @@ class App extends Component {
             // parameter 'pauseBetweenDrawings' signals to recursive function
                 // that there has just been a pause after completing a drawing
                 // and that the variables need to be reset.
+            let submittedStrokes = []
             if (pauseBetweenDrawings) {
                 drawingSpace.submittedStrokeIndex = 0;
                 drawingSpace.responseIndex += 1;
@@ -482,7 +430,7 @@ class App extends Component {
                     // finished dragging it or to set a draggable's 'isDragging' boolean to false.
                 this.mouseDragfunc = mouseDragfunc;
                 // the UIElement's index within the parent UIElement
-                this.index = index != undefined ? index : 0;
+                this.index = index !== undefined ? index : 0;
                 // the number of elements that are siblings to this UIElement in the
                     // parent.
                 // EXAMPLE:
@@ -848,12 +796,10 @@ class App extends Component {
                 scope.showCursor = !scope.showCursor
                 if (scope.showCursor){
                     scope.text+="|"
-                    console.log("show",scope.text)
-
+                    // console.log("show",scope.text)
                 } else {
                     scope.text = scope.text.replace("|","")
-                    console.log("hide",scope.text)
-
+                    // console.log("hide",scope.text)
                 }
                 scope.displayText.setString(scope.text)
                 scope.setTimeoutVariable = setTimeout(function(){scope.toggleShowCursor(scope)},800)
@@ -894,14 +840,12 @@ class App extends Component {
                 const BACKSPACE = keyCode === 8
                 const ENTER = keyCode === 13
                 const SPACE = keyCode === 32
-                console.log(keyCode)
                 if (ENTER) {
                     let drawingDescriptor = this.text.replace("|","")
                     REACT.handleSubmitDescription_React(drawingDescriptor)
                     this.toggleTextBoxSelected(drawingDescriptor)
                     // this.mouseClickfunc = null;
                 } else if (BACKSPACE) {
-                    console.log('hey')
                     this.text = this.text.replace("|","")
                     this.text = this.text.substring(0, this.text.length - 1);
                     this.displayText.setString(this.text)
@@ -939,13 +883,13 @@ class App extends Component {
                 this.rowsOfKeys = []
                 {
                     let row;
-                    for (let i = 0; i < 3; i++){
-                        row = new Container({parent:this,width:this.width-i*10,len:3,index:i,row:true, offsetX:i*10})
+                    for (let i = 0; i < 4; i++){
+                        row = new Container({parent:this,width:this.width-i*10,len:4,index:i,row:true, offsetX:i*10})
+                        // row.setStroke(true)
                         this.rowsOfKeys.push(row)
                     }
                 }
 
-                // need backspace, space, and enter/submit keys
                 this.keyLetters = ["qwertyuiop","asdfghjkl","zxcvbnm"]
                 {
                     let doOnce = true;
@@ -958,20 +902,30 @@ class App extends Component {
                                            len:this.keyLetters[i].length,
                                            index:j,
                                            row:false,
-                                           color:"white"
+                                           // color:"white"
                                          }
                         keyboardButton = new KeyboardKey(parameters)
                         keyboardButton.letter = this.keyLetters[i][j]
-
-                        // i only want these to react to
-                            // click events not mouseover events...
-                        keyboardButton.setInteractivity(true)
-                        keyboardButton.setStroke(true)
                         keyboardButton.setClickType(doOnce)
                         keyboardButton.setKeyLetterToDisplay(this.keyLetters[i][j])
 
                         this.rowsOfKeys.push(keyboardButton)
                     }
+                }
+                let controlButtons = ["SUBMIT","SPACE","BACKSPACE"]
+                for (let i = 0; i < controlButtons.length; i++){
+                    parameters = {
+                                       parent:this.rowsOfKeys[3],
+                                       len:controlButtons.length,
+                                       index:i,
+                                       row:false,
+                                       // color:"white"
+                                     }
+                    keyboardButton = new KeyboardKey(parameters)
+                    keyboardButton.letter = controlButtons[i]
+                    keyboardButton.setClickType(doOnce)
+                    keyboardButton.setKeyLetterToDisplay(controlButtons[i])
+                    this.rowsOfKeys.push(keyboardButton)
                 }
             }
 
@@ -981,22 +935,32 @@ class App extends Component {
             }
             searchClickedKey(){
                 let newChar = undefined
-                for (let i = 3; i < this.rowsOfKeys.length; i++){
+                // first 4 items of this.rowsOfKeys are the row containers.
+                    // skip.
+                for (let i = 4; i < this.rowsOfKeys.length; i++){
                     if(this.rowsOfKeys[i].testForClick()){
                         newChar = this.rowsOfKeys[i].pressKey();
+                        // set interactivity click response function here:
+                            // this.rowsOfKeys[i].displayText.myClickResponseFunc()
+                        this.rowsOfKeys[i].displayText.shrinkButton(1)
+
                     }
                 }
                 if (this.referenceToInputTextBox){
                     if (newChar){
-                        if(!this.referenceToInputTextBox.textBoxSelected){
-                            let text = null;
-                            if(this.referenceToInputTextBox.text){
-                                text = this.referenceToInputTextBox.text.replace("|","")
+                        let keyCode;
+                        if (newChar.length === 1){
+                            newChar = newChar.toUpperCase()
+                            keyCode = newChar.charCodeAt(0);
+                        } else {
+                            if (newChar === "SUBMIT"){
+                                keyCode = 13
+                            } else if (newChar === "SPACE"){
+                                keyCode = 32
+                            } else if (newChar === "BACKSPACE"){
+                                keyCode = 8
                             }
-                            this.referenceToInputTextBox.toggleTextBoxSelected(this.referenceToInputTextBox.text)
                         }
-                        newChar = newChar.toUpperCase()
-                        let keyCode = newChar.charCodeAt(0);
                         this.referenceToInputTextBox.handleTyping(keyCode)
                     }
                 }
@@ -1012,7 +976,7 @@ class App extends Component {
             constructor(parameterObject){
                 super(parameterObject)
                 this.letter = undefined;
-                this.displayText = new TextBox({row:true,parent:this})
+                this.displayText = new TextBox({row:true,parent:this,color:"white"})
                 this.displayText.setStroke(true)
                 this.displayText.setInteractivity(true)
                 this.mouseClickfunc = this.pressKey
