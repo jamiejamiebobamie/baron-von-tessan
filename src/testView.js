@@ -2,50 +2,48 @@ import Container from './uiClasses';
 
 const testView = (p) => {
     // GLOBAL VARIABLES:
-        // width and height of the canvas after math.
         let w, h;
-        // testing.
-        let testClass;
         // ui objects to be drawn to the canvas.
         let _ui = []
-        // mouseIsDown boolean.
+        // mouseIsCurrentlyDown boolean.
         let mouseIsClicked = false;
 
         function setUI(){
             _ui = []
             for (let i = 0; i < 5; i++){
-                let color = i%2 ?"red" :"green"
+                let color = i%2 ?"blue" :"blue"
                 let parameters = { p:p,
-                                   windowWidth:w,
+                                   windowWidth: w,
                                    windowHeight: h,
                                    row:false,
                                    len:5,
                                    index:i,
                                    color:color
                                  }
-                testClass = new Container(parameters)
+                let testClass = new Container(parameters)
+                testClass.setInteractivity(true)
                 _ui.push(testClass)
             }
-            for (let j = 0; j < 5; j++){
-                let color = j%2 ? "orange" : "black"
-                let parameters = { p:p,
-                                   windowWidth:w,
-                                   windowHeight: h,
-                                   row:true,
-                                   len:5,
-                                   index:j,
-                                   color:color,
-                                   parent: _ui[j],
-                                 }
-                let testClassChild = new Container(parameters)
-                testClassChild.setInteractivity(true)
-                _ui.push(testClassChild)
-            }
+                for (let j = 0; j < 5; j++){
+                    let color = j%2 ? "white" : "white"
+                    let parameters = { p:p,
+                                       windowWidth:w,
+                                       windowHeight: h,
+                                       // row:false,
+                                       len:5,
+                                       index:j,
+                                       color:color,
+                                       parent: _ui[j],
+                                     }
+                    let testClassChild = new Container(parameters)
+                    testClassChild.setInteractivity(true)
+                    _ui.push(testClassChild)
+                }
         }
         p.setup = () => {
             w = p.windowWidth - (p.windowWidth/10)
             h = p.windowHeight - (p.windowHeight/10)
-            let canvas = p.createCanvas(w, h);
+            let canvas = p.createCanvas(w,h);
             canvas.parent('sketch-holder');
             p.frameRate(24);
             p.textAlign(p.CENTER,p.CENTER);
@@ -55,7 +53,7 @@ const testView = (p) => {
         p.windowResized = () => {
             w = p.windowWidth - (p.windowWidth/10)
             h = p.windowHeight - (p.windowHeight/10)
-            p.resizeCanvas(w, h);
+            p.resizeCanvas(w,h);
             setUI();
         }
         p.mouseReleased = () => {
@@ -84,4 +82,4 @@ const testView = (p) => {
         }
     }
 
-export { testView as default}
+export { testView as default }
