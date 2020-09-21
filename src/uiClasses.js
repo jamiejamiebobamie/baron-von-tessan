@@ -789,4 +789,11 @@ class KeyboardKey extends Container {
     }
 }
 
-export { Container as default}
+class testCallBackButton extends Container {
+    performClickFunctionality(){
+        this.mouseClickfunc(this.index)
+    }
+
+}
+
+export { testCallBackButton as default}

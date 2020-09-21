@@ -1,6 +1,7 @@
 import React,{Component}  from 'react';
 import {isMobile} from 'react-device-detect';
-import testView from './testView.js';
+import Sketch from './Sketch.js';
+import P5Wrapper from 'react-p5-wrapper';
 
 import './App.css';
 let p5 = require("p5")
@@ -10,14 +11,18 @@ class App extends Component {
         super(props)
         // testing
         this.state = {
-            drawingDescriptor: "",
+            drawingDescriptor: "hello",
             drawingData: [],
             response:[],
             test: false,
             // consider storing timeOut variables here.
         }
         this.myRef = React.createRef()
+        this.SketchWrapper = new Sketch(this)
+        this.Sketch = this.SketchWrapper.sketch;
+        this.testCallback = this.testCallback.bind(this);
     }
+    testCallback(setStateTo) { this.setState({test:setStateTo}) }
     handleSubmitDrawing_React(drawingData) {
         this.setState({drawingData:drawingData})
     }
@@ -118,10 +123,8 @@ class App extends Component {
     //         }
     //     }
 
-        // it works...
-        // Sketch = testView.test;
-        Sketch = testView;
-
+    // it works...
+    // Sketch = testView.test;
 
     // Sketch = (p) => {
     //     // width and height of the canvas
@@ -1090,9 +1093,11 @@ class App extends Component {
         return (
           <div className="App">
               <div className="sketch-holder" id="sketch-holder" ref={this.myRef}></div>
+              <h1>{this.state.test}</h1>
           </div>
         );
     }
 }
 
 export default App;
+// <P5Wrapper sketch={testSketch} variable={"hello,indeed"} />
