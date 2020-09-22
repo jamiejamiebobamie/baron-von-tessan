@@ -1,9 +1,11 @@
 import React,{Component}  from 'react';
 import {isMobile} from 'react-device-detect';
 import Sketch from './Sketch.js';
-import P5Wrapper from 'react-p5-wrapper';
-
 import './App.css';
+// not sure if you can use this module in production.
+// const fs = require('fs');
+
+
 let p5 = require("p5")
 
 class App extends Component {
@@ -11,16 +13,34 @@ class App extends Component {
         super(props)
         // testing
         this.state = {
+            currentView: undefined,
             drawingDescriptor: "hello",
             drawingData: [],
             response:[],
             test: false,
-            // consider storing timeOut variables here.
+            isMobile: undefined,
+            viewIndex: 0
         }
+        // consider storing timeOut variables here.
         this.myRef = React.createRef()
-        this.SketchWrapper = new Sketch(this)
+        this.SketchWrapper = new Sketch(this,isMobile)
         this.Sketch = this.SketchWrapper.sketch;
         this.testCallback = this.testCallback.bind(this);
+        this.testViewSwitch = this.testViewSwitch.bind(this);
+    }
+    testViewSwitch(){
+        // const dir = './Views';
+        // fs.readdir(dir, (err, files) => {
+            // will not be hardcoded.
+            let viewIndex;
+            if (this.state.viewIndex === 1){//files.length){
+                viewIndex = 0
+                this.setState({viewIndex:viewIndex})
+            } else {
+                viewIndex = this.state.viewIndex+1
+                this.setState({viewIndex:viewIndex})
+            }
+            // });
     }
     testCallback(setStateTo) { this.setState({test:setStateTo}) }
     handleSubmitDrawing_React(drawingData) {
@@ -34,7 +54,9 @@ class App extends Component {
     }
     componentDidMount() {
         this.myP5 = new p5(this.Sketch, this.myRef.current)
+        this.setState({isMobile:isMobile})
     }
+    setCurrentView(view) { this.setState({currentView:view}) }
     // import the Container from 'uiClasses.js works'.
     // new variables added to classes to deal with
         // encapsulation and missing global variables.
@@ -1092,12 +1114,11 @@ class App extends Component {
     render(){
         return (
           <div className="App">
+                <div>{this.state.viewIndex}</div>
               <div className="sketch-holder" id="sketch-holder" ref={this.myRef}></div>
-              <h1>{this.state.test}</h1>
           </div>
         );
     }
 }
 
 export default App;
-// <P5Wrapper sketch={testSketch} variable={"hello,indeed"} />

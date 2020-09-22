@@ -82,37 +82,72 @@ class UIElement{
         // given the relevant fields, positions the UIElement on the canvas.
             // depends on: the orientation, the parent's bounds and placement,
             // and the number of siblings and index of the UIElement.
-        if (this.row) {
-            if (parent){
-                // if row orientation and parent
-                this.parent = parent;
-                this.width = width || this.parent.width;
-                this.height = height || this.parent.height / this.len;
-                this.x = this.parent.x + offsetX;
-                this.y = this.index * this.parent.height / this.len + this.parent.y - this.height / 2 * this.len + offsetY + this.height / 2;
+        if (p._renderer._rectMode === "center"){
+            if (this.row) {
+                if (parent){
+                    // if row orientation and parent
+                    this.parent = parent;
+                    this.width = width || this.parent.width;
+                    this.height = height || this.parent.height / this.len;
+                    this.x = this.parent.x + offsetX;
+                    this.y = this.index * this.parent.height / this.len + this.parent.y - this.height / 2 * this.len + offsetY + this.height / 2;
+                } else {
+                    // if row orientation and no parent
+                    this.width = width || this.windowWidth;
+                    this.height = height || this.windowHeight / this.len;
+                    this.x = offsetX + this.width / 2;
+                    this.y = this.index * this.windowHeight / this.len + offsetY + this.height / 2;
+                }
             } else {
-                // if row orientation and no parent
-                this.width = width || this.windowWidth;
-                this.height = height || this.windowHeight / this.len;
-                this.x = offsetX + this.width / 2;
-                this.y = this.index * this.windowHeight / this.len + offsetY + this.height / 2;
+                if (parent) {
+                    // if column orientation and parent
+                    this.parent = parent;
+                    this.width = width || this.parent.width / this.len;
+                    this.height = height || this.parent.height;
+                    this.x = this.index * this.parent.width / this.len + this.parent.x - this.width / 2 * this.len + offsetX + this.width / 2;
+                    this.y = this.parent.y + offsetY;
+                } else {
+                    // if column orientation and no parent
+                    this.width = width || this.windowWidth / this.len;
+                    this.height = height || this.windowHeight;
+                    this.x = offsetX + this.index * this.windowWidth / this.len + this.width / 2;
+                    this.y = offsetY + this.height / 2;
+                }
             }
-        } else {
-            if (parent) {
-                // if column orientation and parent
-                this.parent = parent;
-                this.width = width || this.parent.width / this.len;
-                this.height = height || this.parent.height;
-                this.x = this.index * this.parent.width / this.len + this.parent.x - this.width / 2 * this.len + offsetX + this.width / 2;
-                this.y = this.parent.y + offsetY;
+        } else if (p._renderer._rectMode === "corner") {
+            if (this.row) {
+                if (parent){
+                    // if row orientation and parent
+                    this.parent = parent;
+                    this.width = width || this.parent.width;
+                    this.height = height || this.parent.height / this.len;
+                    this.x = this.parent.x + offsetX;
+                    this.y = this.index * this.parent.height / this.len + this.parent.y + offsetY;
+                } else {
+                    // if row orientation and no parent
+                    this.width = width || this.windowWidth;
+                    this.height = height || this.windowHeight / this.len;
+                    this.x = offsetX;
+                    this.y = this.index * this.windowHeight / this.len + offsetY;
+                }
             } else {
-                // if column orientation and no parent
-                this.width = width || this.windowWidth / this.len;
-                this.height = height || this.windowHeight;
-                this.x = offsetX + this.index * this.windowWidth / this.len + this.width / 2;
-                this.y = offsetY + this.height / 2;
+                if (parent) {
+                    // if column orientation and parent
+                    this.parent = parent;
+                    this.width = width || this.parent.width / this.len;
+                    this.height = height || this.parent.height;
+                    this.x = this.index * this.parent.width / this.len + this.parent.x + offsetX;
+                    this.y = this.parent.y + offsetY;
+                } else {
+                    // if column orientation and no parent
+                    this.width = width || this.windowWidth / this.len;
+                    this.height = height || this.windowHeight;
+                    this.x = offsetX + this.index * this.windowWidth / this.len;
+                    this.y = offsetY;
+                }
             }
         }
+
         this.uiElements = []
     }
     // p5.js built-in methods
@@ -788,12 +823,17 @@ class KeyboardKey extends Container {
         this.displayText.draw()
     }
 }
-
 class testCallBackButton extends Container {
-    performClickFunctionality(){
-        this.mouseClickfunc(this.index)
-    }
-
+    // performClickFunctionality(){
+    //     if (this.mouseClickfunc){
+    //         if (this.doOnce && !this.clickPerformed) {
+    //             this.clickPerformed = true;
+    //             return this.mouseClickfunc(this.index)
+    //         } else if (!this.doOnce) {
+    //             return this.mouseClickfunc(this.index)
+    //         }
+    //     }
+    // }
 }
 
 export { testCallBackButton as default}
