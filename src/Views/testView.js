@@ -1,6 +1,7 @@
 import testCallBackButton from '../uiClasses';
 
 export default class testView {
+    getUI(previousUI){}
     setUI(p,w,h,REACT_APP){
         let _ui = []
         for (let i = 0; i < 5; i++){
@@ -13,8 +14,6 @@ export default class testView {
                                index:i,
                                color:color,
                                mouseClickfunc: REACT_APP.testViewSwitch
-                               // mouseClickfunc: REACT_APP.testCallback
-
                              }
             let testClass = new testCallBackButton(parameters)
             let doOnce = true;

@@ -1,6 +1,7 @@
 import testCallBackButton from '../uiClasses';
 
 export default class testView {
+    getUI(previousUI){}
     setUI(p,w,h,REACT_APP){
         let _ui = []
         for (let i = 0; i < 5; i++){

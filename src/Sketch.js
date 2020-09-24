@@ -1,16 +1,26 @@
 // import testCallBackButton from './uiClasses';
 import testView from './Views/testView';
 import testView2 from './Views/testView2';
+import IntroView from './Views/IntroView';
+import DrawingView from './Views/DrawingView';
+
+
+// const fs = require('fs');
+// const dotenv = require('dotenv').config();
 
 export default class Sketch {
     constructor(app){
         this.REACT_APP = app;
         this.views= [];
         this.viewIndex = app.state.viewIndex;
-        let view = new testView();
+        let view = new IntroView();
         this.views.push(view)
-        view = new testView2();
-        this.views.push(view)
+        view = new DrawingView();
+        this.views.push(view);
+        view = new testView();
+        this.views.push(view);
+        // this.image = undefined;
+        // this.fontStyle = undefined;
     }
     sketch = (p) => {
         // GLOBAL VARIABLES:
@@ -21,62 +31,36 @@ export default class Sketch {
         let mouseIsClicked = false;
         // reference to React App's 'this' variable.
         const REACT_APP = this.REACT_APP;
-        // will polymorphically called: myView.setUI(_ui)
-        // testView.setUI(_ui,p,w,h,REACT_APP)
-        // function setUI(){
-        //     _ui = []
-        //     for (let i = 0; i < 5; i++){
-        //         let color = i%2 ?"blue" :"blue"
-        //         let parameters = { p:p,
-        //                            windowWidth: w,
-        //                            windowHeight: h,
-        //                            // row:true,
-        //                            len:5,
-        //                            index:i,
-        //                            color:color,
-        //                            mouseClickfunc: REACT_APP.testCallback
-        //                          }
-        //         let testClass = new testCallBackButton(parameters)
-        //         testClass.setInteractivity(true)
-        //         _ui.push(testClass)
-        //     }
-        //         for (let j = 0; j < 5; j++){
-        //             let color = j%2 ? "white" : "white"
-        //             let parameters = { p:p,
-        //                                windowWidth:w,
-        //                                windowHeight: h,
-        //                                // row:false,
-        //                                len:5,
-        //                                index:j,
-        //                                color:color,
-        //                                parent: _ui[j],
-        //                                mouseClickfunc: REACT_APP.testCallback
-        //                              }
-        //             let testClassChild = new testCallBackButton(parameters)
-        //             testClassChild.setInteractivity(true)
-        //             _ui.push(testClassChild)
-        //         }
-        // }
+        REACT_APP.setNumberOfViews(this.views.length)
+        p.preload = () => { }
         p.setup = () => {
             w = p.windowWidth - (p.windowWidth/10)
             h = p.windowHeight - (p.windowHeight/10)
             let canvas = p.createCanvas(w,h);
             // parents the canvas to the DOM element 'sketch-holder'
             canvas.parent('sketch-holder');
+
             p.frameRate(24);
+
             p.textAlign(p.CENTER,p.CENTER);
             p.rectMode(p.CENTER,p.CENTER);
-            _ui = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP)
+            let windowResized = false;
+            _ui = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP,windowResized)
         }
         p.windowResized = () => {
             w = p.windowWidth - (p.windowWidth/10)
             h = p.windowHeight - (p.windowHeight/10)
             p.resizeCanvas(w,h);
-            _ui  = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP)
+            let windowResized = true;
+            let previousUI = this.views[REACT_APP.state.viewIndex].getUI()
+            _ui  = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP,windowResized,previousUI)
         }
         p.mouseReleased = () => {
             if (mouseIsClicked){
+                // for the drawing method. needs to moved to
+                    // the drawingContainer class.
                 p.frameRate(24);
+
                 mouseIsClicked = false;
                 for (let i = 0; i < _ui.length; i++){
                     _ui[i].setClick(mouseIsClicked);
@@ -85,7 +69,10 @@ export default class Sketch {
         }
         p.mousePressed = () => {
             if (!mouseIsClicked){
+                // for the drawing method. needs to moved to
+                    // the drawingContainer class.
                 p.frameRate(70);
+
                 mouseIsClicked = true;
                 for (let i = 0; i < _ui.length; i++){
                     _ui[i].setClick(mouseIsClicked);
@@ -93,11 +80,17 @@ export default class Sketch {
             }
         }
         p.draw = () => {
-            p.background(255)
+            // is this computationally expensive?
             if (this.viewIndex !== REACT_APP.state.viewIndex){
                 _ui  = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP)
                 this.viewIndex = REACT_APP.state.viewIndex
             }
+            if (REACT_APP.state.isMobile){
+                p.background(0)
+            } else {
+                p.background(255)
+            }
+            // p.background(255)
             for (let i = 0; i < _ui.length; i++){
                 _ui[i].draw();
             }

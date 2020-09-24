@@ -503,7 +503,6 @@ class TextBox extends Container{
         this.row ? this.drawNormalTextBox() : this.drawRotatedTextBox()
     }
 }
-
 class DrawingContainer extends Container{
     constructor(parameterObject){
         super(parameterObject)
