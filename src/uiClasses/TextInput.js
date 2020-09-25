@@ -19,6 +19,7 @@ export default class TextInput extends Container{
         // this.mouseClickfunc = this.toggleTextBoxSelected
         this.setTimeoutVariable = undefined
         this.setStroke(true)
+        this.referenceToAPP = undefined;
         // dummy object
         this.referenceToMobileKeyboard = new Container({p:this.p,w:this.windowWidth,h:this.windowHeight,width:0,height:0})
     }
@@ -88,7 +89,7 @@ export default class TextInput extends Container{
         const SPACE = keyCode === 32
         if (ENTER) {
             let drawingDescriptor = this.text.replace("|","")
-            this.APP.handleSubmitDescription_React(drawingDescriptor)
+            this.referenceToAPP.handleSubmitDescription(drawingDescriptor)
             this.toggleTextBoxSelected(drawingDescriptor)
             // this.mouseClickfunc = null;
         } else if (BACKSPACE) {

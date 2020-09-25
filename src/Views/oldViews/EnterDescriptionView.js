@@ -31,21 +31,24 @@ export default class EnterDescriptionView {
         // this.displayDrawingSpace.setLoopToTrueToLoopFinishedDrawing()
         let beginRedrawingStrokesFunc = () => {
             this.displayDrawingSpace.setSubmittedStrokeIndex(0)
-            let redrawStrokes = () => {
+            let redrawStrokes = (timeOutVar) => {
                 if (this.displayDrawingSpace.drawingHasBeenDrawn){
                     if (this.displayDrawingSpace.loop){
                         this.displayDrawingSpace.drawingHasBeenDrawn = false;
                         this.displayDrawingSpace.submittedStrokeIndex = 0;
+                        clearTimeout(timeOutVar)
                     } else {
                         return;
                     }
                 }
                 if (this.displayDrawingSpace.submittedStrokeIndex < this.displayDrawingSpace.submittedStrokes.length) {
                     this.displayDrawingSpace.submittedStrokeIndex += 1
-                    setTimeout(redrawStrokes, 1000/this.displayDrawingSpace.submittedStrokes.length);
+                    timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
                 } else {
                     this.displayDrawingSpace.drawingHasBeenDrawn = true;
-                    setTimeout(redrawStrokes, 3000);
+                    // pause three seconds to display drawing.
+                        // then loop if loops is set to true or stop.
+                    timeOutVar = setTimeout(redrawStrokes, 3000,timeOutVar);
                 }
             }
             redrawStrokes();
@@ -96,6 +99,7 @@ export default class EnterDescriptionView {
         if (previouslySelected){
             this.inputTextBox.textBoxSelected = true;
         }
+        this.inputTextBox.setReferenceToAPP(REACT_APP)
 
         _ui.push(this.inputTextBox)
 
