@@ -1,5 +1,5 @@
-import TextBox from '../uiClasses/TextBox'
-import Container from '../uiClasses/Container'
+import TextBox from '../../uiClasses/TextBox'
+import Container from '../../uiClasses/Container'
 // import ImageContainer from '../uiClasses/ImageContainer'
 
 export default class IntroView {

@@ -17,6 +17,7 @@ export default class UIElement{
             width: undefined,
             height: undefined,
             color: undefined,
+            wildcard: undefined
         };
         // if a 'parameterObject' has been passed in, set the fields in the
             // 'parameterObject' to the null parameter object 'parameters'.
@@ -41,12 +42,17 @@ export default class UIElement{
             width: width,
             height: height,
             color: color,
+            wildcard: wildcard,
         } = parameters;
 
         // NEW PARAMS
         this.p = p ? p : new p5();
         this.windowWidth = windowWidth ? windowWidth : this.p.windowWidth;
         this.windowHeight = windowHeight ? windowHeight : this.p.windowHeight;
+        // !!!!
+        // consider creating a "wildcard" parameter that is itself a parameterObject
+            // to get rid of all of these setters...
+        this.wildcard = wildcard;
 
         // performed on mousePressed()
         // used for when you want to grab the value of something after having

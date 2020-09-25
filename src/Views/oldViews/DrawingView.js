@@ -1,80 +1,150 @@
-import TextBox from '../uiClasses/TextBox'
-import Container from '../uiClasses/Container'
-import DrawingContainer from '../uiClasses/DisplayDrawingContainer'
+import TextBox from '../../uiClasses/TextBox'
+import Container from '../../uiClasses/Container'
+import DrawingContainer from '../../uiClasses/DrawingContainer'
 
-export default class SlideshowView {
+export default class DrawingView {
     constructor(){
         this.drawingSpace = undefined;
-        this.drawingSpaceSide = undefined;
-        this.eraserOrPenButton = undefined;
-        this.p = undefined
-    }
+        // callbacks
+        this.toggleTool = this.toggleTool.bind(this)
+        this.buildStroke = this.buildStroke.bind(this)
+        this.undoLastStroke = this.undoLastStroke.bind(this)
+        this.clearStrokes = this.clearStrokes.bind(this)
+        this.removeStroke = this.removeStroke.bind(this)
+     }
     getUI(){
-        let components = {drawingSpace:this.drawingSpace,drawingSpaceSide:this.drawingSpaceSide}
-        return components
+        let _ui = {drawingSpace:this.drawingSpace};
+        return _ui;
     }
-    setUI(p,w,h,REACT_APP, previousComponents){
+    toggleTool(){
+        this.drawingSpace.penMode = !this.drawingSpace.penMode;
+        let buttonString = this.drawingSpace.penMode ? "ERASER" : "PEN";
+        this.eraserOrPenButton.setString(buttonString);
+        this.drawingSpace.mouseClickfunc = this.drawingSpace.penMode ? this.buildStroke : this.removeStroke;
+    }
+    buildStroke(){
+        this.drawingSpace.currentStroke.push({x:this.drawingSpace.p.mouseX/this.drawingSpace.lengthOfDrawingSquare,y:this.drawingSpace.p.mouseY/this.drawingSpace.lengthOfDrawingSquare})
+    }
+    undoLastStroke(){
+        this.drawingSpace.strokes.pop()
+    }
+    clearStrokes(){
+        this.drawingSpace.strokes = []
+    }
+    removeStroke(){
+        for (let i = 0; i < this.drawingSpace.strokes.length; i++ ){
+            for (let j = 0; j < this.drawingSpace.strokes[i].length; j++ ){
+                if ( this.drawingSpace.p.mouseX > this.drawingSpace.strokes[i][j].x*this.drawingSpace.lengthOfDrawingSquare-this.drawingSpace.lengthOfDrawingSquare*.01
+                    && this.drawingSpace.p.mouseX < this.drawingSpace.strokes[i][j].x*this.drawingSpace.lengthOfDrawingSquare+this.drawingSpace.lengthOfDrawingSquare*.01
+                    && this.drawingSpace.p.mouseY > this.drawingSpace.strokes[i][j].y*this.drawingSpace.lengthOfDrawingSquare-this.drawingSpace.lengthOfDrawingSquare*.01
+                    && this.drawingSpace.p.mouseY < this.drawingSpace.strokes[i][j].y*this.drawingSpace.lengthOfDrawingSquare+this.drawingSpace.lengthOfDrawingSquare*.01 ){
+                        this.drawingSpace.strokes[i].splice(j,1)
+                    }
+            }
+        }
+    }
+    setUI(p,w,h,REACT_APP, windowResized, previousUI){
+        let _ui = []
+        let drawingMode;
+        let currentStroke;
+        let strokes;
+        if (previousUI){
+            if (previousUI.drawingSpace){
+                drawingMode = previousUI.drawingSpace.getPenMode()
+                currentStroke = previousUI.drawingSpace.currentStroke
+                strokes = previousUI.drawingSpace.strokes
+                console.log(drawingMode)
+            }
+        } else {
+            drawingMode = true;
+            currentStroke = [];
+            strokes = [];
+        }
         let drawingSpaceWidth = w > h ? w*(2/3) : w;
         let drawingSpaceHeight = w > h ? h : h*(2/3);
-        this.drawingSpaceSide = w > h ? drawingSpaceHeight : drawingSpaceWidth;
+        this.lengthOfDrawingSquare = w > h ? drawingSpaceHeight : drawingSpaceWidth;
         let longerSideOfScreen = w > h ? w : h;
-        this.drawingSpaceSide > longerSideOfScreen*(2/3) ? longerSideOfScreen*(2/3) : this.drawingSpaceSide = undefined;;
-        let submittedStrokes = APP.state.drawingData;
-        let storeStrokeIndex = drawingSpace.submittedStrokeIndex
-        drawingSpace = new DisplayDrawingContainer({width:sketchSide,height:sketchSide,len:2,index:0,color:'lightgrey'})
-        drawingSpace.setSubmittedStrokes(submittedStrokes,storeStrokeIndex)
-        drawingSpace.setFill(true)
-        drawingSpace.shouldLoopFinishedDrawing();
-        let shouldLoopFinishedDrawing = false;
-        beginRedrawingStrokes(shouldLoopFinishedDrawing)
-        _ui.push(drawingSpace)
+        this.lengthOfDrawingSquare = this.lengthOfDrawingSquare > longerSideOfScreen*(2/3) ? longerSideOfScreen*(2/3) : this.lengthOfDrawingSquare;
+        this.drawingSpace = new DrawingContainer({p:p,w:w,h:h,width:this.lengthOfDrawingSquare,height:this.lengthOfDrawingSquare,len:3,index:0,color:'lightgrey', mouseClickfunc:this.buildStroke})
+        this.drawingSpace.setCurrentStroke(currentStroke);
+        this.drawingSpace.setStrokes(strokes);
+        this.drawingSpace.setFill(true)
+        this.drawingSpace.setLengthOfDrawingSquare(this.lengthOfDrawingSquare)
+        let performClickOnce = false;
+        this.drawingSpace.setClickType(performClickOnce)
+        if (drawingMode){
+            this.drawingSpace.setPenMode(drawingMode);
+        }
+        _ui.push(this.drawingSpace)
 
-        let descriptionContainer = new Container({len:3,index:2,row:h>w})
-        _ui.push(descriptionContainer)
-        let descriptionOffsetX = h > w ? descriptionContainer.width*(.1) : descriptionContainer.width*(-.15);
-        let descriptionOffsetY = h > w ? descriptionContainer.height*(-.1) : descriptionContainer.height*(.1);
-        let previouslySubmittedText = null;
-        let previouslySelected = null;
+        let offsetX = w>h ? w*(-1/10) : 0;
+        let offsetY = w>h ? 0 :  -h/10 ;
+        let width =  w>h ? w*(1/3) :  w;
+        let height =  w>h ? h :  h*(1/3) ;
 
-        if (inputTextBox){
-            if (inputTextBox.text !== undefined) {
-                previouslySubmittedText = inputTextBox.text
+        let buttons = new Container({p:p,width:width,height:height,len:3,index:2,row:h>w, offsetX:offsetX, offsetY:offsetY})
+        // buttons.setStroke(true)
+        _ui.push(buttons)
+
+        let button1 = new Container({p:p,w:w,h:h,parent:buttons,len:4,index:0,row:w>h})
+        _ui.push(button1)
+        this.eraserOrPenButton = new TextBox({p:p,w:w,h:h,parent:button1,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:this.toggleTool});
+        let buttonString = this.drawingSpace.penMode ? "ERASER" : "PEN";
+        this.eraserOrPenButton.setString(buttonString);
+        this.eraserOrPenButton.setTextColor("black")
+        // this.eraserOrPenButton.setFontStyle(fontStyle);
+        this.eraserOrPenButton.setInteractivity(true);
+        this.eraserOrPenButton.setStroke(true)
+        performClickOnce = true;
+        this.eraserOrPenButton.setClickType(performClickOnce)
+        _ui.push(this.eraserOrPenButton)
+
+        let button2 = new Container({p:p,w:w,h:h,parent:buttons,len:4,index:1,row:w>h})
+        _ui.push(button2)
+        let undoButton = new TextBox({p:p,w:w,h:h,parent:button2,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:this.undoLastStroke});
+        undoButton.setString("UNDO");
+        // undoButton.setFontStyle(fontStyle);
+        undoButton.setTextColor("black")
+        undoButton.setInteractivity(true);
+        undoButton.setStroke(true)
+        undoButton.setClickType(performClickOnce) // true
+
+        _ui.push(undoButton)
+
+        let button3 = new Container({p:p,w:w,h:h,parent:buttons,len:4,index:2,row:w>h})
+        _ui.push(button3)
+        let clearButton = new TextBox({p:p,w:w,h:h,parent:button3,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:this.clearStrokes});
+        clearButton.setString("CLEAR");
+        // clearButton.setFontStyle(fontStyle);
+        clearButton.setTextColor("black")
+        clearButton.setInteractivity(true);
+        clearButton.setStroke(true)
+        clearButton.setClickType(performClickOnce) // true
+
+        _ui.push(clearButton)
+
+        let button4 = new Container({p:p,w:w,h:h,parent:buttons,len:4,index:3,row:w>h})
+        _ui.push(button4)
+        let submitFunc = () => {
+            let submittedStrokes = [];
+            for (let i = 0; i<this.drawingSpace.strokes.length; i++) {
+                for (let j = 0; j<this.drawingSpace.strokes[i].length; j++) {
+                    submittedStrokes.push(this.drawingSpace.strokes[i][j])
+                }
             }
-            if (inputTextBox.textBoxSelected !== false){
-                previouslySelected = true
-            }
+            REACT_APP.handleSubmitDrawing(submittedStrokes)
+            REACT_APP.testViewSwitch()
         }
-        inputTextBox = new TextInput({parent:descriptionContainer,row:w>h,color:"white",width:descriptionContainer.width*.7,offsetY:descriptionOffsetY,offsetX:descriptionOffsetX,mouseClickfunc:toggleKeyboardForMobile})
-        inputTextBox.setClickType(performClickOnce)
-        inputTextBox.setInteractivity(false)
+        let submitButton = new TextBox({p:p,w:w,h:h,parent:button4,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:submitFunc});
+        submitButton.setString("SUBMIT");
+        // submitButton.setFontStyle(fontStyle);
+        submitButton.setTextColor("black")
+        submitButton.setInteractivity(true);
+        submitButton.setStroke(true)
+        submitButton.setClickType(performClickOnce) // true
 
-        if (previouslySubmittedText){
-            inputTextBox.setDisplayText(previouslySubmittedText)
-        } else {
-            inputTextBox.setDisplayText("I drew a... \n(click to finish the sentence).")
-        }
-
-        if (previouslySelected){
-            inputTextBox.textBoxSelected = true;
-        }
-
-        _ui.push(inputTextBox)
-
-        let backButton = new TextBox({parent:inputTextBox,row:true,width:inputTextBox.width,height:inputTextBox.height/2,color:"white",offsetY:inputTextBox.height*1.1,mouseClickfunc:returnToDrawingView});
-        backButton.setString(" << BACK");
-        backButton.setFontStyle(fontStyle);
-        backButton.setTextColor("black")
-        backButton.setInteractivity(false);
-        backButton.setStroke(true)
-        backButton.setClickType(performClickOnce) // true
-        _ui.push(backButton)
-
-        if (isMobile && inputTextBox.textBoxSelected){
-            let mobileKeyboard = new Keyboard({row:true,len:4,index:2,height:h/3,width:w-w*.05,})
-            mobileKeyboard.setReferenceToInputBox(inputTextBox)
-            _ui.push(mobileKeyboard)
-            inputTextBox.setMobileKeyboardReference(mobileKeyboard)
-        }
+        _ui.push(submitButton)
+        return _ui;
     }
 }
 

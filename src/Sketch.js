@@ -1,8 +1,13 @@
 // import testCallBackButton from './uiClasses';
-import testView from './Views/testView';
-import testView2 from './Views/testView2';
-import IntroView from './Views/IntroView';
-import DrawingView from './Views/DrawingView';
+import testView from './Views/test/testView';
+import testView2 from './Views/test/testView2';
+import IntroView from './Views/oldViews/IntroView';
+import DrawingView from './Views/oldViews/DrawingView';
+import EnterDescriptionView from './Views/oldViews/EnterDescriptionView';
+// import IntroViewWireframe from './Views/wireFrames/1_IntroViewWireframe';
+// import SlideshowViewWireframe from './Views/wireFrames/2_SlideshowViewWireframe';
+// import FlagInappropriateContentWireframe from './Views/wireFrames/5_FlagInappropriateContentWireframe';
+// import EnterDescriptionViewWireframe from './Views/wireFrames/4_EnterDescriptionViewWireframe';
 
 
 // const fs = require('fs');
@@ -13,12 +18,25 @@ export default class Sketch {
         this.REACT_APP = app;
         this.views= [];
         this.viewIndex = app.state.viewIndex;
-        let view = new IntroView();
-        this.views.push(view)
-        view = new DrawingView();
+        let view;
+        view = new IntroView();
         this.views.push(view);
         view = new testView();
         this.views.push(view);
+        view = new DrawingView();
+        this.views.push(view)
+        view = new EnterDescriptionView();
+        this.views.push(view)
+        view = new testView2();
+        this.views.push(view);
+
+        // view = new IntroView();
+        // this.views.push(view)
+        // view = new DrawingView();
+        // view = new EnterDescriptionView();
+        // this.views.push(view);
+        // view = new testView();
+        // this.views.push(view);
         // this.image = undefined;
         // this.fontStyle = undefined;
     }
@@ -41,9 +59,9 @@ export default class Sketch {
             canvas.parent('sketch-holder');
 
             p.frameRate(24);
-
             p.textAlign(p.CENTER,p.CENTER);
             p.rectMode(p.CENTER,p.CENTER);
+            
             let windowResized = false;
             _ui = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP,windowResized)
         }
@@ -79,18 +97,21 @@ export default class Sketch {
                 }
             }
         }
+        p.keyPressed = () => {
+            for (let i = 0; i < _ui.length; i++){
+                if (_ui[i].textBoxSelected){
+                    _ui[i].handleTyping(p.keyCode)
+                }
+            }
+        }
         p.draw = () => {
-            // is this computationally expensive?
+            // temporary setup that works, but is not ideal.
+                // the React App doesn't need to know about the views.
             if (this.viewIndex !== REACT_APP.state.viewIndex){
                 _ui  = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP)
                 this.viewIndex = REACT_APP.state.viewIndex
             }
-            if (REACT_APP.state.isMobile){
-                p.background(0)
-            } else {
-                p.background(255)
-            }
-            // p.background(255)
+            p.background(255)
             for (let i = 0; i < _ui.length; i++){
                 _ui[i].draw();
             }

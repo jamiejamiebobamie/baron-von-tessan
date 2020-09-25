@@ -4,7 +4,7 @@ export default class TextBox extends Container{
     constructor(parameterObject){
         super(parameterObject)
         this.text = undefined
-        this.textColor = undefined;
+        this.textColor = "black";
         // this.row determines the orientation of the font.
         // use the orientation of the parent container for aligning
             // normally-oriented text, vertically.
@@ -12,6 +12,13 @@ export default class TextBox extends Container{
         if (this.textSize * 2.5 > this.height && this.row){this.textSize = this.width / 10}
         this.p.textSize(this.textSize);
         this.fontStyle = undefined
+        if (this.wildcard){
+            if (this.wildcard.string){
+                // this.setString(this.wildcard.string)
+                this.text = this.wildcard.string
+                this.setFontSize(this.width/50)
+            }
+        }
     }
     // call this after instantiating the object to set the text
     setString(s) { this.text = s }
