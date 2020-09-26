@@ -29,6 +29,7 @@ export default class EnterDescriptionView {
         let submittedStrokes = REACT_APP.state.drawingData
         this.displayDrawingSpace.setSubmittedStrokes(submittedStrokes)
         // this.displayDrawingSpace.setLoopToTrueToLoopFinishedDrawing()
+
         let beginRedrawingStrokesFunc = () => {
             this.displayDrawingSpace.setSubmittedStrokeIndex(0)
             let redrawStrokes = (timeOutVar) => {
@@ -47,7 +48,8 @@ export default class EnterDescriptionView {
                 } else {
                     this.displayDrawingSpace.drawingHasBeenDrawn = true;
                     // pause three seconds to display drawing.
-                        // then loop if loops is set to true or stop.
+                        // then loop if this.displayDrawingSpace.loop
+                        // is set to true otherwise return.
                     timeOutVar = setTimeout(redrawStrokes, 3000,timeOutVar);
                 }
             }

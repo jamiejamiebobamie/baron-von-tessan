@@ -1,12 +1,12 @@
 // import testCallBackButton from './uiClasses';
-import testView from './Views/test/testView';
-import testView2 from './Views/test/testView2';
-import IntroView from './Views/oldViews/IntroView';
-import DrawingView from './Views/oldViews/DrawingView';
-import EnterDescriptionView from './Views/oldViews/EnterDescriptionView';
+// import testView from './Views/test/testView';
+// import testView2 from './Views/test/testView2';
+// import IntroView from './Views/oldViews/IntroView';
+// import DrawingView from './Views/oldViews/DrawingView';
+// import EnterDescriptionView from './Views/oldViews/EnterDescriptionView';
 // import IntroViewWireframe from './Views/wireFrames/1_IntroViewWireframe';
 // import SlideshowViewWireframe from './Views/wireFrames/2_SlideshowViewWireframe';
-// import FlagInappropriateContentWireframe from './Views/wireFrames/5_FlagInappropriateContentWireframe';
+import FlagInappropriateContentWireframe from './Views/wireFrames/6_FlagInappropriateContentWireframe';
 // import EnterDescriptionViewWireframe from './Views/wireFrames/4_EnterDescriptionViewWireframe';
 
 
@@ -19,16 +19,17 @@ export default class Sketch {
         this.views= [];
         this.viewIndex = app.state.viewIndex;
         let view;
-        view = new IntroView();
+        // view = new IntroView();
+        view = new FlagInappropriateContentWireframe();
         this.views.push(view);
-        view = new testView();
-        this.views.push(view);
-        view = new DrawingView();
-        this.views.push(view)
-        view = new EnterDescriptionView();
-        this.views.push(view)
-        view = new testView2();
-        this.views.push(view);
+        // view = new testView();
+        // this.views.push(view);
+        // view = new DrawingView();
+        // this.views.push(view)
+        // view = new EnterDescriptionView();
+        // this.views.push(view)
+        // view = new testView2();
+        // this.views.push(view);
 
         // view = new IntroView();
         // this.views.push(view)
@@ -61,7 +62,7 @@ export default class Sketch {
             p.frameRate(24);
             p.textAlign(p.CENTER,p.CENTER);
             p.rectMode(p.CENTER,p.CENTER);
-            
+
             let windowResized = false;
             _ui = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP,windowResized)
         }
