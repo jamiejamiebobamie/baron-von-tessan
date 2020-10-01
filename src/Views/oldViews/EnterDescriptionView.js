@@ -8,13 +8,7 @@ export default class EnterDescriptionView {
         this.displayDrawingSpace = undefined;
         this.inputTextBox = undefined;
     }
-    getUI(){
-        let currentUI = {
-            displayDrawingSpace:this.displayDrawingSpace,
-            inputTextBox:this.inputTextBox
-        };
-        return currentUI;
-    }
+    getUI(){ return this; }
     setUI(p,w,h,REACT_APP, windowResized, previousUI){
         let _ui = []
 

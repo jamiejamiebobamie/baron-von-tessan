@@ -1,7 +1,8 @@
-// import Container from './Container'
+import Container from './Container'
 
-export default class Mirror{
+export default class Mirror extends Container{
     constructor(parameterObject){
+        super()
         this.p = parameterObject.p;
 
         this.object = parameterObject.objectToMirror;

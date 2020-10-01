@@ -2,12 +2,15 @@
 // import testView from './Views/test/testView';
 // import testView2 from './Views/test/testView2';
 // import IntroView from './Views/oldViews/IntroView';
-// import DrawingView from './Views/oldViews/DrawingView';
+import DrawingView from './Views/oldViews/DrawingView';
 // import EnterDescriptionView from './Views/oldViews/EnterDescriptionView';
 // import IntroViewWireframe from './Views/wireFrames/1_IntroViewWireframe';
 // import SlideshowViewWireframe from './Views/wireFrames/2_SlideshowViewWireframe';
-import FlagInappropriateContentWireframe from './Views/wireFrames/6_FlagInappropriateContentWireframe';
+// import FlagInappropriateContentWireframe from './Views/wireFrames/5_FlagInappropriateContentWireframe';
 // import EnterDescriptionViewWireframe from './Views/wireFrames/4_EnterDescriptionViewWireframe';
+import DrawingViewWireframe from './Views/wireFrames/3_DrawingViewWireframe';
+
+
 
 
 // const fs = require('fs');
@@ -20,10 +23,10 @@ export default class Sketch {
         this.viewIndex = app.state.viewIndex;
         let view;
         // view = new IntroView();
-        view = new FlagInappropriateContentWireframe();
-        this.views.push(view);
-        // view = new testView();
+        view = new DrawingView();
         // this.views.push(view);
+        // view = new DrawingViewWireframe();
+        this.views.push(view);
         // view = new DrawingView();
         // this.views.push(view)
         // view = new EnterDescriptionView();
