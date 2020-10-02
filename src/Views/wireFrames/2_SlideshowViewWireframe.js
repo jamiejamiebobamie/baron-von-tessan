@@ -2,9 +2,10 @@ import Wireframe from '../../uiClasses/Wireframe';
 import Mirror from '../../uiClasses/Mirror';
 
 export default class testView {
-    constructor(){
-        this.mirrorTest1 = undefined
-        this.mirrorTest2 = undefined
+    constructor(previousView){
+        console.log(previousView)
+        this.drawing = previousView ? previousView.drawing : undefined;
+        this.dialog = previousView ? previousView.dialog : undefined;
     }
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI){
@@ -18,72 +19,55 @@ export default class testView {
         let parameters = { p:p,
                            windowWidth: w,
                            windowHeight: h,
-                           // row:true,
+                           offsetX:w>h?0:(w-lengthOfDrawingSquare)/2,
+                           offsetY:w>h?(h-lengthOfDrawingSquare)/2:0,
                            width:lengthOfDrawingSquare,
                            height:lengthOfDrawingSquare,
                            len:3,
                            index:0,
                            color:"red",
                            wildcard:wildcard,
-                           // mouseClickfunc: REACT_APP.testViewSwitch
                          }
-        let wireFrame1 = new Wireframe(parameters)
+        let drawingArea = new Wireframe(parameters)
         // _ui.push(wireFrame1)
 
-        wildcard = {shouldBeSquare:false,shrinkAmountWidth:1,shrinkAmountHeight:1,string:"this is a container to place the description."}
+        wildcard = {shouldBeSquare:false,shrinkAmountWidth:1.1,shrinkAmountHeight:.7,string:"this is a container to place the description."}
         parameters = { p:p,
                            windowWidth: w,
                            windowHeight: h,
-                           // offsetY:h-10,
-                           // row:false,
                            len:3,
                            index:2,
-                           color:"green",
+                           color:"red",
                            wildcard:wildcard,
-                           // mouseClickfunc: REACT_APP.testViewSwitch
+                           mouseClickfunc: REACT_APP.testViewSwitch
                          }
         let wireFrame = new Wireframe(parameters)
         // _ui.push(wireFrame)
 
-        wildcard = {shouldBeSquare:false,shrinkAmountWidth:w>h?.9:2,shrinkAmountHeight:.9,string:"this is where the descriptions will be displayed."}
-        parameters = { p:p,
-                           windowWidth: w,
-                           windowHeight: h,
-                           row:w>h,
-                           len:w>h?2:3,
-                           index:1,
-                           color:"pink",
-                           wildcard:wildcard,
-                           parent:wireFrame,
-                          mouseClickfunc: REACT_APP.testViewSwitch
-                           // mouseClickfunc: REACT_APP.testViewSwitch
-                         }
-        let wireFrame2 = new Wireframe(parameters)
-        // _ui.push(wireFrame2)
-
         let x,y,width,height;
         if (previousUI){
-            if (previousUI.mirrorTest1){
-                x = previousUI.mirrorTest1.x;
-                y = previousUI.mirrorTest1.y;
-                width = previousUI.mirrorTest1.width;
-                height = previousUI.mirrorTest1.height;
+            if (previousUI.drawing){
+                x = previousUI.drawing.x;
+                y = previousUI.drawing.y;
+                width = previousUI.drawing.width;
+                height = previousUI.drawing.height;
             }
         }
-        parameters = {p:p,objectToMirror:wireFrame1,x:x,y:y,width:width,height:height, mouseClickfunc: REACT_APP.testViewSwitch}
-        this.mirrorTest1 = new Mirror(parameters)
-        _ui.push(this.mirrorTest1)
+        parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height, mouseClickfunc: REACT_APP.testViewSwitch}
+        this.drawing = new Mirror(parameters)
+        _ui.push(this.drawing)
+
         if (previousUI){
-            if (previousUI.mirrorTest2){
-                x = previousUI.mirrorTest2.x;
-                y = previousUI.mirrorTest2.y;
-                width = previousUI.mirrorTest2.width;
-                height = previousUI.mirrorTest2.height;
+            if (previousUI.dialog){
+                x = previousUI.dialog.x;
+                y = previousUI.dialog.y;
+                width = previousUI.dialog.width;
+                height = previousUI.dialog.height;
             }
         }
-        parameters = {p:p,objectToMirror:wireFrame2,x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
-        this.mirrorTest2 = new Mirror(parameters)
-        _ui.push(this.mirrorTest2)
+        parameters = {p:p,objectToMirror:wireFrame,x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
+        this.dialog = new Mirror(parameters)
+        _ui.push(this.dialog)
         return _ui;
     }
 }

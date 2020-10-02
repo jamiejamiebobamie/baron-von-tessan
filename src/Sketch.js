@@ -2,16 +2,13 @@
 // import testView from './Views/test/testView';
 // import testView2 from './Views/test/testView2';
 // import IntroView from './Views/oldViews/IntroView';
-// import DrawingView from './Views/oldViews/DrawingView';
+import DrawingView from './Views/oldViews/DrawingView';
 // import EnterDescriptionView from './Views/oldViews/EnterDescriptionView';
 import IntroViewWireframe from './Views/wireFrames/1_IntroViewWireframe';
 import SlideshowViewWireframe from './Views/wireFrames/2_SlideshowViewWireframe';
 import DrawingViewWireframe from './Views/wireFrames/3_DrawingViewWireframe';
 import EnterDescriptionViewWireframe from './Views/wireFrames/4_EnterDescriptionViewWireframe';
 import FlagInappropriateContentWireframe from './Views/wireFrames/5_FlagInappropriateContentWireframe';
-
-
-
 
 // const fs = require('fs');
 // const dotenv = require('dotenv').config();
@@ -24,8 +21,11 @@ export default class Sketch {
         let view;
         view = new IntroViewWireframe();
         this.views.push(view);
-        view = new SlideshowViewWireframe();
+        view = new SlideshowViewWireframe(view);
         this.views.push(view);
+
+        // view = new DrawingView();
+        // this.views.push(view);
 
         // in progress
         view = new DrawingViewWireframe();
@@ -51,9 +51,6 @@ export default class Sketch {
             w = p.windowWidth - (p.windowWidth/10)
             h = p.windowHeight - (p.windowHeight/10)
             let canvas = p.createCanvas(w,h);
-            // parents the canvas to the DOM element 'sketch-holder'
-            // canvas.parent('sketch-holder');
-
             p.frameRate(24);
             p.textAlign(p.CENTER,p.CENTER);
             p.rectMode(p.CENTER,p.CENTER);
@@ -104,7 +101,9 @@ export default class Sketch {
             // temporary setup that works, but is not ideal.
                 // the React App doesn't need to know about the views.
             if (this.viewIndex !== REACT_APP.state.viewIndex){
-                _ui  = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP)
+                let previousView = this.views[this.viewIndex].getUI()
+                let windowResized = false
+                _ui  = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP,windowResized,previousView)
                 this.viewIndex = REACT_APP.state.viewIndex
             }
             p.background(255)

@@ -12,7 +12,7 @@ class App extends Component {
             response:[],
             isMobile: isMobile,
 
-            // temporary variables...
+            // temporary
             viewIndex:0,
             lengthOfViews:1,
         }
@@ -37,11 +37,11 @@ class App extends Component {
     }
 
     // ----
-        // temporary...
+        // temporary
     setNumberOfViews(number){
         this.setState({lengthOfViews:number})
     }
-        // temporary...
+        // temporary
     testViewSwitch(){
         let viewIndex;
         if (this.state.viewIndex === this.state.lengthOfViews-1){

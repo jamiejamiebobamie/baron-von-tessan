@@ -2,12 +2,18 @@ import Wireframe from '../../uiClasses/Wireframe';
 import Mirror from '../../uiClasses/Mirror';
 
 export default class testView {
-    constructor(){
+    constructor(previousView){
         this.mirrorTest1 = undefined
         this.mirrorTest2 = undefined
         this.mirrorTest3 = undefined
         this.mirrorTest4 = undefined
         this.mirrorTest5 = undefined
+
+        this.drawing = previousView ? previousView.drawing : undefined;
+
+        // NOT THE DIALOG BOX -- CONTROLS WINDOW
+        this.dialog = previousView ? previousView.dialog : undefined;
+
     }
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI){
@@ -235,28 +241,28 @@ export default class testView {
         _ui.push(this.mirrorTest2)
 
         if (previousUI){
-            if (previousUI.mirrorTest3){
-                x = previousUI.mirrorTest3.x;
-                y = previousUI.mirrorTest3.y;
-                width = previousUI.mirrorTest3.width;
-                height = previousUI.mirrorTest3.height;
+            if (previousUI.dialog){
+                x = previousUI.dialog.x;
+                y = previousUI.dialog.y;
+                width = previousUI.dialog.width;
+                height = previousUI.dialog.height;
             }
         }
         parameters = {p:p,objectToMirror:input,x:x,y:y,width:width,height:height, mouseClickfunc:REACT_APP.testViewSwitch}
-        this.mirrorTest3 = new Mirror(parameters)
-        _ui.push(this.mirrorTest3)
+        this.dialog = new Mirror(parameters)
+        _ui.push(this.dialog)
 
         if (previousUI){
-            if (previousUI.mirrorTest4){
-                x = previousUI.mirrorTest4.x;
-                y = previousUI.mirrorTest4.y;
-                width = previousUI.mirrorTest4.width;
-                height = previousUI.mirrorTest4.height;
+            if (previousUI.drawing){
+                x = previousUI.drawing.x;
+                y = previousUI.drawing.y;
+                width = previousUI.drawing.width;
+                height = previousUI.drawing.height;
             }
         }
         parameters = {p:p,objectToMirror:drawing,x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
-        this.mirrorTest4 = new Mirror(parameters)
-        _ui.push(this.mirrorTest4)
+        this.drawing = new Mirror(parameters)
+        _ui.push(this.drawing)
 
         if (previousUI){
             if (previousUI.mirrorTest5){

@@ -5,8 +5,8 @@ import Mirror from '../../uiClasses/Mirror';
 export default class FlagInappropriateContentWireframe {
     constructor(){
         this.mirrorTest1 = undefined
-        this.mirrorTest2 = [undefined,undefined,undefined]
-        this.mirrorTest3 = [undefined,undefined,undefined]
+        this.drawings1 = [undefined,undefined,undefined]
+        this.drawings2 = [undefined,undefined,undefined]
         this.mirrorTest4 = undefined
     }
     getUI(previousUI){return this}
@@ -184,31 +184,37 @@ export default class FlagInappropriateContentWireframe {
         // top left row to mirror
         for (let i = 0; i < 3; i++){
             if (previousUI){
-                if (previousUI.mirrorTest2[i]){
-                    x = previousUI.mirrorTest2[i].x;
-                    y = previousUI.mirrorTest2[i].y;
-                    width = previousUI.mirrorTest2[i].width;
-                    height = previousUI.mirrorTest2[i].height;
+                if (previousUI.drawings1){
+                    if (previousUI.drawings1[i]){
+                    x = previousUI.drawings1[i].x;
+                    y = previousUI.drawings1[i].y;
+                    width = previousUI.drawings1[i].width;
+                    height = previousUI.drawings1[i].height;
                 }
             }
+
+            }
             parameters = {p:p,objectToMirror:topLeft[i],x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
-            this.mirrorTest2[i] = new Mirror(parameters)
-            _ui.push(this.mirrorTest2[i])
+            this.drawings1[i] = new Mirror(parameters)
+            _ui.push(this.drawings1[i])
         }
 
         // bottom right row to mirror
         for (let i = 0; i < 3; i++){
             if (previousUI){
-                if (previousUI.mirrorTest3[i]){
-                    x = previousUI.mirrorTest3[i].x;
-                    y = previousUI.mirrorTest3[i].y;
-                    width = previousUI.mirrorTest3[i].width;
-                    height = previousUI.mirrorTest3[i].height;
+                if (previousUI.drawings2){
+                    if (previousUI.drawings2[i]){
+                    x = previousUI.drawings2[i].x;
+                    y = previousUI.drawings2[i].y;
+                    width = previousUI.drawings2[i].width;
+                    height = previousUI.drawings2[i].height;
                 }
             }
+
+            }
             parameters = {p:p,objectToMirror:bottomRight[i],x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
-            this.mirrorTest3[i] = new Mirror(parameters)
-            _ui.push(this.mirrorTest3[i])
+            this.drawings2[i] = new Mirror(parameters)
+            _ui.push(this.drawings2[i])
         }
 
         return _ui;
