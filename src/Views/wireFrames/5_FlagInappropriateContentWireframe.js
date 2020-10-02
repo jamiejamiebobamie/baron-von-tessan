@@ -12,6 +12,8 @@ export default class FlagInappropriateContentWireframe {
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI){
         let wireFrameElements = []
+        let _ui = []
+
         for (let i = 0; i < 3; i++){
             let color = i%2 ?"pink" :"orange"
             let wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1,string:"do you find any of this content offensive or inappropriate?"}
@@ -27,6 +29,26 @@ export default class FlagInappropriateContentWireframe {
             let wireFrame = new Wireframe(parameters)
             wireFrameElements.push(wireFrame)
         }
+
+        let topThirdOfScreen = wireFrameElements[0]
+        for (let i = 0; i < 5; i++){
+            let color = i%2 ?"pink" :"orange"
+            let wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1,string:"do you find any of this content offensive or inappropriate?"}
+            let parameters = { p:p,
+                               windowWidth: w,
+                               windowHeight: h,
+                               row:w<h,
+                               len:5,
+                               index:i,
+                               color:color,
+                               wildcard:wildcard,
+                               parent:topThirdOfScreen,
+                             }
+            let wireFrame = new Wireframe(parameters)
+            _ui.push(wireFrame)
+        }
+
+
         let wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
         let parameters = { p:p,
                             windowWidth: w,
@@ -41,7 +63,7 @@ export default class FlagInappropriateContentWireframe {
         wireFrameElements.push(wireFrame)
         for (let i = 0; i < 2; i++){
             let color = i%2 ?"red" :"red"
-            let wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1,string:"this a container to place the drawings."}
+            let wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1,string:"this is a container to place the drawings."}
             let parameters = { p:p,
                                windowWidth: w,
                                windowHeight: h,
@@ -91,7 +113,6 @@ export default class FlagInappropriateContentWireframe {
             bottomRight.push(wireFrame)
             // _ui.push(wireFrame)
         }
-        let _ui = []
         let x,y,width,height;
 
         // display question
@@ -103,9 +124,9 @@ export default class FlagInappropriateContentWireframe {
                 height = previousUI.mirrorTest1.height;
             }
         }
-        parameters = {p:p,objectToMirror:wireFrameElements[0],x:x,y:y,width:width,height:height}
+        parameters = {p:p,objectToMirror:wireFrameElements[0],x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
         this.mirrorTest1 = new Mirror(parameters)
-        _ui.push(this.mirrorTest1)
+        // _ui.push(this.mirrorTest1)
         //
 
         // top left row to mirror
@@ -118,7 +139,7 @@ export default class FlagInappropriateContentWireframe {
                     height = previousUI.mirrorTest2[i].height;
                 }
             }
-            parameters = {p:p,objectToMirror:topLeft[i],x:x,y:y,width:width,height:height}
+            parameters = {p:p,objectToMirror:topLeft[i],x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
             this.mirrorTest2[i] = new Mirror(parameters)
             _ui.push(this.mirrorTest2[i])
         }
@@ -133,7 +154,7 @@ export default class FlagInappropriateContentWireframe {
                     height = previousUI.mirrorTest3[i].height;
                 }
             }
-            parameters = {p:p,objectToMirror:bottomRight[i],x:x,y:y,width:width,height:height}
+            parameters = {p:p,objectToMirror:bottomRight[i],x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
             this.mirrorTest3[i] = new Mirror(parameters)
             _ui.push(this.mirrorTest3[i])
         }

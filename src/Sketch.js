@@ -2,13 +2,13 @@
 // import testView from './Views/test/testView';
 // import testView2 from './Views/test/testView2';
 // import IntroView from './Views/oldViews/IntroView';
-import DrawingView from './Views/oldViews/DrawingView';
+// import DrawingView from './Views/oldViews/DrawingView';
 // import EnterDescriptionView from './Views/oldViews/EnterDescriptionView';
-// import IntroViewWireframe from './Views/wireFrames/1_IntroViewWireframe';
-// import SlideshowViewWireframe from './Views/wireFrames/2_SlideshowViewWireframe';
-// import FlagInappropriateContentWireframe from './Views/wireFrames/5_FlagInappropriateContentWireframe';
-// import EnterDescriptionViewWireframe from './Views/wireFrames/4_EnterDescriptionViewWireframe';
+import IntroViewWireframe from './Views/wireFrames/1_IntroViewWireframe';
+import SlideshowViewWireframe from './Views/wireFrames/2_SlideshowViewWireframe';
 import DrawingViewWireframe from './Views/wireFrames/3_DrawingViewWireframe';
+import EnterDescriptionViewWireframe from './Views/wireFrames/4_EnterDescriptionViewWireframe';
+import FlagInappropriateContentWireframe from './Views/wireFrames/5_FlagInappropriateContentWireframe';
 
 
 
@@ -22,27 +22,17 @@ export default class Sketch {
         this.views= [];
         this.viewIndex = app.state.viewIndex;
         let view;
-        // view = new IntroView();
-        view = new DrawingView();
-        // this.views.push(view);
-        // view = new DrawingViewWireframe();
+        view = new IntroViewWireframe();
         this.views.push(view);
-        // view = new DrawingView();
-        // this.views.push(view)
-        // view = new EnterDescriptionView();
-        // this.views.push(view)
-        // view = new testView2();
+        view = new SlideshowViewWireframe();
+        this.views.push(view);
+        // in progress
+        // view = new DrawingViewWireframe();
         // this.views.push(view);
-
-        // view = new IntroView();
-        // this.views.push(view)
-        // view = new DrawingView();
-        // view = new EnterDescriptionView();
-        // this.views.push(view);
-        // view = new testView();
-        // this.views.push(view);
-        // this.image = undefined;
-        // this.fontStyle = undefined;
+        view = new EnterDescriptionViewWireframe();
+        this.views.push(view);
+        view = new FlagInappropriateContentWireframe();
+        this.views.push(view);
     }
     sketch = (p) => {
         // GLOBAL VARIABLES:

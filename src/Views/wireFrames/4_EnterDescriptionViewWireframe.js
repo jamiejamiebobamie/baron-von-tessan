@@ -12,6 +12,8 @@ export default class testView {
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI){
         let wireFrameElements = []
+        let _ui = []
+
 
         let wildcard;
         let parameters;
@@ -28,9 +30,87 @@ export default class testView {
                                color:color,
                                wildcard:wildcard,
                              }
-            wireFrame = new Wireframe(parameters)
-            wireFrameElements.push(wireFrame)
+            let viewBrokenIntoThirds = new Wireframe(parameters)
+            wireFrameElements.push(viewBrokenIntoThirds)
         }
+
+        wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
+        parameters = { p:p,
+                            windowWidth: w,
+                           windowHeight: h*2/3,
+                           color:"green",
+                           wildcard:wildcard,
+                         }
+        let topTwoThirdsOfView = new Wireframe(parameters)
+        // _ui.push(topTwoThirdsOfView)
+
+        wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
+        parameters = { p:p,
+                            windowWidth: w,
+                           windowHeight: h*2/3,
+                           color:"red",
+                           wildcard:wildcard,
+                           row:false,
+                           len:2,
+                           index:0,
+                           parent:topTwoThirdsOfView,
+                         }
+        let topTwoThirdsOfViewSplitInTwoFirstHalf = new Wireframe(parameters)
+        // _ui.push(topTwoThirdsOfViewSplitInTwoFirstHalf)
+
+        wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
+        parameters = { p:p,
+                            windowWidth: w,
+                           windowHeight: h*2/3,
+                           color:"green",
+                           wildcard:wildcard,
+                           row:false,
+                           len:2,
+                           index:1,
+                           parent:topTwoThirdsOfView,
+                         }
+        let topTwoThirdsOfViewSplitInTwoSecondHalf = new Wireframe(parameters)
+        // _ui.push(topTwoThirdsOfViewSplitInTwoSecondHalf)
+
+
+        let topThirdOfView = wireFrameElements[0]
+        let middleThirdOfScreen =  wireFrameElements[1];
+        let bottomThirdOfScreen = wireFrameElements[2];
+
+        let drawingParent = topTwoThirdsOfView;
+        if (REACT_APP.state.isMobile){
+            if (w>h){
+                drawingParent = topTwoThirdsOfViewSplitInTwoFirstHalf;
+
+            } else {
+                drawingParent = topThirdOfView;
+            }
+        }
+
+        wildcard = {shouldBeSquare:true,shrinkAmountWidth:1,shrinkAmountHeight:REACT_APP.state.isMobile?.9:1,string:"[user drawing just submitted]"}
+        parameters = { p:p,
+                            windowWidth: w,
+                           windowHeight: h,
+                           color:"red",
+                           wildcard:wildcard,
+                           parent:drawingParent,
+                         }
+        let drawing = new Wireframe(parameters)
+
+
+
+        let inputFormParent = bottomThirdOfScreen;
+        if (REACT_APP.state.isMobile){
+            if (w>h){
+                inputFormParent = topTwoThirdsOfViewSplitInTwoSecondHalf;
+
+            } else {
+                inputFormParent = middleThirdOfScreen;
+            }
+        }
+
+         // inputFormParent = REACT_APP.state.isMobile && w>h ? topTwoThirdsOfViewSplitInTwoSecondHalf : bottomThirdOfScreen;
+         // inputFormParent = REACT_APP.state.isMobile && !w>h ? middleThirdOfScreen : bottomThirdOfScreen;
 
         wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:.5, string:"this is the inputform container"}
         parameters = { p:p,
@@ -39,7 +119,7 @@ export default class testView {
                            row:true,
                            color:"green",
                            wildcard:wildcard,
-                           parent:REACT_APP.state.isMobile?wireFrameElements[1]:wireFrameElements[2],
+                           parent:inputFormParent,
                          }
         let inputform = new Wireframe(parameters)
         // wireFrameElements.push(inputform)
@@ -55,7 +135,7 @@ export default class testView {
                            wildcard:wildcard,
                            parent:inputform,
                          }
-        let inputformContainer1 = new Wireframe(parameters)
+        let inputformContainer1ForInput = new Wireframe(parameters)
         // _ui.push(inputformContainer1)
 
         wildcard = {shrinkAmountWidth:.95,shrinkAmountHeight:1}
@@ -69,7 +149,7 @@ export default class testView {
                            wildcard:wildcard,
                            parent:inputform,
                          }
-        let inputformContainer2 = new Wireframe(parameters)
+        let inputformContainer2ForButtons = new Wireframe(parameters)
         // _ui.push(inputformContainer2)
 
         wildcard = {shrinkAmountWidth:.9,shrinkAmountHeight:1.5, string:"<< Back"}
@@ -81,7 +161,7 @@ export default class testView {
                            len:2,
                            index:0,
                            wildcard:wildcard,
-                           parent:inputformContainer2,
+                           parent:inputformContainer2ForButtons,
                          }
         let backButton = new Wireframe(parameters)
         // _ui.push(backButton)
@@ -95,7 +175,7 @@ export default class testView {
                            len:2,
                            index:1,
                            wildcard:wildcard,
-                           parent:inputformContainer2,
+                           parent:inputformContainer2ForButtons,
                          }
         let submitButton = new Wireframe(parameters)
         // _ui.push(submitButton)
@@ -108,30 +188,11 @@ export default class testView {
                            row:true,
                            color:"purple",
                            wildcard:wildcard,
-                           parent:inputformContainer1,
+                           parent:inputformContainer1ForInput,
                          }
         let input = new Wireframe(parameters)
         // _ui.push(input)
 
-        wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
-        parameters = { p:p,
-                            windowWidth: w,
-                           windowHeight: h*2/3,
-                           color:"green",
-                           wildcard:wildcard,
-                         }
-        wireFrame = new Wireframe(parameters)
-        // _ui.push(wireFrame)
-
-        wildcard = {shouldBeSquare:true,shrinkAmountWidth:1,shrinkAmountHeight:REACT_APP.state.isMobile?.9:1,string:"[user drawing just submitted]"}
-        parameters = { p:p,
-                            windowWidth: w,
-                           windowHeight: h,
-                           color:"red",
-                           wildcard:wildcard,
-                           parent:REACT_APP.state.isMobile?wireFrameElements[0]:wireFrame,
-                         }
-        let drawing = new Wireframe(parameters)
         // _ui.push(drawing)
 
         wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
@@ -149,7 +210,6 @@ export default class testView {
         let areaForKeyboard = new Wireframe(parameters)
 
         let x,y,width,height;
-        let _ui = []
         if (previousUI){
             if (previousUI.mirrorTest1){
                 x = previousUI.mirrorTest1.x;
@@ -158,7 +218,7 @@ export default class testView {
                 height = previousUI.mirrorTest1.height;
             }
         }
-        parameters = {p:p,objectToMirror:backButton,x:x,y:y,width:width,height:height}
+        parameters = {p:p,objectToMirror:backButton,x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
         this.mirrorTest1 = new Mirror(parameters)
         _ui.push(this.mirrorTest1)
 
@@ -170,7 +230,7 @@ export default class testView {
                 height = previousUI.mirrorTest2.height;
             }
         }
-        parameters = {p:p,objectToMirror:submitButton,x:x,y:y,width:width,height:height}
+        parameters = {p:p,objectToMirror:submitButton,x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
         this.mirrorTest2 = new Mirror(parameters)
         _ui.push(this.mirrorTest2)
 
@@ -182,7 +242,7 @@ export default class testView {
                 height = previousUI.mirrorTest3.height;
             }
         }
-        parameters = {p:p,objectToMirror:input,x:x,y:y,width:width,height:height}
+        parameters = {p:p,objectToMirror:input,x:x,y:y,width:width,height:height, mouseClickfunc:REACT_APP.testViewSwitch}
         this.mirrorTest3 = new Mirror(parameters)
         _ui.push(this.mirrorTest3)
 
@@ -194,7 +254,7 @@ export default class testView {
                 height = previousUI.mirrorTest4.height;
             }
         }
-        parameters = {p:p,objectToMirror:drawing,x:x,y:y,width:width,height:height}
+        parameters = {p:p,objectToMirror:drawing,x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
         this.mirrorTest4 = new Mirror(parameters)
         _ui.push(this.mirrorTest4)
 

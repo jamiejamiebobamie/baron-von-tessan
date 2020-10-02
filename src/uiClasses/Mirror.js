@@ -2,7 +2,7 @@ import Container from './Container'
 
 export default class Mirror extends Container{
     constructor(parameterObject){
-        super()
+        super(parameterObject)
         this.p = parameterObject.p;
 
         this.object = parameterObject.objectToMirror;
@@ -47,6 +47,7 @@ export default class Mirror extends Container{
         }
     }
     draw(){
+        super.draw()
         this.lerpX()
         this.lerpY()
         this.lerpWidth()

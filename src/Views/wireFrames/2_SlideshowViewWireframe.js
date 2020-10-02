@@ -55,6 +55,7 @@ export default class testView {
                            color:"pink",
                            wildcard:wildcard,
                            parent:wireFrame,
+                          mouseClickfunc: REACT_APP.testViewSwitch
                            // mouseClickfunc: REACT_APP.testViewSwitch
                          }
         let wireFrame2 = new Wireframe(parameters)
@@ -69,7 +70,7 @@ export default class testView {
                 height = previousUI.mirrorTest1.height;
             }
         }
-        parameters = {p:p,objectToMirror:wireFrame1,x:x,y:y,width:width,height:height}
+        parameters = {p:p,objectToMirror:wireFrame1,x:x,y:y,width:width,height:height, mouseClickfunc: REACT_APP.testViewSwitch}
         this.mirrorTest1 = new Mirror(parameters)
         _ui.push(this.mirrorTest1)
         if (previousUI){
@@ -80,7 +81,7 @@ export default class testView {
                 height = previousUI.mirrorTest2.height;
             }
         }
-        parameters = {p:p,objectToMirror:wireFrame2,x:x,y:y,width:width,height:height}
+        parameters = {p:p,objectToMirror:wireFrame2,x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
         this.mirrorTest2 = new Mirror(parameters)
         _ui.push(this.mirrorTest2)
         return _ui;

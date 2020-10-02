@@ -43,7 +43,7 @@ export default class IntroViewWireframe {
                 height = previousUI.mirrorTest1.height;
             }
         }
-        parameters = {p:p,objectToMirror:wireFrame1,x:x,y:y,width:width,height:height}
+        parameters = {p:p,objectToMirror:wireFrame1,x:x,y:y,width:width,height:height, mouseClickfunc: REACT_APP.testViewSwitch}
         this.mirrorTest1 = new Mirror(parameters)
         _ui.push(this.mirrorTest1)
         if (previousUI){
@@ -54,7 +54,7 @@ export default class IntroViewWireframe {
                 height = previousUI.mirrorTest2.height;
             }
         }
-        parameters = {p:p,objectToMirror:wireFrame2,x:x,y:y,width:width,height:height}
+        parameters = {p:p,objectToMirror:wireFrame2,x:x,y:y,width:width,height:height, mouseClickfunc: REACT_APP.testViewSwitch}
         this.mirrorTest2 = new Mirror(parameters)
         _ui.push(this.mirrorTest2)
         return _ui;
