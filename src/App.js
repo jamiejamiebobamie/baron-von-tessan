@@ -57,7 +57,7 @@ class App extends Component {
     render(){
         return (
           <div className="App">
-              <div className="sketch-holder" id="sketch-holder" ref={this.myRef}></div>
+              <div className="sketch-holder" ref={this.myRef}></div>
           </div>
         );
     }

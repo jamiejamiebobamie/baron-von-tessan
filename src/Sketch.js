@@ -26,9 +26,11 @@ export default class Sketch {
         this.views.push(view);
         view = new SlideshowViewWireframe();
         this.views.push(view);
+
         // in progress
-        // view = new DrawingViewWireframe();
-        // this.views.push(view);
+        view = new DrawingViewWireframe();
+        this.views.push(view);
+
         view = new EnterDescriptionViewWireframe();
         this.views.push(view);
         view = new FlagInappropriateContentWireframe();
@@ -50,7 +52,7 @@ export default class Sketch {
             h = p.windowHeight - (p.windowHeight/10)
             let canvas = p.createCanvas(w,h);
             // parents the canvas to the DOM element 'sketch-holder'
-            canvas.parent('sketch-holder');
+            // canvas.parent('sketch-holder');
 
             p.frameRate(24);
             p.textAlign(p.CENTER,p.CENTER);

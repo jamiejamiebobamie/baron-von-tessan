@@ -47,7 +47,7 @@ body{
     justify-content: center;
     overflow: hidden;
     position: relative;
-    background-color: blue;
+    background-color: white;
 }
 
 /* div needs to be locked in place on mobile... */
