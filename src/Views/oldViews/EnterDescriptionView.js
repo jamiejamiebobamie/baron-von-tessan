@@ -2,6 +2,7 @@ import TextBox from '../../uiClasses/TextBox'
 import Container from '../../uiClasses/Container'
 import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer'
 import TextInput from '../../uiClasses/TextInput'
+import Keyboard from '../../uiClasses/Keyboard'
 
 export default class EnterDescriptionView {
     constructor(){
@@ -22,6 +23,8 @@ export default class EnterDescriptionView {
         this.displayDrawingSpace.setLengthOfDrawingSquare(lengthOfDrawingSquare)
         let submittedStrokes = REACT_APP.state.drawingData
         this.displayDrawingSpace.setSubmittedStrokes(submittedStrokes)
+
+        ////// ----- ////// TO LOOP.
         // this.displayDrawingSpace.setLoopToTrueToLoopFinishedDrawing()
 
         let beginRedrawingStrokesFunc = () => {
@@ -89,7 +92,7 @@ export default class EnterDescriptionView {
         if (previouslySubmittedText){
             this.inputTextBox.setDisplayText(previouslySubmittedText)
         } else {
-            this.inputTextBox.setDisplayText("I drew a... \n(click to finish the sentence).")
+            this.inputTextBox.setDisplayText("")//I drew a... \n(click to finish the sentence).")
         }
 
         if (previouslySelected){
@@ -99,21 +102,29 @@ export default class EnterDescriptionView {
 
         _ui.push(this.inputTextBox)
 
-        // let backButton = new TextBox({parent:inputTextBox,row:true,width:inputTextBox.width,height:inputTextBox.height/2,color:"white",offsetY:inputTextBox.height*1.1,mouseClickfunc:returnToDrawingView});
-        // backButton.setString(" << BACK");
-        // backButton.setFontStyle(fontStyle);
-        // backButton.setTextColor("black")
-        // backButton.setInteractivity(false);
-        // backButton.setStroke(true)
-        // backButton.setClickType(performClickOnce) // true
-        // _ui.push(backButton)
-        //
-        // if (isMobile && inputTextBox.textBoxSelected){
-        //     let mobileKeyboard = new Keyboard({row:true,len:4,index:2,height:h/3,width:w-w*.05,})
-        //     mobileKeyboard.setReferenceToInputBox(inputTextBox)
-        //     _ui.push(mobileKeyboard)
-        //     inputTextBox.setMobileKeyboardReference(mobileKeyboard)
-        // }
+        if (REACT_APP.state.isMobile){
+            let mobileKeyboard = new Keyboard(
+                {
+                    p:p,
+                    windowWidth:w,
+                    windowHeight:h,
+                    row:true,
+                    len:3,
+                    index:1,
+                    height:h/2.9,
+                    width:w/1.1,
+                    offsetX:w/25,
+                    offsetY:h/3.3,
+
+
+                    // color:"black"
+                }
+            )
+            mobileKeyboard.setReferenceToInputBox(this.inputTextBox)
+            // mobileKeyboard.setStroke(true)
+            _ui.push(mobileKeyboard)
+            this.inputTextBox.setMobileKeyboardReference(mobileKeyboard)
+        }
         return _ui;
     }
 }

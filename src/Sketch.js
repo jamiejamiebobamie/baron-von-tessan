@@ -1,9 +1,9 @@
 // import testCallBackButton from './uiClasses';
 // import testView from './Views/test/testView';
 // import testView2 from './Views/test/testView2';
-// import IntroView from './Views/oldViews/IntroView';
+import IntroView from './Views/oldViews/IntroView';
 import DrawingView from './Views/oldViews/DrawingView';
-// import EnterDescriptionView from './Views/oldViews/EnterDescriptionView';
+import EnterDescriptionView from './Views/oldViews/EnterDescriptionView';
 import IntroViewWireframe from './Views/wireFrames/1_IntroViewWireframe';
 import SlideshowViewWireframe from './Views/wireFrames/2_SlideshowViewWireframe';
 import DrawingViewWireframe from './Views/wireFrames/3_DrawingViewWireframe';
@@ -19,18 +19,21 @@ export default class Sketch {
         this.views= [];
         this.viewIndex = app.state.viewIndex;
         let view;
+
+        // view = new IntroView();
+        // this.views.push(view);
+        view = new DrawingView();
+        this.views.push(view);
+        view = new EnterDescriptionView();
+        this.views.push(view);
+
+
         view = new IntroViewWireframe();
         this.views.push(view);
         view = new SlideshowViewWireframe(view);
         this.views.push(view);
-
-        // view = new DrawingView();
-        // this.views.push(view);
-
-        // in progress
         view = new DrawingViewWireframe();
         this.views.push(view);
-
         view = new EnterDescriptionViewWireframe();
         this.views.push(view);
         view = new FlagInappropriateContentWireframe();

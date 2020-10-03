@@ -1,4 +1,5 @@
 import Container from './Container'
+// import Mirror from './Mirror'
 
 export default class DrawingContainer extends Container{
     constructor(parameterObject){
@@ -7,7 +8,7 @@ export default class DrawingContainer extends Container{
         this.strokes = [];
         // false for eraserMode
         this.penMode = true;
-        this.lengthOfDrawingSquare = 0
+        this.lengthOfDrawingSquare = 0;
     }
     setLengthOfDrawingSquare(length){
         this.lengthOfDrawingSquare = length

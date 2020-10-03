@@ -1,5 +1,8 @@
 import Wireframe from '../../uiClasses/Wireframe';
 import Mirror from '../../uiClasses/Mirror';
+import DrawingContainer from '../../uiClasses/DrawingContainer';
+
+
 
 
 export default class IntroViewWireframe {
@@ -18,7 +21,6 @@ export default class IntroViewWireframe {
                            wildcard:wildcard,
                          }
         let drawingArea = new Wireframe(parameters)
-        // _ui.push(wireFrame1)
 
         wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1,string:"this is where the text that is spoken will be displayed."}
         parameters = {     p:p,
@@ -32,7 +34,6 @@ export default class IntroViewWireframe {
                            row:true,
                          }
         let dialogBox = new Wireframe(parameters)
-        // _ui.push(wireFrame2)
 
         let x,y,width,height;
         if (previousUI){
@@ -43,7 +44,17 @@ export default class IntroViewWireframe {
                 height = previousUI.drawing.height;
             }
         }
-        parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height, mouseClickfunc: REACT_APP.testViewSwitch}
+        parameters = {
+            p:p,
+            windowWidth: w,
+            windowHeight: h,
+            objectToMirror:drawingArea,
+            x:x,
+            y:y,
+            width:width,
+            height:height,
+            mouseClickfunc: REACT_APP.testViewSwitch
+        }
         this.drawing = new Mirror(parameters)
         _ui.push(this.drawing)
 
@@ -55,7 +66,17 @@ export default class IntroViewWireframe {
                 height = previousUI.dialog.height;
             }
         }
-        parameters = {p:p,objectToMirror:dialogBox,x:x,y:y,width:width,height:height, mouseClickfunc: REACT_APP.testViewSwitch}
+        parameters = {
+            p:p,
+            windowWidth: w,
+            windowHeight: h,
+            objectToMirror:dialogBox,
+            x:x,
+            y:y,
+            width:width,
+            height:height,
+            mouseClickfunc: REACT_APP.testViewSwitch
+        }
         this.dialog = new Mirror(parameters)
         _ui.push(this.dialog)
 

@@ -4,13 +4,12 @@ import Mirror from '../../uiClasses/Mirror';
 export default class testView {
     constructor(previousView){
         this.drawing = previousView ? previousView.drawing : undefined;
-
-        // NOT THE DIALOG BOX -- CONTROLS WINDOW
         this.buttons = [undefined,undefined,undefined,undefined]
     }
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI){
         let _ui = []
+
         let drawingSpaceWidth = w > h ? w*(2/3) : w;
         let drawingSpaceHeight = w > h ? h : h*(2/3);
         let lengthOfDrawingSquare = w > h ? drawingSpaceHeight : drawingSpaceWidth;
@@ -20,35 +19,26 @@ export default class testView {
         let parameters = { p:p,
                            windowWidth: w,
                            windowHeight: h,
-
-                             offsetX:w>h?0:(w-lengthOfDrawingSquare)/2,
-                             offsetY:w>h?(h-lengthOfDrawingSquare)/2:0,
-
+                           offsetX:w>h?0:(w-lengthOfDrawingSquare)/2,
+                           offsetY:w>h?(h-lengthOfDrawingSquare)/2:0,
                            width:lengthOfDrawingSquare,
                            height:lengthOfDrawingSquare,
                            len:3,
                            index:0,
                            color:"red",
                            wildcard:wildcard,
-                           // mouseClickfunc: REACT_APP.testViewSwitch
                          }
         let drawingArea = new Wireframe(parameters)
-        // _ui.push(wireFrame1)
 
         wildcard = {shouldBeSquare:false,shrinkAmountWidth:1.1,shrinkAmountHeight:.9,string:"this is a container to place the description."}
-        parameters = { p:p,
+        parameters = {     p:p,
                            windowWidth: w,
                            windowHeight: h,
-                           // offsetY:h-10,
-                           // row:false,
                            len:3,
                            index:2,
-                           // color:"red",
                            wildcard:wildcard,
-                           // mouseClickfunc: REACT_APP.testViewSwitch
-                         }
+                     }
         let controlsArea = new Wireframe(parameters)
-        // _ui.push(controlsArea)
 
         let buttons = []
         for (let i = 0; i<4;i++){
@@ -74,32 +64,25 @@ export default class testView {
                                wildcard:wildcard,
                                parent:controlsArea,
                               mouseClickfunc: REACT_APP.testViewSwitch
-                             }
+                         }
             let button = new Wireframe(parameters)
-            // _ui.push(button)
             buttons.push(button)
         }
-
-        // if(w<h){
-                wildcard = {shouldBeSquare:false,shrinkAmountWidth:1,shrinkAmountHeight:.9,string:"SUBMIT"}
-                parameters = { p:p,
-                                   windowWidth: w,
-                                   windowHeight: h,
-                                   row:true,
-                                   len:3,
-                                   offsetY:-controlsArea.height/4,
-                                   index:2,
-                                   color:"pink",
-                                   wildcard:wildcard,
-                                   parent:controlsArea,
-                                  mouseClickfunc: REACT_APP.testViewSwitch
-                                   // mouseClickfunc: REACT_APP.testViewSwitch
-                                 }
-                let button = new Wireframe(parameters)
-                // _ui.push(button)
-                buttons.push(button)
-        // }
-
+        wildcard = {shouldBeSquare:false,shrinkAmountWidth:1,shrinkAmountHeight:.9,string:"SUBMIT"}
+        parameters = { p:p,
+                           windowWidth: w,
+                           windowHeight: h,
+                           row:true,
+                           len:3,
+                           offsetY:-controlsArea.height/4,
+                           index:2,
+                           color:"pink",
+                           wildcard:wildcard,
+                           parent:controlsArea,
+                          mouseClickfunc: REACT_APP.testViewSwitch
+                     }
+        let button = new Wireframe(parameters)
+        buttons.push(button)
 
         let x,y,width,height;
         if (previousUI){
@@ -118,35 +101,22 @@ export default class testView {
             if (previousUI){
                 if (previousUI.buttons){
                     if (previousUI.buttons[i]){
-                    x = previousUI.buttons[i].x;
-                    y = previousUI.buttons[i].y;
-                    width = previousUI.buttons[i].width;
-                    height = previousUI.buttons[i].height;
+                        x = previousUI.buttons[i].x;
+                        y = previousUI.buttons[i].y;
+                        width = previousUI.buttons[i].width;
+                        height = previousUI.buttons[i].height;
+                    }
                 }
             }
-        }
-        let submitButtonMirror = buttons[i];
-        // submit button logic
-        if (i === 3)
-        {
-            submitButtonMirror = w>h ? buttons[3]:buttons[4]
-        }
+            let submitButtonMirror = buttons[i];
+            // submit button logic
+            if (i === 3){
+                submitButtonMirror = w>h ? buttons[3]:buttons[4]
+            }
             parameters = {p:p,objectToMirror:submitButtonMirror,x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
             this.buttons[i] = new Mirror(parameters)
             _ui.push(this.buttons[i])
         }
-
-        // if (previousUI){
-        //     if (previousUI.dialog){
-        //         x = previousUI.dialog.x;
-        //         y = previousUI.dialog.y;
-        //         width = previousUI.dialog.width;
-        //         height = previousUI.dialog.height;
-        //     }
-        // }
-        // parameters = {p:p,objectToMirror:controlsArea,x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
-        // this.dialog = new Mirror(parameters)
-        // _ui.push(this.dialog)
 
         return _ui;
     }

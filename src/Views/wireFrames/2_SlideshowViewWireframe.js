@@ -29,7 +29,6 @@ export default class testView {
                            wildcard:wildcard,
                          }
         let drawingArea = new Wireframe(parameters)
-        // _ui.push(wireFrame1)
 
         wildcard = {shouldBeSquare:false,shrinkAmountWidth:1.1,shrinkAmountHeight:.7,string:"this is a container to place the description."}
         parameters = { p:p,
@@ -42,7 +41,6 @@ export default class testView {
                            mouseClickfunc: REACT_APP.testViewSwitch
                          }
         let wireFrame = new Wireframe(parameters)
-        // _ui.push(wireFrame)
 
         let x,y,width,height;
         if (previousUI){

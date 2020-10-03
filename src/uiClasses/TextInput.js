@@ -4,14 +4,14 @@ import Container from '../uiClasses/Container'
 export default class TextInput extends Container{
     constructor(parameterObject){
         super(parameterObject)
-        this.text = undefined//"I drew a... (click me and finish the sentence)."
+        this.text = ""//"I drew a... (click me and finish the sentence)."
         this.height = 60//this.windowHeight / 6;
         this.displayText = new TextBox({p:this.p,w:this.windowWidth,h:this.windowHeight,row:true,parent:this})
 
         // should enlarge when selected and shrink when deselected.
         this.displayText.setInteractivity(false)
 
-        this.displayText.setStroke(true)
+        // this.displayText.setStroke(true)
         this.displayText.setString(this.text)
         this.textBoxSelected = false;
         this.showCursor = false;
@@ -78,7 +78,7 @@ export default class TextInput extends Container{
                 if (resetDisplayText){
                     this.text = resetDisplayText
                 } else {
-                    this.text = "I drew a... \n(click to finish the sentence)."
+                    this.text = ""//I drew a... \n(click to finish the sentence)."
                 }
                 this.displayText.setString(this.text)
             }
@@ -91,7 +91,8 @@ export default class TextInput extends Container{
             let drawingDescriptor = this.text.replace("|","")
             this.referenceToAPP.handleSubmitDescription(drawingDescriptor)
             this.toggleTextBoxSelected(drawingDescriptor)
-            // this.mouseClickfunc = null;
+
+            this.referenceToAPP.testViewSwitch()
         } else if (BACKSPACE) {
             this.text = this.text.replace("|","")
             this.text = this.text.substring(0, this.text.length - 1);
