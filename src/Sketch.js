@@ -10,9 +10,6 @@ import DrawingViewWireframe from './Views/wireFrames/3_DrawingViewWireframe';
 import EnterDescriptionViewWireframe from './Views/wireFrames/4_EnterDescriptionViewWireframe';
 import FlagInappropriateContentWireframe from './Views/wireFrames/5_FlagInappropriateContentWireframe';
 
-// const fs = require('fs');
-// const dotenv = require('dotenv').config();
-
 export default class Sketch {
     constructor(app){
         this.REACT_APP = app;
@@ -22,23 +19,26 @@ export default class Sketch {
 
         // view = new IntroView();
         // this.views.push(view);
-        view = new DrawingView();
-        this.views.push(view);
-        view = new EnterDescriptionView();
-        this.views.push(view);
+        // view = new DrawingView();
+        // this.views.push(view);
+        // view = new EnterDescriptionView();
+        // this.views.push(view);
 
 
-        view = new IntroViewWireframe();
-        this.views.push(view);
-        view = new SlideshowViewWireframe(view);
-        this.views.push(view);
-        view = new DrawingViewWireframe();
-        this.views.push(view);
+        // view = new IntroViewWireframe();
+        // this.views.push(view);
+        // view = new SlideshowViewWireframe(view);
+        // this.views.push(view);
+        // view = new DrawingViewWireframe();
+        // this.views.push(view);
         view = new EnterDescriptionViewWireframe();
         this.views.push(view);
         view = new FlagInappropriateContentWireframe();
         this.views.push(view);
+        this.img = undefined;
+        this.font = undefined
     }
+
     sketch = (p) => {
         // GLOBAL VARIABLES:
         let w, h;
@@ -49,15 +49,18 @@ export default class Sketch {
         // reference to React App's 'this' variable.
         const REACT_APP = this.REACT_APP;
         REACT_APP.setNumberOfViews(this.views.length)
-        p.preload = () => { }
+        p.preload = () => {
+            this.font = p.loadFont('fonts/PrintClearly.otf');
+            // this.img = p.loadImage('images/inspiration.jpg');
+         }
         p.setup = () => {
             w = p.windowWidth - (p.windowWidth/10)
             h = p.windowHeight - (p.windowHeight/10)
             let canvas = p.createCanvas(w,h);
             p.frameRate(24);
             p.textAlign(p.CENTER,p.CENTER);
+            p.textFont(this.font);
             p.rectMode(p.CENTER,p.CENTER);
-
             let windowResized = false;
             _ui = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP,windowResized)
         }
@@ -110,6 +113,10 @@ export default class Sketch {
                 this.viewIndex = REACT_APP.state.viewIndex
             }
             p.background(255)
+            // p.image(this.img,0,0);
+
+
+            p.text('p5*js', 10, 50);
             for (let i = 0; i < _ui.length; i++){
                 _ui[i].draw();
             }

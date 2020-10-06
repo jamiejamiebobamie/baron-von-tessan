@@ -6,7 +6,6 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "app-b-dashboard": "file:./public/scripts/sketch",
     "dot-env": "0.0.1",
     "dotenv": "^8.2.0",
     "p5": "^1.1.9",
@@ -14,7 +13,8 @@
     "react-device-detect": "^1.13.1",
     "react-dom": "^16.13.1",
     "react-p5-wrapper": "^2.3.0",
-    "react-scripts": "3.4.3"
+    "react-scripts": "3.4.3",
+    "save": "^2.4.0"
   },
   "scripts": {
     "start": "react-scripts start",

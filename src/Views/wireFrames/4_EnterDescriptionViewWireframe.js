@@ -1,5 +1,7 @@
 import Wireframe from '../../uiClasses/Wireframe';
 import Mirror from '../../uiClasses/Mirror';
+import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer';
+
 
 export default class testView {
     constructor(previousView){
@@ -260,9 +262,10 @@ export default class testView {
                 height = previousUI.drawing.height;
             }
         }
-        parameters = {p:p,objectToMirror:drawing,x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
-        this.drawing = new Mirror(parameters)
+        parameters = {p:p,objectToMirror:drawing,x:x,y:y,width:width,height:height}
+        this.drawing = new DisplayDrawingContainer(parameters)
         _ui.push(this.drawing)
+        console.log(this.drawing)
 
         if (previousUI){
             if (previousUI.mirrorTest5){

@@ -18,7 +18,15 @@ export default class EnterDescriptionView {
         let lengthOfDrawingSquare = w > h ? drawingSpaceHeight : drawingSpaceWidth;
         let longerSideOfScreen = w > h ? w : h;
         lengthOfDrawingSquare = lengthOfDrawingSquare > longerSideOfScreen*(2/3) ? longerSideOfScreen*(2/3) : lengthOfDrawingSquare;
-        this.displayDrawingSpace = new DisplayDrawingContainer({p:p,w:w,h:h,width:lengthOfDrawingSquare,height:lengthOfDrawingSquare,len:3,index:0,color:'lightgrey'})//len:2,index:0,
+        let drawingHasBeenDrawn = false
+        if (previousUI){
+            if (previousUI.displayDrawingSpace){
+                drawingHasBeenDrawn = previousUI.displayDrawingSpace.drawingHasBeenDrawn
+                clearTimeout(previousUI.displayDrawingSpace.timeOut)
+            }
+        }
+        let wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
+        this.displayDrawingSpace = new DisplayDrawingContainer({p:p,w:w,h:h,width:lengthOfDrawingSquare,height:lengthOfDrawingSquare,len:3,index:0,color:'lightgrey',wildcard:wildcard})//len:2,index:0,
         this.displayDrawingSpace.setFill(true)
         this.displayDrawingSpace.setLengthOfDrawingSquare(lengthOfDrawingSquare)
         let submittedStrokes = REACT_APP.state.drawingData

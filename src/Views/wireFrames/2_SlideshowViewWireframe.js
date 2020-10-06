@@ -3,7 +3,6 @@ import Mirror from '../../uiClasses/Mirror';
 
 export default class testView {
     constructor(previousView){
-        console.log(previousView)
         this.drawing = previousView ? previousView.drawing : undefined;
         this.dialog = previousView ? previousView.dialog : undefined;
     }

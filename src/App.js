@@ -3,6 +3,7 @@ import {isMobile} from 'react-device-detect';
 import Sketch from './Sketch.js';
 import './App.css';
 const p5 = require("p5")
+
 class App extends Component {
     constructor(props){
         super(props)

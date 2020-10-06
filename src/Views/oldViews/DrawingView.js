@@ -53,7 +53,7 @@ export default class DrawingView {
                 drawingMode = previousUI.drawingSpace.getPenMode()
                 currentStroke = previousUI.drawingSpace.currentStroke
                 strokes = previousUI.drawingSpace.strokes
-                console.log(drawingMode)
+                // console.log(drawingMode)
             }
         } else {
             drawingMode = true;
