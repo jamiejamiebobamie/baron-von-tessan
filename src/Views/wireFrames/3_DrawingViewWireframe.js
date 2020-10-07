@@ -6,7 +6,7 @@ import TextBox from '../../uiClasses/TextBox'
 
 export default class testView {
     constructor(previousView){
-        this.drawing = previousView ? previousView.drawing : undefined;
+        this.drawing = undefined//previousView ? previousView.drawing : undefined;
         this.buttons = [undefined,undefined,undefined,undefined]
         // callbacks
         this.toggleTool = this.toggleTool.bind(this)
@@ -22,7 +22,7 @@ export default class testView {
         this.drawing.mouseClickfunc = this.drawing.penMode ? this.buildStroke : this.removeStroke;
     }
     buildStroke(){
-        if (this.drawing){
+        if (this.drawing !== undefined){
             if (this.drawing.strokes){
         this.drawing.currentStroke.push({x:(this.drawing.p.mouseX-this.drawing.x)/this.drawing.lengthOfDrawingSquare,y:(this.drawing.p.mouseY-this.drawing.y)/this.drawing.lengthOfDrawingSquare})
     }
@@ -212,17 +212,20 @@ export default class testView {
 //// START OF DRAWN UI ELEMENTS
 
         let x,y,width,height,drawingMode,currentStroke,strokes;
-        if (previousUI){
+        if (previousUI !== undefined){
             if (previousUI.drawing){
+                // console.log(previousUI.drawing)
+
                 x = previousUI.drawing.x;
                 y = previousUI.drawing.y;
                 width = previousUI.drawing.width;
                 height = previousUI.drawing.height;
-                drawingMode = previousUI.drawing.penMode
-                currentStroke = previousUI.drawing.currentStroke
-                strokes = previousUI.drawing.strokes
+                drawingMode = previousUI.drawing.drawingMode ? previousUI.drawing.drawingMode : true;
+                currentStroke = previousUI.drawing.currentStroke ? previousUI.drawing.currentStroke : [];
+                strokes = previousUI.drawing.strokes ? previousUI.drawing.strokes : [];
+                console.log(drawingMode,currentStroke,strokes)
             }
-        }  else {
+        } else {
             drawingMode = true;
             currentStroke = [];
             strokes = [];
@@ -263,6 +266,10 @@ export default class testView {
             this.buttons[i].setStroke(true)
             this.buttons[i].setFill(true)
             this.buttons[i].setTextColor("black")
+            // this.buttons[i].textSize = this.buttons[i].row ? this.buttons[i].width / 20 : this.buttons[i].height / 20
+            // if (this.buttons[i].textSize * 2.5 > this.buttons[i].height && w>h){this.buttons[i].textSize = this.buttons[i].width / 20}
+
+
             performClickOnce = true;
             this.buttons[i].setClickType(performClickOnce)
             // submit button logic

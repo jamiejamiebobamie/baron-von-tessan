@@ -9,8 +9,8 @@ export default class TextBox extends Mirror{
         // this.row determines the orientation of the font.
         // use the orientation of the parent container for aligning
             // normally-oriented text, vertically.
-        this.textSize = this.row ? this.width / 5 : this.height / 10
-        if (this.textSize * 2.5 > this.height && this.row){this.textSize = this.width / 20}
+        this.textSize = this.row ? this.width / 10 : this.height / 20
+        // if (this.textSize * 2.5 > this.height && this.row){this.textSize = this.width / 20}
         this.p.textSize(this.textSize);
         this.fontStyle = undefined
         if (this.wildcard){
@@ -21,6 +21,9 @@ export default class TextBox extends Mirror{
                 // this.setFontSize(100)
             }
         }
+        // setTimeout(()=>{
+        //     this.textSize = this.row ? this.width / 10 : this.height / 20
+        // },200);
     }
     // call this after instantiating the object to set the text
     setString(s) { this.text = s }
@@ -57,6 +60,7 @@ export default class TextBox extends Mirror{
         }
     }
     draw() {
-        this.row ? this.drawNormalTextBox() : this.drawRotatedTextBox();
+        // this.row ? this.drawNormalTextBox() : this.drawRotatedTextBox();
+        this.drawNormalTextBox()
     }
 }

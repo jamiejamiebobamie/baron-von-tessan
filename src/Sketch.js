@@ -27,6 +27,7 @@ export default class Sketch {
 
         view = new IntroViewWireframe();
         this.views.push(view);
+
         // view = new SlideshowViewWireframe(view);
         // this.views.push(view);
         view = new DrawingViewWireframe();
@@ -62,7 +63,7 @@ export default class Sketch {
             p.textFont(this.font);
             p.rectMode(p.CENTER,p.CENTER);
             let windowResized = false;
-            _ui = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP,windowResized)
+            _ui = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP,windowResized,undefined)
             console.log(_ui)
         }
         p.windowResized = () => {

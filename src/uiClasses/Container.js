@@ -11,11 +11,15 @@ export default class Container extends UIElement{
         // some UI_elements respond to a single click, others to a mouse press
             // (a single click held down over a period of time.)
         this.isInteractive = false;
-        this.scaleAmount = .1;
-        this.mouseOverWidthSize = this.width * (this.scaleAmount+1)
-        this.mouseOverHeightSize = this.height * (this.scaleAmount+1)
+        this.scaleAmount = .3;
+        this.mouseOverWidthSize = this.width + (this.width*this.scaleAmount)
+        this.mouseOverHeightSize = this.height + (this.height*this.scaleAmount)
         this.screenHasSettled = false;
-        setTimeout(()=>{this.screenHasSettled = true;},500);
+        setTimeout(()=>{
+            this.screenHasSettled = true;
+            this.mouseOverWidthSize = this.width + (this.width*this.scaleAmount)
+            this.mouseOverHeightSize = this.height + (this.height*this.scaleAmount)
+        },500);
     }
     testForClick(){
         if (this.p._renderer._rectMode === "center"){
@@ -67,18 +71,18 @@ export default class Container extends UIElement{
     enlargeButton(){
         if (this.isInteractive){
             if (this.width < this.mouseOverWidthSize){
-                this.width = this.p.lerp(this.width, this.mouseOverWidthSize, 0.05);
+                this.width = this.p.lerp(this.width, this.mouseOverWidthSize+this.scaleAmount, 0.05);
             if (this.height < this.mouseOverHeightSize)
-                this.height = this.p.lerp(this.height, this.mouseOverHeightSize, 0.05);
+                this.height = this.p.lerp(this.height, this.mouseOverHeightSize+this.scaleAmount, 0.05);
             }
         }
     }
     shrinkButton(shrinkSpeed){
         if (this.isInteractive){
             if (this.width > this.mouseOverWidthSize){
-                this.width = this.p.lerp(this.width, this.mouseOverWidthSize*this.scaleAmount, shrinkSpeed);
+                this.width = this.p.lerp(this.width, this.mouseOverWidthSize, shrinkSpeed);
             if (this.height > this.mouseOverHeightSize)
-                this.height = this.p.lerp(this.height, this.mouseOverHeightSize*this.scaleAmount, shrinkSpeed);
+                this.height = this.p.lerp(this.height, this.mouseOverHeightSize, shrinkSpeed);
             }
         }
     }

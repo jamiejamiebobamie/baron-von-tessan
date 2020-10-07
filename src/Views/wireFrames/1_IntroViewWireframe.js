@@ -15,6 +15,7 @@ export default class testView {
         // NOT THE DIALOG BOX -- CONTROLS WINDOW
         this.dialog = previousView ? previousView.dialog : undefined;
         this.baronDialogIndex = 0
+        this.timeOutVar = undefined
     }
     addCharacterToDialog(changeViewMethod){
         if (this.baronDialogIndex<baronData.descriptionData.length){
@@ -22,9 +23,13 @@ export default class testView {
             let allOfDialog = baronData.descriptionData
             let dialogString = allOfDialog.slice(0,this.baronDialogIndex)
             this.dialog.setString(dialogString)
-            setTimeout(()=>{this.addCharacterToDialog(changeViewMethod)},200)
-        } else {
-            setTimeout(()=>{changeViewMethod()},2000)
+            clearTimeout(this.timeOutVar)
+            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialog(changeViewMethod)},200)
+        }
+        else {
+            clearTimeout(this.timeOutVar)
+            return
+                // this.timeOutVar = setTimeout(()=>{changeViewMethod()},15000)
         }
     }
     getUI(){return this}
@@ -130,10 +135,14 @@ export default class testView {
                 height = previousUI.dialog.height;
             }
         }
-        parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height,mouseClickfunc:REACT_APP.testViewSwitch}
+        parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height,mouseClickfunc:REACT_APP.testViewSwitch}//color:"pink"}
         this.dialog = new TextBox(parameters)
         this.dialog.setFill(true)
+        let fontSize = 40//w>h ? 30 : 30 ;
+        this.dialog.setFontSize(fontSize)
         // this.dialog.setStroke(true)
+        // this.dialog.row = false;
+
         _ui.push(this.dialog)
 
         if (!windowResized){
@@ -173,6 +182,7 @@ export default class testView {
                         this.drawing.submittedStrokeIndex = 0;
                         clearTimeout(timeOutVar)
                     } else {
+                        REACT_APP.testViewSwitch();
                         return;
                     }
                 }
