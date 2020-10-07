@@ -11,24 +11,16 @@ export default class DisplayDrawingContainer extends Mirror{
         this.drawingHasBeenDrawn = false;
         if (parameterObject.wildcard){
             if (parameterObject.wildcard.drawingHasBeenDrawn){
-
                 this.drawingHasBeenDrawn = parameterObject.wildcard.drawingHasBeenDrawn;
             }
         }
         this.lengthOfDrawingSquare = 0
 
-        // need to externalize this information / method!!
         this.toLocation = []
         this.fromLocation = []
         this.timeOut = undefined;
-        this.setFill(true)
-        this.setStroke(true)
-        this.color="lightgrey"
-
         this.setNewToLocation()
     }
-
-    // need to externalize this information / method!!
     setNewToLocation(){
         this.toLocation = []
         for (let i = 0; i < this.submittedStrokes.length; i++){
@@ -54,7 +46,7 @@ export default class DisplayDrawingContainer extends Mirror{
                     driftX = this.p.lerp(this.fromLocation[i].x,this.toLocation[i].x,.2)
                     driftY = this.p.lerp(this.fromLocation[i].y,this.toLocation[i].y,.2)
                 }
-                this.p.ellipse(this.submittedStrokes[i].x*this.lengthOfDrawingSquare+driftX, this.submittedStrokes[i].y*this.lengthOfDrawingSquare+driftY, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
+                this.p.ellipse(this.submittedStrokes[i].x*this.lengthOfDrawingSquare+driftX+this.x, this.submittedStrokes[i].y*this.lengthOfDrawingSquare+driftY+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
             }
         } else {
             for (let i = 0; i < this.submittedStrokeIndex; i++){
@@ -62,7 +54,7 @@ export default class DisplayDrawingContainer extends Mirror{
                     driftX = this.p.lerp(this.fromLocation[i].x,this.toLocation[i].x,.2)
                     driftY = this.p.lerp(this.fromLocation[i].y,this.toLocation[i].y,.2)
                 }
-                this.p.ellipse(this.submittedStrokes[i].x*this.lengthOfDrawingSquare+driftX, this.submittedStrokes[i].y*this.lengthOfDrawingSquare+driftY, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
+                this.p.ellipse(this.submittedStrokes[i].x*this.lengthOfDrawingSquare+driftX+this.x, this.submittedStrokes[i].y*this.lengthOfDrawingSquare+driftY+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
             }
         }
     }

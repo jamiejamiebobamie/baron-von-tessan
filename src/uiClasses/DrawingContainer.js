@@ -1,7 +1,7 @@
 import Container from './Container'
-// import Mirror from './Mirror'
+import Mirror from './Mirror'
 
-export default class DrawingContainer extends Container{
+export default class DrawingContainer extends Mirror{
     constructor(parameterObject){
         super(parameterObject)
         this.currentStroke = []
@@ -32,16 +32,15 @@ export default class DrawingContainer extends Container{
     drawStrokes(){
         for (let i = 0; i < this.strokes.length;i++){
             for (let j = 0; j < this.strokes[i].length;j++){
-                this.p.ellipse(this.strokes[i][j].x*this.lengthOfDrawingSquare, this.strokes[i][j].y*this.lengthOfDrawingSquare, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
+                this.p.ellipse(this.strokes[i][j].x*this.lengthOfDrawingSquare+this.x, this.strokes[i][j].y*this.lengthOfDrawingSquare+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
             }
         }
     }
     draw() {
         super.draw()
-        this.p.noStroke()
         this.p.fill(100,0,0)
         for (let i = 0; i < this.currentStroke.length;i++){
-            this.p.ellipse(this.currentStroke[i].x*this.lengthOfDrawingSquare, this.currentStroke[i].y*this.lengthOfDrawingSquare, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
+            this.p.ellipse(this.currentStroke[i].x*this.lengthOfDrawingSquare+this.x, this.currentStroke[i].y*this.lengthOfDrawingSquare+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
         }
         this.p.fill(0)
         this.drawStrokes()

@@ -1,6 +1,7 @@
 import Container from './Container'
+import Mirror from './Mirror'
 
-export default class TextBox extends Container{
+export default class TextBox extends Mirror{
     constructor(parameterObject){
         super(parameterObject)
         this.text = undefined
@@ -9,14 +10,15 @@ export default class TextBox extends Container{
         // use the orientation of the parent container for aligning
             // normally-oriented text, vertically.
         this.textSize = this.row ? this.width / 5 : this.height / 10
-        if (this.textSize * 2.5 > this.height && this.row){this.textSize = this.width / 10}
+        if (this.textSize * 2.5 > this.height && this.row){this.textSize = this.width / 20}
         this.p.textSize(this.textSize);
         this.fontStyle = undefined
         if (this.wildcard){
             if (this.wildcard.string){
                 // this.setString(this.wildcard.string)
                 this.text = this.wildcard.string
-                this.setFontSize(this.width/50)
+                this.setFontSize(this.width/100)
+                // this.setFontSize(100)
             }
         }
     }
@@ -56,5 +58,6 @@ export default class TextBox extends Container{
     }
     draw() {
         this.row ? this.drawNormalTextBox() : this.drawRotatedTextBox()
+        // this.p.text("hello",this.x,this.y)
     }
 }

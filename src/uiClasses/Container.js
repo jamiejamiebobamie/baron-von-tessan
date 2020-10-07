@@ -11,7 +11,7 @@ export default class Container extends UIElement{
         // some UI_elements respond to a single click, others to a mouse press
             // (a single click held down over a period of time.)
         this.isInteractive = false;
-        this.growAmount = 1.3
+        this.growAmount = .5;
         this.mouseOverWidthSize = this.width * this.growAmount
         this.mouseOverHeightSize = this.height * this.growAmount
         this.screenHasSettled = false;
@@ -75,10 +75,10 @@ export default class Container extends UIElement{
     }
     shrinkButton(shrinkSpeed){
         if (this.isInteractive){
-            if (this.width > this.mouseOverWidthSize/1.5){
-                this.width = this.p.lerp(this.width, this.mouseOverWidthSize/1.5, shrinkSpeed);
-            if (this.height > this.mouseOverHeightSize/1.5)
-                this.height = this.p.lerp(this.height, this.mouseOverHeightSize/1.5, shrinkSpeed);
+            if (this.width > this.mouseOverWidthSize/this.growAmount){
+                this.width = this.p.lerp(this.width, this.mouseOverWidthSize/this.growAmount, shrinkSpeed);
+            if (this.height > this.mouseOverHeightSize/this.growAmount)
+                this.height = this.p.lerp(this.height, this.mouseOverHeightSize/this.growAmount, shrinkSpeed);
             }
         }
     }
@@ -98,9 +98,9 @@ export default class Container extends UIElement{
         this.hasFill ? this.p.fill(45) : this.p.noFill();
         this.color ? this.p.fill(this.color) : this.p.noFill();
         this.p.rect(this.x,this.y,this.width,this.height)
-        for (let i = 0; i < this.uiElements.length; i++){
-            if (this.uiElements[i].draw){
-                this.uiElements[i].draw();
+        for (let i = 0; i < this._ui.length; i++){
+            if (this._ui[i].draw){
+                this._ui[i].draw();
             }
         }
     }

@@ -154,7 +154,7 @@ export default class UIElement{
             }
         }
 
-        this.uiElements = []
+        this._ui = []
     }
     // p5.js built-in methods
     mouseOver(){}

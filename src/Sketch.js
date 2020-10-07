@@ -1,4 +1,4 @@
-// import testCallBackButton from './uiClasses';
+import testCallBackButton from './uiClasses';
 // import testView from './Views/test/testView';
 // import testView2 from './Views/test/testView2';
 import IntroView from './Views/oldViews/IntroView';
@@ -29,8 +29,8 @@ export default class Sketch {
         // this.views.push(view);
         // view = new SlideshowViewWireframe(view);
         // this.views.push(view);
-        // view = new DrawingViewWireframe();
-        // this.views.push(view);
+        view = new DrawingViewWireframe();
+        this.views.push(view);
         view = new EnterDescriptionViewWireframe();
         this.views.push(view);
         view = new FlagInappropriateContentWireframe();
@@ -63,6 +63,7 @@ export default class Sketch {
             p.rectMode(p.CENTER,p.CENTER);
             let windowResized = false;
             _ui = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP,windowResized)
+            console.log(_ui)
         }
         p.windowResized = () => {
             w = p.windowWidth - (p.windowWidth/10)
@@ -114,9 +115,6 @@ export default class Sketch {
             }
             p.background(255)
             // p.image(this.img,0,0);
-
-
-            p.text('p5*js', 10, 50);
             for (let i = 0; i < _ui.length; i++){
                 _ui[i].draw();
             }

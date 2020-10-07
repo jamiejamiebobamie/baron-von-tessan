@@ -15,7 +15,6 @@ export default class testView {
 
         // NOT THE DIALOG BOX -- CONTROLS WINDOW
         this.dialog = previousView ? previousView.dialog : undefined;
-
     }
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI){
@@ -254,18 +253,70 @@ export default class testView {
         this.dialog = new Mirror(parameters)
         _ui.push(this.dialog)
 
+
+// ---------------------
+
+
+
+        let drawingHasBeenDrawn = false
         if (previousUI){
             if (previousUI.drawing){
                 x = previousUI.drawing.x;
                 y = previousUI.drawing.y;
                 width = previousUI.drawing.width;
                 height = previousUI.drawing.height;
+                drawingHasBeenDrawn = previousUI.drawing.drawingHasBeenDrawn
+                clearTimeout(previousUI.drawing.timeOut)
             }
         }
-        parameters = {p:p,objectToMirror:drawing,x:x,y:y,width:width,height:height}
+        wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
+
+        parameters = {p:p,w:w,h:h,objectToMirror:drawing,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard}
         this.drawing = new DisplayDrawingContainer(parameters)
+        this.drawing.setLengthOfDrawingSquare(this.drawing.width)
+        this.drawing.setFill(true)
+        let submittedStrokes = REACT_APP.state.drawingData
+        this.drawing.setSubmittedStrokes(submittedStrokes)
+
+
+        let beginRedrawingStrokesFunc = () => {
+            this.drawing.setSubmittedStrokeIndex(0)
+            let redrawStrokes = (timeOutVar) => {
+                if (this.drawing.drawingHasBeenDrawn){
+                    if (this.drawing.loop){
+                        this.drawing.drawingHasBeenDrawn = false;
+                        this.drawing.submittedStrokeIndex = 0;
+                        clearTimeout(timeOutVar)
+                    } else {
+                        return;
+                    }
+                }
+                if (this.drawing.submittedStrokeIndex < this.drawing.submittedStrokes.length) {
+                    this.drawing.submittedStrokeIndex += 1
+                    timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
+                } else {
+                    this.drawing.drawingHasBeenDrawn = true;
+                    // pause three seconds to display drawing.
+                        // then loop if this.displayDrawingSpace.loop
+                        // is set to true otherwise return.
+                    timeOutVar = setTimeout(redrawStrokes, 3000,timeOutVar);
+                }
+            }
+            redrawStrokes();
+        }
+
+        ////// ----- ////// TO LOOP.
+        // this.drawing.setLoopToTrueToLoopFinishedDrawing()
+
+        if (!windowResized){
+            beginRedrawingStrokesFunc();
+        }
+
         _ui.push(this.drawing)
         console.log(this.drawing)
+
+
+
 
         if (previousUI){
             if (previousUI.mirrorTest5){
