@@ -11,9 +11,9 @@ export default class Container extends UIElement{
         // some UI_elements respond to a single click, others to a mouse press
             // (a single click held down over a period of time.)
         this.isInteractive = false;
-        this.growAmount = .5;
-        this.mouseOverWidthSize = this.width * this.growAmount
-        this.mouseOverHeightSize = this.height * this.growAmount
+        this.scaleAmount = .1;
+        this.mouseOverWidthSize = this.width * (this.scaleAmount+1)
+        this.mouseOverHeightSize = this.height * (this.scaleAmount+1)
         this.screenHasSettled = false;
         setTimeout(()=>{this.screenHasSettled = true;},500);
     }
@@ -75,10 +75,10 @@ export default class Container extends UIElement{
     }
     shrinkButton(shrinkSpeed){
         if (this.isInteractive){
-            if (this.width > this.mouseOverWidthSize/this.growAmount){
-                this.width = this.p.lerp(this.width, this.mouseOverWidthSize/this.growAmount, shrinkSpeed);
-            if (this.height > this.mouseOverHeightSize/this.growAmount)
-                this.height = this.p.lerp(this.height, this.mouseOverHeightSize/this.growAmount, shrinkSpeed);
+            if (this.width > this.mouseOverWidthSize){
+                this.width = this.p.lerp(this.width, this.mouseOverWidthSize*this.scaleAmount, shrinkSpeed);
+            if (this.height > this.mouseOverHeightSize)
+                this.height = this.p.lerp(this.height, this.mouseOverHeightSize*this.scaleAmount, shrinkSpeed);
             }
         }
     }

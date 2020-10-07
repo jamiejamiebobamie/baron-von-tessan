@@ -22,26 +22,41 @@ export default class testView {
         this.drawing.mouseClickfunc = this.drawing.penMode ? this.buildStroke : this.removeStroke;
     }
     buildStroke(){
+        if (this.drawing){
+            if (this.drawing.strokes){
         this.drawing.currentStroke.push({x:(this.drawing.p.mouseX-this.drawing.x)/this.drawing.lengthOfDrawingSquare,y:(this.drawing.p.mouseY-this.drawing.y)/this.drawing.lengthOfDrawingSquare})
     }
+}
+}
     undoLastStroke(){
+        if (this.drawing){
+            if (this.drawing.strokes){
         this.drawing.strokes.pop()
     }
+}
+}
     clearStrokes(){
+        if (this.drawing){
+            if (this.drawing.strokes){
         this.drawing.strokes = []
     }
-    // this is broken.
+}
+}
     removeStroke(){
+        if (this.drawing){
+            if (this.drawing.strokes){
         for (let i = 0; i < this.drawing.strokes.length; i++ ){
             for (let j = 0; j < this.drawing.strokes[i].length; j++ ){
-                if ( this.drawing.p.mouseX > this.drawing.strokes[i][j].x*this.drawing.lengthOfDrawingSquare-this.drawing.lengthOfDrawingSquare*.01
-                    && this.drawing.p.mouseX < this.drawing.strokes[i][j].x*this.drawing.lengthOfDrawingSquare+this.drawing.lengthOfDrawingSquare*.01
-                    && this.drawing.p.mouseY > this.drawing.strokes[i][j].y*this.drawing.lengthOfDrawingSquare-this.drawing.lengthOfDrawingSquare*.01
-                    && this.drawing.p.mouseY < this.drawing.strokes[i][j].y*this.drawing.lengthOfDrawingSquare+this.drawing.lengthOfDrawingSquare*.01 ){
+                if ( this.drawing.p.mouseX > this.drawing.x+this.drawing.strokes[i][j].x*this.drawing.lengthOfDrawingSquare-this.drawing.lengthOfDrawingSquare*.01
+                    && this.drawing.p.mouseX < this.drawing.x+this.drawing.strokes[i][j].x*this.drawing.lengthOfDrawingSquare+this.drawing.lengthOfDrawingSquare*.01
+                    && this.drawing.p.mouseY > this.drawing.y+this.drawing.strokes[i][j].y*this.drawing.lengthOfDrawingSquare-this.drawing.lengthOfDrawingSquare*.01
+                    && this.drawing.p.mouseY < this.drawing.y+this.drawing.strokes[i][j].y*this.drawing.lengthOfDrawingSquare+this.drawing.lengthOfDrawingSquare*.01 ){
                         this.drawing.strokes[i].splice(j,1)
                     }
             }
         }
+    }
+}
     }
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI){
@@ -137,7 +152,7 @@ export default class testView {
                          }
         let drawingArea = new Wireframe(parameters)
 
-        wildcard = {shouldBeSquare:false,shrinkAmountWidth:.9,shrinkAmountHeight:.9,string:"this is a container to place the description."}
+        wildcard = {shouldBeSquare:false,shrinkAmountWidth:.9,shrinkAmountHeight:.9}
         parameters = {     p:p,
                            windowWidth: w,
                            windowHeight: h,
@@ -149,7 +164,8 @@ export default class testView {
 
         let buttons = []
         for (let i = 0; i<4;i++){
-            wildcard = {shouldBeSquare:false,shrinkAmountWidth:w>h?.7:.9,shrinkAmountHeight:w>h?.5:.3}
+            // wildcard = {shouldBeSquare:false,shrinkAmountWidth:w>h?.7:.9,shrinkAmountHeight:w>h?.5:.3}
+            wildcard = {shouldBeSquare:false,shrinkAmountWidth:w>h?.5:.9,shrinkAmountHeight:w>h?.5:.3}
 
             if (i === 0){
                 wildcard.string = "PEN"
@@ -175,7 +191,7 @@ export default class testView {
             let button = new Wireframe(parameters)
             buttons.push(button)
         }
-        wildcard = {shouldBeSquare:false,shrinkAmountWidth:1,shrinkAmountHeight:.9,string:"SUBMIT"}
+        wildcard = {shouldBeSquare:false,shrinkAmountWidth:.97,shrinkAmountHeight:.9,string:"SUBMIT"}
         parameters = { p:p,
                            windowWidth: w,
                            windowHeight: h,
@@ -191,14 +207,18 @@ export default class testView {
         let button = new Wireframe(parameters)
         buttons.push(button)
 
-        let x,y,width,height, drawingMode,currentStroke,strokes;
+
+//// ---- - - - - - - - -
+//// START OF DRAWN UI ELEMENTS
+
+        let x,y,width,height,drawingMode,currentStroke,strokes;
         if (previousUI){
             if (previousUI.drawing){
                 x = previousUI.drawing.x;
                 y = previousUI.drawing.y;
                 width = previousUI.drawing.width;
                 height = previousUI.drawing.height;
-                drawingMode = previousUI.drawing.getPenMode()
+                drawingMode = previousUI.drawing.penMode
                 currentStroke = previousUI.drawing.currentStroke
                 strokes = previousUI.drawing.strokes
             }
@@ -208,7 +228,7 @@ export default class testView {
             strokes = [];
         }
 
-        parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height,p:p,w:w,h:h,color:'lightgrey', mouseClickfunc:this.buildStroke}
+        parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height,p:p,w:w,h:h,color:'lightgrey'}
         this.drawing = new DrawingContainer(parameters)
         this.drawing.setCurrentStroke(currentStroke);
         this.drawing.setStrokes(strokes);
@@ -216,9 +236,8 @@ export default class testView {
         this.drawing.setLengthOfDrawingSquare(lengthOfDrawingSquare)
         let performClickOnce = false;
         this.drawing.setClickType(performClickOnce)
-        if (drawingMode){
-            this.drawing.setPenMode(drawingMode);
-        }
+        this.drawing.penMode = drawingMode
+        this.drawing.mouseClickfunc = this.drawing.penMode ? this.buildStroke : this.removeStroke;
         _ui.push(this.drawing)
 
         for (let i = 0; i<4;i++){
@@ -266,13 +285,17 @@ export default class testView {
         // SUBMIT
         let submitFunc = () => {
             let submittedStrokes = [];
-            for (let i = 0; i<this.drawing.strokes.length; i++) {
-                for (let j = 0; j<this.drawing.strokes[i].length; j++) {
-                    submittedStrokes.push(this.drawing.strokes[i][j])
+            if (this.drawing){
+                if (this.drawing.strokes){
+                    for (let i = 0; i<this.drawing.strokes.length; i++) {
+                        for (let j = 0; j<this.drawing.strokes[i].length; j++) {
+                            submittedStrokes.push(this.drawing.strokes[i][j])
+                        }
+                    }
+                    REACT_APP.handleSubmitDrawing(submittedStrokes)
+                    REACT_APP.testViewSwitch()
                 }
             }
-            REACT_APP.handleSubmitDrawing(submittedStrokes)
-            REACT_APP.testViewSwitch()
         }
         this.buttons[3].mouseClickfunc = submitFunc;
 

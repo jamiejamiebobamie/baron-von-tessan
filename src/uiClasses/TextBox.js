@@ -57,7 +57,6 @@ export default class TextBox extends Mirror{
         }
     }
     draw() {
-        this.row ? this.drawNormalTextBox() : this.drawRotatedTextBox()
-        // this.p.text("hello",this.x,this.y)
+        this.row ? this.drawNormalTextBox() : this.drawRotatedTextBox();
     }
 }

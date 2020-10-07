@@ -28,6 +28,7 @@ class App extends Component {
         this.testViewSwitch = this.testViewSwitch.bind(this);
     }
     handleSubmitDrawing(drawingData) {
+        console.log(drawingData)
         this.setState({drawingData:drawingData})
     }
     handleSubmitDescription(drawingDescription){

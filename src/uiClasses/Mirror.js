@@ -4,12 +4,14 @@ export default class Mirror extends Container{
     constructor(parameterObject){
         super(parameterObject)
 
-        this.object = parameterObject.objectToMirror;
-        this.x = parameterObject.x === undefined ? parameterObject.objectToMirror.x : parameterObject.x;
-        this.y = parameterObject.y === undefined ? parameterObject.objectToMirror.y : parameterObject.y ;
-        this.width = parameterObject.width === undefined ? parameterObject.objectToMirror.width : this.width;
-        this.height = parameterObject.height === undefined ? parameterObject.objectToMirror.height : this.height;
-        this.delta = parameterObject.delta ? parameterObject.delta : 1;
+        if (parameterObject){
+            this.object = parameterObject.objectToMirror !== undefined ? parameterObject.objectToMirror : undefined;
+            this.x = parameterObject.x === undefined ? parameterObject.objectToMirror.x : parameterObject.x;
+            this.y = parameterObject.y === undefined ? parameterObject.objectToMirror.y : parameterObject.y ;
+            this.width = parameterObject.width === undefined ? parameterObject.objectToMirror.width : this.width;
+            this.height = parameterObject.height === undefined ? parameterObject.objectToMirror.height : this.height;
+            this.delta = parameterObject.delta ? parameterObject.delta : 1;
+        }
     }
 
     lerpX(){

@@ -25,8 +25,8 @@ export default class Sketch {
         // this.views.push(view);
 
 
-        // view = new IntroViewWireframe();
-        // this.views.push(view);
+        view = new IntroViewWireframe();
+        this.views.push(view);
         // view = new SlideshowViewWireframe(view);
         // this.views.push(view);
         view = new DrawingViewWireframe();
@@ -51,7 +51,7 @@ export default class Sketch {
         REACT_APP.setNumberOfViews(this.views.length)
         p.preload = () => {
             this.font = p.loadFont('fonts/PrintClearly.otf');
-            // this.img = p.loadImage('images/inspiration.jpg');
+            this.img = p.loadImage('images/inspiration.jpg');
          }
         p.setup = () => {
             w = p.windowWidth - (p.windowWidth/10)
@@ -114,10 +114,14 @@ export default class Sketch {
                 this.viewIndex = REACT_APP.state.viewIndex
             }
             p.background(255)
-            // p.image(this.img,0,0);
             for (let i = 0; i < _ui.length; i++){
                 _ui[i].draw();
             }
+            // if (this.viewIndex === 0){
+            //     p.tint(255,126)
+            //     p.image(this.img,-340,-130,1008,756);
+            // }
+
         }
     }
 }
