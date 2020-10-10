@@ -265,7 +265,6 @@ export default class testView {
             this.buttons[i].setTextColor("black")
             this.buttons[i].textSize = this.buttons[0].width / 5;
 
-
             performClickOnce = true;
             this.buttons[i].setClickType(performClickOnce)
             // submit button logic

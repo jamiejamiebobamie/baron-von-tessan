@@ -12,7 +12,7 @@ class App extends Component {
         this.state = {
             drawingDescription: "",
             drawingData: [],
-            response:[response,response,response,response,response],
+            response:response.data,
             isMobile: isMobile,
 
             // temporary

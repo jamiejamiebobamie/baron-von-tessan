@@ -18,11 +18,11 @@ export default class Sketch {
         let view;
 
 
-        view = new IntroViewWireframe();
-        this.views.push(view);
+        // view = new IntroViewWireframe();
+        // this.views.push(view);
 
-        view = new SlideshowViewWireframe(view);
-        this.views.push(view);
+        // view = new SlideshowViewWireframe(view);
+        // this.views.push(view);
 
         view = new DrawingViewWireframe();
         this.views.push(view);

@@ -259,6 +259,8 @@ export default class testView {
 
 
         let drawingHasBeenDrawn = false
+        let strokeIndex = 0;
+
         if (previousUI){
             if (previousUI.drawing){
                 x = previousUI.drawing.x;
@@ -267,6 +269,7 @@ export default class testView {
                 height = previousUI.drawing.height;
                 drawingHasBeenDrawn = previousUI.drawing.drawingHasBeenDrawn
                 clearTimeout(previousUI.drawing.timeOut)
+                strokeIndex = previousUI.drawing.submittedStrokeIndex
             }
         }
         wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
@@ -277,7 +280,7 @@ export default class testView {
         this.drawing.setFill(true)
         let submittedStrokes = REACT_APP.state.drawingData
         this.drawing.setSubmittedStrokes(submittedStrokes)
-
+        this.drawing.submittedStrokeIndex = strokeIndex;
 
         let beginRedrawingStrokesFunc = () => {
             this.drawing.setSubmittedStrokeIndex(0)

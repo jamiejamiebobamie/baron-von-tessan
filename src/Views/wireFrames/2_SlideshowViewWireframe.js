@@ -95,8 +95,7 @@ export default class testView {
                         this.drawing.submittedStrokeIndex = 0;
                         clearTimeout(timeOutVar)
                     } else {
-                        // out of bounds error. hard-coding for now.
-                        if (this.responseIndex < 4){//REACT_APP.state.response.length){
+                        if (this.responseIndex < REACT_APP.state.response.length-1){
                             this.responseIndex += 1
                             this.drawing.drawingHasBeenDrawn = false;
                             this.drawing.submittedStrokeIndex = 0;
