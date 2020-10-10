@@ -1,8 +1,10 @@
-import TextBox from './TextBox'
+import TextBox from './TextBoxContainer'
 import Container from './Container'
 import KeyboardKey from './KeyboardKey'
+import Mirror from './Mirror'
 
-export default class Keyboard extends TextBox{
+
+export default class Keyboard extends Mirror{
     constructor(parameterObject){
         super(parameterObject)
         this.mouseClickfunc = this.searchClickedKey;

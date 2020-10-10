@@ -18,18 +18,18 @@ export default class Sketch {
         let view;
 
 
-        // view = new IntroViewWireframe();
-        // this.views.push(view);
-
-        // view = new SlideshowViewWireframe(view);
-        // this.views.push(view);
-
+        view = new IntroViewWireframe();
+        this.views.push(view);
+        view = new SlideshowViewWireframe(view);
+        this.views.push(view);
         view = new DrawingViewWireframe();
         this.views.push(view);
         view = new EnterDescriptionViewWireframe();
         this.views.push(view);
         view = new FlagInappropriateContentWireframe();
         this.views.push(view);
+
+        // p5.js media references
         this.img = undefined;
         this.font = undefined
     }
@@ -106,6 +106,7 @@ export default class Sketch {
                 let windowResized = false
                 _ui  = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP,windowResized,previousView)
                 this.viewIndex = REACT_APP.state.viewIndex
+                console.log(REACT_APP.state)
             }
             p.background(255)
             for (let i = 0; i < _ui.length; i++){

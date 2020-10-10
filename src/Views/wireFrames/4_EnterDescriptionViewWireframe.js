@@ -1,20 +1,18 @@
 import Wireframe from '../../uiClasses/Wireframe';
 import Mirror from '../../uiClasses/Mirror';
 import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer';
+import TextInput from '../../uiClasses/TextInput'
+import TextBox from '../../uiClasses/TextBox'
+import Keyboard from '../../uiClasses/Keyboard'
 
 
 export default class testView {
     constructor(previousView){
-        this.mirrorTest1 = undefined
-        this.mirrorTest2 = undefined
-        this.mirrorTest3 = undefined
-        this.mirrorTest4 = undefined
-        this.mirrorTest5 = undefined
-
-        this.drawing = previousView ? previousView.drawing : undefined;
-
-        // NOT THE DIALOG BOX -- CONTROLS WINDOW
-        this.dialog = previousView ? previousView.dialog : undefined;
+        this.backButton = undefined;
+        this.submitButton = undefined;
+        this.drawing = undefined;
+        this.input = undefined;
+        this.keyBoard = undefined;
     }
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI){
@@ -103,8 +101,6 @@ export default class testView {
                            parent:drawingParent,
                          }
         let drawing = new Wireframe(parameters)
-
-
 
         let inputFormParent = bottomThirdOfScreen;
         if (REACT_APP.state.isMobile){
@@ -215,52 +211,71 @@ export default class testView {
                            parent:REACT_APP.state.isMobile?wireFrameElements[3]:wireFrame,
                          }
         let areaForKeyboard = new Wireframe(parameters)
+        // _ui.push(areaForKeyboard)
 
         let x,y,width,height;
         if (previousUI){
-            if (previousUI.mirrorTest1){
-                x = previousUI.mirrorTest1.x;
-                y = previousUI.mirrorTest1.y;
-                width = previousUI.mirrorTest1.width;
-                height = previousUI.mirrorTest1.height;
+            if (previousUI.backButton){
+                x = previousUI.backButton.x;
+                y = previousUI.backButton.y;
+                width = previousUI.backButton.width;
+                height = previousUI.backButton.height;
             }
         }
-        parameters = {p:p,objectToMirror:backButton,x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
-        this.mirrorTest1 = new Mirror(parameters)
-        _ui.push(this.mirrorTest1)
+        let returnToPreviousView = () => {
+            let currentViewIndex = REACT_APP.state.viewIndex
+            REACT_APP.testViewSwitch(currentViewIndex-1)
+        }
+        parameters = {p:p,objectToMirror:backButton,x:x,y:y,width:width,height:height,mouseClickfunc:returnToPreviousView}
+        this.backButton = new TextBox(parameters)
+        this.backButton.setInteractivity(true);
+        this.backButton.setStroke(true)
+        this.backButton.setFill(true)
+        this.backButton.setTextColor("black")
+        this.backButton.setString("<< BACK");
+        this.backButton.setFontSize(1);
+        _ui.push(this.backButton)
 
         if (previousUI){
-            if (previousUI.mirrorTest2){
-                x = previousUI.mirrorTest2.x;
-                y = previousUI.mirrorTest2.y;
-                width = previousUI.mirrorTest2.width;
-                height = previousUI.mirrorTest2.height;
+            if (previousUI.submitButton){
+                x = previousUI.submitButton.x;
+                y = previousUI.submitButton.y;
+                width = previousUI.submitButton.width;
+                height = previousUI.submitButton.height;
             }
         }
-        parameters = {p:p,objectToMirror:submitButton,x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
-        this.mirrorTest2 = new Mirror(parameters)
-        _ui.push(this.mirrorTest2)
+        let submitDescription = () => {
+            let drawingDescription = this.input.text;
+            REACT_APP.handleSubmitDescription(drawingDescription)
+            REACT_APP.testViewSwitch()
+        }
+        parameters = {p:p,objectToMirror:submitButton,x:x,y:y,width:width,height:height,mouseClickfunc:submitDescription}
+        this.submitButton = new TextBox(parameters)
+        this.submitButton.setInteractivity(true);
+        this.submitButton.setStroke(true)
+        this.submitButton.setFill(true)
+        this.submitButton.setTextColor("black")
+        this.submitButton.setString("SUBMIT");
+        this.submitButton.setFontSize(1);
+        _ui.push(this.submitButton)
 
         if (previousUI){
-            if (previousUI.dialog){
-                x = previousUI.dialog.x;
-                y = previousUI.dialog.y;
-                width = previousUI.dialog.width;
-                height = previousUI.dialog.height;
+            if (previousUI.input){
+                x = previousUI.input.x;
+                y = previousUI.input.y;
+                width = previousUI.input.width;
+                height = previousUI.input.height;
             }
         }
-        parameters = {p:p,objectToMirror:input,x:x,y:y,width:width,height:height, mouseClickfunc:REACT_APP.testViewSwitch}
-        this.dialog = new Mirror(parameters)
-        _ui.push(this.dialog)
-
+        parameters = {p:p,objectToMirror:input,x:x,y:y,width:width,height:height}
+        this.input = new TextInput(parameters)
+        _ui.push(this.input)
 
 // ---------------------
 
-
-
         let drawingHasBeenDrawn = false
         let strokeIndex = 0;
-
+        let strokes = []
         if (previousUI){
             if (previousUI.drawing){
                 x = previousUI.drawing.x;
@@ -270,6 +285,12 @@ export default class testView {
                 drawingHasBeenDrawn = previousUI.drawing.drawingHasBeenDrawn
                 clearTimeout(previousUI.drawing.timeOut)
                 strokeIndex = previousUI.drawing.submittedStrokeIndex
+                // in case user returns to the drawing view.
+                    // need to store his strokes.
+                    // the submitted drawing data stored in the React state
+                    // is a flattened 2d array. so drawing app functionality
+                    // is lost if this version of data is used.
+                strokes = previousUI.drawing.strokes
             }
         }
         wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
@@ -281,6 +302,7 @@ export default class testView {
         let submittedStrokes = REACT_APP.state.drawingData
         this.drawing.setSubmittedStrokes(submittedStrokes)
         this.drawing.submittedStrokeIndex = strokeIndex;
+        this.drawing.strokes = strokes
 
         let beginRedrawingStrokesFunc = () => {
             this.drawing.setSubmittedStrokeIndex(0)
@@ -318,17 +340,21 @@ export default class testView {
         _ui.push(this.drawing)
 
         if (previousUI){
-            if (previousUI.mirrorTest5){
-                x = previousUI.mirrorTest5.x;
-                y = previousUI.mirrorTest5.y;
-                width = previousUI.mirrorTest5.width;
-                height = previousUI.mirrorTest5.height;
+            if (previousUI.keyBoard){
+                x = previousUI.keyBoard.x;
+                y = previousUI.keyBoard.y;
+                width = previousUI.keyBoard.width;
+                height = previousUI.keyBoard.height;
             }
         }
         parameters = {p:p,objectToMirror:areaForKeyboard,x:x,y:y,width:width,height:height}
-        this.mirrorTest5 = new Mirror(parameters)
-        _ui.push(this.mirrorTest5)
+        this.keyBoard = new Keyboard(parameters)
+        this.keyBoard.setReferenceToInputBox(this.input)
+        this.input.setMobileKeyboardReference(this.keyBoard)
+        if (REACT_APP.state.isMobile){
+            _ui.push(this.keyBoard)
 
+        }
         return _ui;
     }
 }

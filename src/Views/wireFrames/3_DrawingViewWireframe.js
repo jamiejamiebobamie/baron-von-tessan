@@ -228,6 +228,10 @@ export default class testView {
             strokes = [];
         }
 
+        // if (REACT_APP.state.drawingData.length !== 0){
+        //     strokes = REACT_APP.state.drawingData
+        // }
+
         parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height,p:p,w:w,h:h,color:'lightgrey'}
         this.drawing = new DrawingContainer(parameters)
         this.drawing.setCurrentStroke(currentStroke);
@@ -238,6 +242,7 @@ export default class testView {
         this.drawing.setClickType(performClickOnce)
         this.drawing.penMode = drawingMode
         this.drawing.mouseClickfunc = this.drawing.penMode ? this.buildStroke : this.removeStroke;
+        console.log(this.drawing.strokes)
         _ui.push(this.drawing)
 
         for (let i = 0; i<4;i++){

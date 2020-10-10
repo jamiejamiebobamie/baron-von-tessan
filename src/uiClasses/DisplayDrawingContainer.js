@@ -20,6 +20,9 @@ export default class DisplayDrawingContainer extends Mirror{
         this.fromLocation = []
         this.timeOut = undefined;
         this.setNewToLocation()
+        // for DrawingContainer functionality.
+            // purely storing strokes.
+        this.strokes = []
     }
     setNewToLocation(){
         this.toLocation = []

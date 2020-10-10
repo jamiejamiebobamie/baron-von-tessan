@@ -35,8 +35,8 @@ export default class Mirror extends Container{
         }
     }
     draw(){
-        // this.p.fill("pink")
-        // this.p.rect(this.x, this.y, this.width, this.height)
+        this.p.fill("pink")
+        this.p.rect(this.x, this.y, this.width, this.height)
         super.draw()
 
         this.lerpX()

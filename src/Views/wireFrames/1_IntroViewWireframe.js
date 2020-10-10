@@ -185,6 +185,7 @@ export default class testView {
                         this.drawing.submittedStrokeIndex = 0;
                         clearTimeout(timeOutVar)
                     } else {
+                        clearTimeout(timeOutVar)
                         REACT_APP.testViewSwitch();
                         return;
                     }

@@ -1,4 +1,4 @@
-import TextBox from './TextBox'
+import TextBox from './TextBoxContainer'
 import Container from './Container'
 
 export default class KeyboardKey extends Container{

@@ -1,7 +1,9 @@
-import TextBox from '../uiClasses/TextBox'
+import TextBox from '../uiClasses/TextBoxContainer'
 import Container from '../uiClasses/Container'
+import Mirror from '../uiClasses/Mirror'
 
-export default class TextInput extends Container{
+
+export default class TextInput extends Mirror{
     constructor(parameterObject){
         super(parameterObject)
         this.text = ""//"I drew a... (click me and finish the sentence)."

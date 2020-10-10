@@ -17,7 +17,7 @@ class App extends Component {
 
             // temporary
             viewIndex:0,
-            lengthOfViews:1,
+            lengthOfViews:5,
         }
         this.myRef = React.createRef()
         this.SketchWrapper = new Sketch(this)
@@ -45,14 +45,18 @@ class App extends Component {
         this.setState({lengthOfViews:number})
     }
         // temporary
-    testViewSwitch(){
-        let viewIndex;
-        if (this.state.viewIndex === this.state.lengthOfViews-1){
-            viewIndex = 0
-            this.setState({viewIndex:viewIndex})
+    testViewSwitch(viewIndexToSwitchTo){
+        if (viewIndexToSwitchTo===undefined){
+            let viewIndex;
+            if (this.state.viewIndex === this.state.lengthOfViews-1){
+                viewIndex = 0
+                this.setState({viewIndex:viewIndex})
+            } else {
+                viewIndex = this.state.viewIndex+1
+                this.setState({viewIndex:viewIndex})
+            }
         } else {
-            viewIndex = this.state.viewIndex+1
-            this.setState({viewIndex:viewIndex})
+            this.setState({viewIndex:viewIndexToSwitchTo})
         }
     }
     // ----

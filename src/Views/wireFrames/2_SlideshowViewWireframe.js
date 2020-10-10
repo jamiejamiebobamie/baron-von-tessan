@@ -12,14 +12,14 @@ export default class testView {
         this.charIndex = 0
         this.timeOutVar = undefined
     }
-    addCharacterToDialog(REACT_APP){
+    addCharacterToDialogString(REACT_APP){
         if (this.charIndex<REACT_APP.state.response[this.responseIndex].descriptionData.length){
             let allOfDialog = REACT_APP.state.response[this.responseIndex].descriptionData
             let dialogString = allOfDialog.slice(0,this.charIndex)
             this.dialog.setString(dialogString)
             clearTimeout(this.timeOutVar)
             this.charIndex += 1
-            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialog(REACT_APP)},200)
+            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialogString(REACT_APP)},50)
         }
         else {
             clearTimeout(this.timeOutVar)
@@ -71,7 +71,7 @@ export default class testView {
                 y = previousUI.drawing.y;
                 width = previousUI.drawing.width;
                 height = previousUI.drawing.height;
-                drawingHasBeenDrawn = previousUI.drawing.drawingHasBeenDrawn
+                drawingHasBeenDrawn = windowResized ? previousUI.drawing.drawingHasBeenDrawn : false;
                 clearTimeout(previousUI.drawing.timeOut)
                 strokeIndex = previousUI.drawing.submittedStrokeIndex
             }
@@ -87,7 +87,8 @@ export default class testView {
 
         let beginRedrawingStrokesAndAddingCharsFunc = () => {
             this.drawing.setSubmittedStrokeIndex(0)
-            this.addCharacterToDialog(REACT_APP)
+            this.charIndex = 0
+            this.addCharacterToDialogString(REACT_APP)
             let redrawStrokes = (timeOutVar) => {
                 if (this.drawing.drawingHasBeenDrawn){
                     if (this.drawing.loop){
@@ -96,12 +97,11 @@ export default class testView {
                         clearTimeout(timeOutVar)
                     } else {
                         if (this.responseIndex < REACT_APP.state.response.length-1){
-                            this.responseIndex += 1
                             this.drawing.drawingHasBeenDrawn = false;
                             this.drawing.submittedStrokeIndex = 0;
                             this.charIndex = 0
-                            this.addCharacterToDialog(REACT_APP)
-                            console.log(REACT_APP.state.response[this.responseIndex].drawingData,REACT_APP.state.response.length)
+                            this.addCharacterToDialogString(REACT_APP)
+                            this.responseIndex += 1
                             this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
                         } else {
                             REACT_APP.testViewSwitch();
