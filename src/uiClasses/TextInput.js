@@ -37,16 +37,13 @@ export default class TextInput extends Container{
     performClickFunctionality(){
         this.toggleTextBoxSelected(this.text)
         super.performClickFunctionality()
-        console.log(this.textBoxSelected)
     }
     toggleShowCursor(scope){
         scope.showCursor = !scope.showCursor
         if (scope.showCursor){
             scope.text+="|"
-            // console.log("show",scope.text)
         } else {
             scope.text = scope.text.replace("|","")
-            // console.log("hide",scope.text)
         }
         scope.displayText.setString(scope.text)
         scope.setTimeoutVariable = setTimeout(function(){scope.toggleShowCursor(scope)},800)

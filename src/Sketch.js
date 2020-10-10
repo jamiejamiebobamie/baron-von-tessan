@@ -17,19 +17,13 @@ export default class Sketch {
         this.viewIndex = app.state.viewIndex;
         let view;
 
-        // view = new IntroView();
-        // this.views.push(view);
-        // view = new DrawingView();
-        // this.views.push(view);
-        // view = new EnterDescriptionView();
-        // this.views.push(view);
-
 
         view = new IntroViewWireframe();
         this.views.push(view);
 
-        // view = new SlideshowViewWireframe(view);
-        // this.views.push(view);
+        view = new SlideshowViewWireframe(view);
+        this.views.push(view);
+
         view = new DrawingViewWireframe();
         this.views.push(view);
         view = new EnterDescriptionViewWireframe();
@@ -64,7 +58,6 @@ export default class Sketch {
             p.rectMode(p.CENTER,p.CENTER);
             let windowResized = false;
             _ui = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP,windowResized,undefined)
-            console.log(_ui)
         }
         p.windowResized = () => {
             w = p.windowWidth - (p.windowWidth/10)

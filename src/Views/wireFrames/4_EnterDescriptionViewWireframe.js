@@ -313,10 +313,6 @@ export default class testView {
         }
 
         _ui.push(this.drawing)
-        console.log(this.drawing)
-
-
-
 
         if (previousUI){
             if (previousUI.mirrorTest5){

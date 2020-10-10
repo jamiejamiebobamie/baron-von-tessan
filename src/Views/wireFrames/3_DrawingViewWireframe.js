@@ -214,8 +214,6 @@ export default class testView {
         let x,y,width,height,drawingMode,currentStroke,strokes;
         if (previousUI !== undefined){
             if (previousUI.drawing){
-                // console.log(previousUI.drawing)
-
                 x = previousUI.drawing.x;
                 y = previousUI.drawing.y;
                 width = previousUI.drawing.width;
@@ -223,7 +221,6 @@ export default class testView {
                 drawingMode = previousUI.drawing.drawingMode ? previousUI.drawing.drawingMode : true;
                 currentStroke = previousUI.drawing.currentStroke ? previousUI.drawing.currentStroke : [];
                 strokes = previousUI.drawing.strokes ? previousUI.drawing.strokes : [];
-                console.log(drawingMode,currentStroke,strokes)
             }
         } else {
             drawingMode = true;
@@ -266,8 +263,7 @@ export default class testView {
             this.buttons[i].setStroke(true)
             this.buttons[i].setFill(true)
             this.buttons[i].setTextColor("black")
-            // this.buttons[i].textSize = this.buttons[i].row ? this.buttons[i].width / 20 : this.buttons[i].height / 20
-            // if (this.buttons[i].textSize * 2.5 > this.buttons[i].height && w>h){this.buttons[i].textSize = this.buttons[i].width / 20}
+            this.buttons[i].textSize = this.buttons[0].width / 5;
 
 
             performClickOnce = true;
@@ -283,7 +279,7 @@ export default class testView {
             _ui.push(this.buttons[i])
         }
         // PEN
-        let func = () => {this.toggleTool(this.buttons[0]);console.log('hey')}
+        let func = () => {this.toggleTool(this.buttons[0]);}
         this.buttons[0].mouseClickfunc = func;
         // UNDO
         this.buttons[1].mouseClickfunc = this.undoLastStroke;

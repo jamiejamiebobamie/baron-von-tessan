@@ -32,9 +32,8 @@ export default class DisplayDrawingContainer extends Mirror{
     }
     setLengthOfDrawingSquare(length){ this.lengthOfDrawingSquare = length }
     setSubmittedStrokeIndex(index){ this.submittedStrokeIndex = index }
-    setSubmittedStrokes(submittedStrokes,submittedStrokeIndex){
+    setSubmittedStrokes(submittedStrokes){
         this.submittedStrokes = submittedStrokes
-        this.submittedStrokeIndex = submittedStrokeIndex ? submittedStrokeIndex : submittedStrokes.length
     }
     setLoopToTrueToLoopFinishedDrawing(){ this.loop = true; }
     drawSubmittedStrokes(){

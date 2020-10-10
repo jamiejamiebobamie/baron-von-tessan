@@ -2,6 +2,8 @@ import React,{Component}  from 'react';
 import {isMobile} from 'react-device-detect';
 import Sketch from './Sketch.js';
 import './App.css';
+import response from './simulatedResponse'
+
 const p5 = require("p5")
 
 class App extends Component {
@@ -10,7 +12,7 @@ class App extends Component {
         this.state = {
             drawingDescription: "",
             drawingData: [],
-            response:[],
+            response:[response,response,response,response,response],
             isMobile: isMobile,
 
             // temporary
@@ -28,7 +30,6 @@ class App extends Component {
         this.testViewSwitch = this.testViewSwitch.bind(this);
     }
     handleSubmitDrawing(drawingData) {
-        console.log(drawingData)
         this.setState({drawingData:drawingData})
     }
     handleSubmitDescription(drawingDescription){

@@ -9,21 +9,27 @@ export default class TextBox extends Mirror{
         // this.row determines the orientation of the font.
         // use the orientation of the parent container for aligning
             // normally-oriented text, vertically.
-        this.textSize = this.row ? this.width / 10 : this.height / 20
+        this.rotated = false;
+        this.textSize = undefined
         // if (this.textSize * 2.5 > this.height && this.row){this.textSize = this.width / 20}
-        this.p.textSize(this.textSize);
+        // this.p.textSize(this.textSize);
         this.fontStyle = undefined
-        if (this.wildcard){
-            if (this.wildcard.string){
-                // this.setString(this.wildcard.string)
-                this.text = this.wildcard.string
-                this.setFontSize(this.width/100)
-                // this.setFontSize(100)
-            }
-        }
+        // if (this.wildcard){
+        //     if (this.wildcard.string){
+        //         // this.setString(this.wildcard.string)
+        //         this.text = this.wildcard.string
+        //         this.setFontSize(this.width/100)
+        //         // this.setFontSize(100)
+        //     }
+        // }
+
+        this.textSize = this.textSize ? this.textSize : (this.row ? this.width / 10 : 1);
+        this.p.textSize(this.textSize);
+
         // setTimeout(()=>{
-        //     this.textSize = this.row ? this.width / 10 : this.height / 20
-        // },200);
+        //     this.textSize = this.textSize ? this.textSize : (this.row ? this.width / 10 : 1);
+        //     this.p.textSize(this.textSize);
+        // },100);
     }
     // call this after instantiating the object to set the text
     setString(s) { this.text = s }
@@ -60,7 +66,7 @@ export default class TextBox extends Mirror{
         }
     }
     draw() {
-        // this.row ? this.drawNormalTextBox() : this.drawRotatedTextBox();
-        this.drawNormalTextBox()
+        !this.rotated ? this.drawNormalTextBox() : this.drawRotatedTextBox();
+        // this.drawNormalTextBox()
     }
 }

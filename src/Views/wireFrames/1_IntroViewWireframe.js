@@ -2,7 +2,6 @@ import Wireframe from '../../uiClasses/Wireframe';
 import Mirror from '../../uiClasses/Mirror';
 import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer';
 import TextBox from '../../uiClasses/TextBox'
-
 import baronData from '../../baronDrawingData'
 
 
@@ -17,14 +16,14 @@ export default class testView {
         this.baronDialogIndex = 0
         this.timeOutVar = undefined
     }
-    addCharacterToDialog(changeViewMethod){
+    addCharacterToDialog(){
         if (this.baronDialogIndex<baronData.descriptionData.length){
             this.baronDialogIndex += 1
             let allOfDialog = baronData.descriptionData
             let dialogString = allOfDialog.slice(0,this.baronDialogIndex)
             this.dialog.setString(dialogString)
             clearTimeout(this.timeOutVar)
-            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialog(changeViewMethod)},200)
+            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialog()},200)
         }
         else {
             clearTimeout(this.timeOutVar)
@@ -140,13 +139,11 @@ export default class testView {
         this.dialog.setFill(true)
         let fontSize = 40//w>h ? 30 : 30 ;
         this.dialog.setFontSize(fontSize)
-        // this.dialog.setStroke(true)
-        // this.dialog.row = false;
 
         _ui.push(this.dialog)
 
         if (!windowResized){
-            this.addCharacterToDialog(REACT_APP.testViewSwitch)
+            this.addCharacterToDialog()
         }
         if (previousUI){
             if (previousUI.baronDialogIndex){
@@ -155,6 +152,7 @@ export default class testView {
         }
 
         let drawingHasBeenDrawn = false
+        let strokeIndex = 0
         if (previousUI){
             if (previousUI.drawing){
                 x = previousUI.drawing.x;
@@ -162,6 +160,7 @@ export default class testView {
                 width = previousUI.drawing.width;
                 height = previousUI.drawing.height;
                 drawingHasBeenDrawn = previousUI.drawing.drawingHasBeenDrawn
+                strokeIndex = previousUI.drawing.submittedStrokeIndex
                 clearTimeout(previousUI.drawing.timeOut)
             }
         }
@@ -172,9 +171,13 @@ export default class testView {
         this.drawing.setLengthOfDrawingSquare(this.drawing.width)
         this.drawing.setFill(true)
         this.drawing.setSubmittedStrokes(baronData.drawingData)
+        this.drawing.submittedStrokeIndex = strokeIndex;
+
 
         let beginRedrawingStrokesFunc = () => {
-            this.drawing.setSubmittedStrokeIndex(0)
+            // this.drawing.submittedStrokeIndex = strokeIndex;
+
+            // this.drawing.setSubmittedStrokeIndex(strokeIndex)
             let redrawStrokes = (timeOutVar) => {
                 if (this.drawing.drawingHasBeenDrawn){
                     if (this.drawing.loop){

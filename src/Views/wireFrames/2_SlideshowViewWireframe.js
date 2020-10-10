@@ -1,14 +1,35 @@
 import Wireframe from '../../uiClasses/Wireframe';
 import Mirror from '../../uiClasses/Mirror';
+import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer';
+import TextBox from '../../uiClasses/TextBox'
+
 
 export default class testView {
     constructor(previousView){
         this.drawing = previousView ? previousView.drawing : undefined;
         this.dialog = previousView ? previousView.dialog : undefined;
+        this.responseIndex = 0
+        this.charIndex = 0
+        this.timeOutVar = undefined
+    }
+    addCharacterToDialog(REACT_APP){
+        if (this.charIndex<REACT_APP.state.response[this.responseIndex].descriptionData.length){
+            let allOfDialog = REACT_APP.state.response[this.responseIndex].descriptionData
+            let dialogString = allOfDialog.slice(0,this.charIndex)
+            this.dialog.setString(dialogString)
+            clearTimeout(this.timeOutVar)
+            this.charIndex += 1
+            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialog(REACT_APP)},200)
+        }
+        else {
+            clearTimeout(this.timeOutVar)
+            return
+        }
     }
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI){
         let _ui = []
+
         let drawingSpaceWidth = w > h ? w*(2/3) : w;
         let drawingSpaceHeight = w > h ? h : h*(2/3);
         let lengthOfDrawingSquare = w > h ? drawingSpaceHeight : drawingSpaceWidth;
@@ -27,7 +48,7 @@ export default class testView {
                            color:"red",
                            wildcard:wildcard,
                          }
-        let drawingArea = new Wireframe(parameters)
+        let drawing = new Wireframe(parameters)
 
         wildcard = {shouldBeSquare:false,shrinkAmountWidth:1.1,shrinkAmountHeight:.7,string:"this is a container to place the description."}
         parameters = { p:p,
@@ -39,19 +60,69 @@ export default class testView {
                            wildcard:wildcard,
                            mouseClickfunc: REACT_APP.testViewSwitch
                          }
-        let wireFrame = new Wireframe(parameters)
+        let dialog = new Wireframe(parameters)
 
         let x,y,width,height;
+        let drawingHasBeenDrawn = false
+        let strokeIndex = 0;
         if (previousUI){
             if (previousUI.drawing){
                 x = previousUI.drawing.x;
                 y = previousUI.drawing.y;
                 width = previousUI.drawing.width;
                 height = previousUI.drawing.height;
+                drawingHasBeenDrawn = previousUI.drawing.drawingHasBeenDrawn
+                clearTimeout(previousUI.drawing.timeOut)
+                strokeIndex = previousUI.drawing.submittedStrokeIndex
             }
         }
-        parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height, mouseClickfunc: REACT_APP.testViewSwitch}
-        this.drawing = new Mirror(parameters)
+        wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
+
+        parameters = {p:p,objectToMirror:drawing,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard}
+        this.drawing = new DisplayDrawingContainer(parameters)
+        this.drawing.setLengthOfDrawingSquare(this.drawing.width)
+        this.drawing.setFill(true)
+        this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
+        this.drawing.submittedStrokeIndex = strokeIndex;
+
+        let beginRedrawingStrokesAndAddingCharsFunc = () => {
+            this.drawing.setSubmittedStrokeIndex(0)
+            this.addCharacterToDialog(REACT_APP)
+            let redrawStrokes = (timeOutVar) => {
+                if (this.drawing.drawingHasBeenDrawn){
+                    if (this.drawing.loop){
+                        this.drawing.drawingHasBeenDrawn = false;
+                        this.drawing.submittedStrokeIndex = 0;
+                        clearTimeout(timeOutVar)
+                    } else {
+                        // out of bounds error. hard-coding for now.
+                        if (this.responseIndex < 4){//REACT_APP.state.response.length){
+                            this.responseIndex += 1
+                            this.drawing.drawingHasBeenDrawn = false;
+                            this.drawing.submittedStrokeIndex = 0;
+                            this.charIndex = 0
+                            this.addCharacterToDialog(REACT_APP)
+                            console.log(REACT_APP.state.response[this.responseIndex].drawingData,REACT_APP.state.response.length)
+                            this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
+                        } else {
+                            REACT_APP.testViewSwitch();
+                            return;
+                        }
+                    }
+                }
+                if (this.drawing.submittedStrokeIndex < this.drawing.submittedStrokes.length) {
+                    this.drawing.submittedStrokeIndex += 1
+                    timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
+                } else {
+                    this.drawing.drawingHasBeenDrawn = true;
+                    // pause three seconds to display drawing.
+                        // then loop if this.displayDrawingSpace.loop
+                        // is set to true otherwise return.
+                    timeOutVar = setTimeout(redrawStrokes, 3000,timeOutVar);
+                }
+            }
+            redrawStrokes();
+        }
         _ui.push(this.drawing)
 
         if (previousUI){
@@ -60,11 +131,26 @@ export default class testView {
                 y = previousUI.dialog.y;
                 width = previousUI.dialog.width;
                 height = previousUI.dialog.height;
+                this.charIndex = previousUI.charIndex;
             }
         }
-        parameters = {p:p,objectToMirror:wireFrame,x:x,y:y,width:width,height:height,mouseClickfunc: REACT_APP.testViewSwitch}
-        this.dialog = new Mirror(parameters)
+        parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height,mouseClickfunc:REACT_APP.testViewSwitch}
+        this.dialog = new TextBox(parameters)
+        this.dialog.setFill(true)
+        let fontSize = 40
+        this.dialog.setFontSize(fontSize)
+
+        if (this.charIndex>=REACT_APP.state.response[this.responseIndex].descriptionData.length){
+            let allOfDialog = REACT_APP.state.response[this.responseIndex].descriptionData
+            this.dialog.setString(allOfDialog)
+        }
+
         _ui.push(this.dialog)
+
+        if (!windowResized){
+            beginRedrawingStrokesAndAddingCharsFunc();
+        }
+
         return _ui;
     }
 }
