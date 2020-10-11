@@ -18,8 +18,6 @@ export default class testView {
     setUI(p,w,h,REACT_APP,windowResized,previousUI){
         let wireFrameElements = []
         let _ui = []
-
-
         let wildcard;
         let parameters;
         let wireFrame
@@ -226,14 +224,19 @@ export default class testView {
             let currentViewIndex = REACT_APP.state.viewIndex
             REACT_APP.testViewSwitch(currentViewIndex-1)
         }
+        wildcard = {fontSize:backButton.width/5}
         parameters = {p:p,objectToMirror:backButton,x:x,y:y,width:width,height:height,mouseClickfunc:returnToPreviousView}
         this.backButton = new TextBox(parameters)
         this.backButton.setInteractivity(true);
         this.backButton.setStroke(true)
         this.backButton.setFill(true)
         this.backButton.setTextColor("black")
+        // this.backButton.setFontSize(100);
+
         this.backButton.setString("<< BACK");
-        this.backButton.setFontSize(1);
+        // this.backButton.setFontSize(100);
+        // this.backButton.textSize = 100//setFontSize(100);
+
         _ui.push(this.backButton)
 
         if (previousUI){
@@ -249,29 +252,34 @@ export default class testView {
             REACT_APP.handleSubmitDescription(drawingDescription)
             REACT_APP.testViewSwitch()
         }
-        parameters = {p:p,objectToMirror:submitButton,x:x,y:y,width:width,height:height,mouseClickfunc:submitDescription}
+        wildcard = {fontSize:submitButton.width/2}
+        parameters = {p:p,objectToMirror:submitButton,x:x,y:y,width:width,height:height,mouseClickfunc:submitDescription,wildcard:wildcard}
         this.submitButton = new TextBox(parameters)
         this.submitButton.setInteractivity(true);
         this.submitButton.setStroke(true)
         this.submitButton.setFill(true)
         this.submitButton.setTextColor("black")
         this.submitButton.setString("SUBMIT");
-        this.submitButton.setFontSize(1);
+        // this.submitButton.setFontSize(1);
         _ui.push(this.submitButton)
 
+        let textInput = "I drew a..."
         if (previousUI){
             if (previousUI.input){
                 x = previousUI.input.x;
                 y = previousUI.input.y;
                 width = previousUI.input.width;
                 height = previousUI.input.height;
+                textInput = previousUI.input.text;
             }
         }
-        parameters = {p:p,objectToMirror:input,x:x,y:y,width:width,height:height}
+        wildcard = {fontSize:submitButton.width/5, REACT_APP:REACT_APP,text:textInput}
+        parameters = {p:p,objectToMirror:input,x:x,y:y,width:width,height:height,wildcard:wildcard}
         this.input = new TextInput(parameters)
+        this.input.setStroke(true)
+        this.input.text = textInput
         _ui.push(this.input)
 
-// ---------------------
 
         let drawingHasBeenDrawn = false
         let strokeIndex = 0;
@@ -353,7 +361,6 @@ export default class testView {
         this.input.setMobileKeyboardReference(this.keyBoard)
         if (REACT_APP.state.isMobile){
             _ui.push(this.keyBoard)
-
         }
         return _ui;
     }

@@ -14,6 +14,7 @@ class App extends Component {
             drawingData: [],
             response:response.data,
             isMobile: isMobile,
+            flaggedIndices:[],
 
             // temporary
             viewIndex:0,
@@ -34,6 +35,9 @@ class App extends Component {
     }
     handleSubmitDescription(drawingDescription){
         this.setState({drawingDescription:drawingDescription})
+    }
+    handleSubmitFlaggedIndices(flaggedIndices){
+        this.setState({flaggedIndices:flaggedIndices})
     }
     componentDidMount() {
         this.myP5 = new p5(this.Sketch, this.myRef.current)

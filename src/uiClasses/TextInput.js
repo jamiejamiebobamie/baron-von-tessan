@@ -6,40 +6,32 @@ import Mirror from '../uiClasses/Mirror'
 export default class TextInput extends Mirror{
     constructor(parameterObject){
         super(parameterObject)
-        this.text = ""//"I drew a... (click me and finish the sentence)."
-        this.height = 60//this.windowHeight / 6;
-        this.displayText = new TextBox({p:this.p,w:this.windowWidth,h:this.windowHeight,row:true,parent:this})
-
-        // should enlarge when selected and shrink when deselected.
-        this.displayText.setInteractivity(false)
-
-        // this.displayText.setStroke(true)
-        this.displayText.setString(this.text)
-        this.textBoxSelected = false;
-        this.showCursor = false;
-        // this.toggleShowCursor(this);
-        // this.mouseClickfunc = this.toggleTextBoxSelected
+        this.text = "I drew a ..."
+        if (parameterObject.wildcard){
+            if (parameterObject.wildcard.REACT_APP){
+                this.handleSubmitDescription = parameterObject.wildcard.REACT_APP.handleSubmitDescription
+                this.testViewSwitch = parameterObject.wildcard.REACT_APP.testViewSwitch
+            }
+            if (parameterObject.wildcard.text){
+                this.text = parameterObject.wildcard.text
+            }
+        }
+        this.displayText = new TextBox({p:this.p,w:this.windowWidth,h:this.windowHeight,row:true,parent:this,wildcard:{text:this.text}})
         this.setTimeoutVariable = undefined
-        this.setStroke(true)
-        this.referenceToAPP = undefined;
         // dummy object
-        this.referenceToMobileKeyboard = new Container({p:this.p,w:this.windowWidth,h:this.windowHeight,width:0,height:0})
+        this.referenceToMobileKeyboard = new Container({p:this.p,w:this.windowWidth,h:this.windowHeight,width:0,height:0});
+        this.mouseClickfunc = this.clearFillerText
+        // perform mouseClickFunc once per click.
+        this.doOnce = true;
+        this.toggleShowCursor(this);
     }
-    setReferenceToAPP(APP){
-        this.referenceToAPP = APP;
+    clearFillerText(){
+        if (this.text === "I drew a..."){
+            this.text = ""
+        }
     }
-    setDisplayText(text){
-        // I'm not sure if I need a reference outside of this.displayText
-        this.text = text
-        this.displayText.setString(this.text)
-    }
-    setMobileKeyboardReference(ref){
-        this.referenceToMobileKeyboard = ref
-    }
-    performClickFunctionality(){
-        this.toggleTextBoxSelected(this.text)
-        super.performClickFunctionality()
-    }
+    setReferenceToAPP(APP){ this.referenceToAPP = APP; }
+    setMobileKeyboardReference(ref){ this.referenceToMobileKeyboard = ref }
     toggleShowCursor(scope){
         scope.showCursor = !scope.showCursor
         if (scope.showCursor){
@@ -50,48 +42,15 @@ export default class TextInput extends Mirror{
         scope.displayText.setString(scope.text)
         scope.setTimeoutVariable = setTimeout(function(){scope.toggleShowCursor(scope)},800)
     }
-    // it works but it's ugly.
-    // if the user clicks on the TextInputBox the cursor will begin to show
-    // if the user clicks on the TextInputBox again. nothing changes.
-    // if the user clicks off the TextInputBox, the cursor goes away.
-
-        // need to rename methods and variables
-            // this.testForClick() -> this.testForMouseOver
-            // this.clicked -> this.userClickedOnScreen
-            // etc.
-    toggleTextBoxSelected(resetDisplayText){
-        if (this.testForClick() && !this.textBoxSelected && this.setTimeoutVariable === undefined ){
-            this.textBoxSelected = true;
-            this.text = ""
-            // start cursor playing
-            this.toggleShowCursor(this);
-        } else if (!this.testForClick() || resetDisplayText) {
-                if (this.showCursor) {
-                    this.showCursor = false;
-                    this.text = this.text.replace("|","")
-                    this.displayText.setString(this.text)
-                }
-                this.textBoxSelected = false;
-                clearTimeout(this.setTimeoutVariable);
-                this.setTimeoutVariable = undefined;
-                if (resetDisplayText){
-                    this.text = resetDisplayText
-                } else {
-                    this.text = ""//I drew a... \n(click to finish the sentence)."
-                }
-                this.displayText.setString(this.text)
-            }
-        }
     handleTyping(keyCode){
         const BACKSPACE = keyCode === 8
         const ENTER = keyCode === 13
         const SPACE = keyCode === 32
+        this.clearFillerText()
         if (ENTER) {
             let drawingDescriptor = this.text.replace("|","")
-            this.referenceToAPP.handleSubmitDescription(drawingDescriptor)
-            this.toggleTextBoxSelected(drawingDescriptor)
-
-            this.referenceToAPP.testViewSwitch()
+            this.handleSubmitDescription(drawingDescriptor)
+            this.testViewSwitch()
         } else if (BACKSPACE) {
             this.text = this.text.replace("|","")
             this.text = this.text.substring(0, this.text.length - 1);
@@ -109,13 +68,6 @@ export default class TextInput extends Mirror{
     }
     draw() {
         super.draw()
-        // toggle off if user clicks off the TextInputBox
-        if ( this.clicked &&
-            ( !this.testForClick() && !this.referenceToMobileKeyboard.testForClick() ) &&
-            this.textBoxSelected) {
-                let text = this.text.replace("|","")
-                this.performClickFunctionality()
-        }
         this.displayText.draw();
     }
 }

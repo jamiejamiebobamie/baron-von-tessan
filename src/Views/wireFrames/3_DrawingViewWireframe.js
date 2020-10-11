@@ -61,8 +61,6 @@ export default class testView {
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI){
         let _ui = []
-
-
         // let offsetX = w>h ? w*(-1/10) : 0;
         // let offsetY = w>h ? 0 :  -h/10 ;
         // let width =  w>h ? w*(1/3) :  w;
@@ -262,14 +260,14 @@ export default class testView {
                 submitButtonMirror = w>h ? buttons[3]:buttons[4]
                 let buttonString = this.drawing.penMode ? "ERASER" : "PEN";
             }
-            parameters = {p:p,objectToMirror:submitButtonMirror,x:x,y:y,row:true,width:width,height:height}
+            let fontSize = w>h ? button.width / 10 :  button.width / 20
+            wildcard = {fontSize:fontSize}
+            parameters = {p:p,objectToMirror:submitButtonMirror,x:x,y:y,row:true,width:width,height:height, wildcard:wildcard}
             this.buttons[i] = new TextBox(parameters)
             this.buttons[i].setInteractivity(true);
             this.buttons[i].setStroke(true)
             this.buttons[i].setFill(true)
             this.buttons[i].setTextColor("black")
-            this.buttons[i].textSize = this.buttons[0].width / 5;
-
             performClickOnce = true;
             this.buttons[i].setClickType(performClickOnce)
             // submit button logic

@@ -16,8 +16,6 @@ export default class Sketch {
         this.views= [];
         this.viewIndex = app.state.viewIndex;
         let view;
-
-
         view = new IntroViewWireframe();
         this.views.push(view);
         view = new SlideshowViewWireframe(view);
@@ -93,7 +91,7 @@ export default class Sketch {
         }
         p.keyPressed = () => {
             for (let i = 0; i < _ui.length; i++){
-                if (_ui[i].textBoxSelected){
+                if (_ui[i].handleTyping){
                     _ui[i].handleTyping(p.keyCode)
                 }
             }

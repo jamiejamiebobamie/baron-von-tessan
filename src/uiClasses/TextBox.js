@@ -23,13 +23,29 @@ export default class TextBox extends Mirror{
         //     }
         // }
 
-        this.textSize = this.textSize ? this.textSize : (this.row ? this.width / 10 : 1);
+        if (parameterObject.wildcard){
+            if (parameterObject.wildcard.fontSize){
+                this.textSize = parameterObject.wildcard.fontSize
+            }
+            if (parameterObject.wildcard.text){
+                this.text = parameterObject.wildcard.text
+            }
+        }
+
+        this.textSize = this.textSize ? this.textSize :
+            (this.windowWidth>this.windowHeight ?
+                    this.width / 5 : this.width / 20) ;
+
+
+
         this.p.textSize(this.textSize);
 
         // setTimeout(()=>{
-        //     this.textSize = this.textSize ? this.textSize : (this.row ? this.width / 10 : 1);
-        //     this.p.textSize(this.textSize);
-        // },100);
+        // this.textSize = this.textSize ? this.textSize :
+        //     (this.windowWidth>this.windowHeight ?
+        //             this.width / 5 : this.width / 20) ;
+        // this.p.textSize(this.textSize);},100);
+        console.log(this.textSize)
     }
     // call this after instantiating the object to set the text
     setString(s) { this.text = s }

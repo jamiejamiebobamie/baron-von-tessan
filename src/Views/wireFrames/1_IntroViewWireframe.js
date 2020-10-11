@@ -4,14 +4,10 @@ import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer';
 import TextBox from '../../uiClasses/TextBox'
 import baronData from '../../baronDrawingData'
 
-
-
-
 export default class testView {
     constructor(previousView){
         this.drawing = previousView ? previousView.drawing : undefined;
 
-        // NOT THE DIALOG BOX -- CONTROLS WINDOW
         this.dialog = previousView ? previousView.dialog : undefined;
         this.baronDialogIndex = 0
         this.timeOutVar = undefined
@@ -134,7 +130,7 @@ export default class testView {
                 height = previousUI.dialog.height;
             }
         }
-        parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height,mouseClickfunc:REACT_APP.testViewSwitch}//color:"pink"}
+        parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height}//color:"pink"}
         this.dialog = new TextBox(parameters)
         this.dialog.setFill(true)
         let fontSize = 40//w>h ? 30 : 30 ;
@@ -198,7 +194,7 @@ export default class testView {
                     // pause three seconds to display drawing.
                         // then loop if this.displayDrawingSpace.loop
                         // is set to true otherwise return.
-                    timeOutVar = setTimeout(redrawStrokes, 3000,timeOutVar);
+                    timeOutVar = setTimeout(redrawStrokes, 7000,timeOutVar);
                 }
             }
             redrawStrokes();

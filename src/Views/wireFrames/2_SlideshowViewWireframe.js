@@ -77,7 +77,6 @@ export default class testView {
             }
         }
         wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-
         parameters = {p:p,objectToMirror:drawing,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard}
         this.drawing = new DisplayDrawingContainer(parameters)
         this.drawing.setLengthOfDrawingSquare(this.drawing.width)
@@ -133,7 +132,7 @@ export default class testView {
                 this.charIndex = previousUI.charIndex;
             }
         }
-        parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height,mouseClickfunc:REACT_APP.testViewSwitch}
+        parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height}
         this.dialog = new TextBox(parameters)
         this.dialog.setFill(true)
         let fontSize = 40
