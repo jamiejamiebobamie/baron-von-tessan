@@ -61,7 +61,7 @@ export default class FlagInappropriateContentWireframe {
                            // len:5,
                            // index:0,
 
-                           offsetY:w>h? 0:-topThirdOfScreen.height*(1/5),
+                           offsetY:w>h? 0:-topThirdOfScreen.height*(1/4),
                            offsetX:w>h? -topThirdOfScreen.width*(1/5):0,
                            row:w>h,
                            color:"red",
@@ -71,7 +71,7 @@ export default class FlagInappropriateContentWireframe {
         let questionArea = new Wireframe(parameters)
         // _ui.push(questionArea)
 
-        wildcard = {shrinkAmountWidth:w>h?.8:.5,shrinkAmountHeight:w>h?.5:.8}
+        wildcard = {shrinkAmountWidth:w>h?.8:.5,shrinkAmountHeight:w>h?.3:.6}
         parameters = { p:p,
                            windowWidth: w,
                            windowHeight: h,
@@ -80,7 +80,7 @@ export default class FlagInappropriateContentWireframe {
                            // len:5,
                            // index:0,
 
-                           offsetY:w>h? 0:topThirdOfScreen.height*(1.5/5),
+                           offsetY:w>h? 0:topThirdOfScreen.height*(1/5),
                            offsetX:w>h? topThirdOfScreen.width*(1.5/5):0,
                            row:w>h,
                            color:"green",
@@ -160,6 +160,30 @@ export default class FlagInappropriateContentWireframe {
         }
         let x,y,width,height;
 
+        if (previousUI){
+            if (previousUI.submitButton){
+                x = previousUI.submitButton.x;
+                y = previousUI.submitButton.y;
+                width = previousUI.submitButton.width;
+                height = previousUI.submitButton.height;
+            }
+        }
+        // wildcard = {fontSize:submitButtonArea.width/15}
+        // wildcard = {fontSize:submitButtonArea.width/13}
+
+        let submitFunc = () => {
+            REACT_APP.handleSubmitFlaggedIndices(this.flaggedIndices)
+            REACT_APP.testViewSwitch()
+        }
+        parameters = {p:p,objectToMirror:submitButtonArea,x:x,y:y,width:width,height:height,mouseClickfunc:submitFunc,wildcard:{fontSize:submitButtonArea.width/13}}
+        this.submitButton = new TextBox(parameters)
+        this.submitButton.setInteractivity(true);
+        this.submitButton.setStroke(true)
+        this.submitButton.setFill(true)
+        this.submitButton.setTextColor("black")
+        this.submitButton.setString("SUBMIT");
+        _ui.push(this.submitButton)
+
         // display question
         if (previousUI){
             if (previousUI.instructions){
@@ -169,57 +193,39 @@ export default class FlagInappropriateContentWireframe {
                 height = previousUI.instructions.height;
             }
         }
-        wildcard = {fontSize:questionArea.width/10, text:"Did you find any of these drawings offensive?"}
-        parameters = {p:p,objectToMirror:questionArea,x:x,y:y,width:width,height:height,wildcard:wildcard}
+        // wildcard = {fontSize:500,text:"Did you find any of these drawings offensive?"}
+        parameters = {p:p,objectToMirror:questionArea,x:x,y:y,width:width,height:height,wildcard:{fontSize:questionArea.width/15,text:"Did you find any of these drawings offensive?"}}
         this.instructions = new TextBox(parameters)
         this.instructions.setFill(true)
-        let fontSize = 10//questionArea.width/10// w>h ? 1 : 100 ;
-        this.instructions.setFontSize(fontSize)
+        this.instructions.setTextColor("black")
+
         _ui.push(this.instructions)
 
-        if (previousUI){
-            if (previousUI.submitButton){
-                x = previousUI.submitButton.x;
-                y = previousUI.submitButton.y;
-                width = previousUI.submitButton.width;
-                height = previousUI.submitButton.height;
-            }
-        }
-        wildcard = {fontSize:submitButtonArea.width/5}
-        let submitFunc = () => {
-            REACT_APP.handleSubmitFlaggedIndices(this.flaggedIndices)
-            REACT_APP.testViewSwitch()
-        }
-        parameters = {p:p,objectToMirror:submitButtonArea,x:x,y:y,width:width,height:height,mouseClickfunc:submitFunc,wildcard:wildcard}
-        this.submitButton = new TextBox(parameters)
-        this.submitButton.setInteractivity(true);
-        this.submitButton.setStroke(true)
-        this.submitButton.setFill(true)
-        this.submitButton.setTextColor("black")
-        this.submitButton.setString("SUBMIT");
-        _ui.push(this.submitButton)
-
-        let beginRedrawingStrokesAndAddingCharsFunc = (drawingSpace) => {
-            drawingSpace.setSubmittedStrokeIndex(0)
-            let redrawStrokes = (timeOutVar) => {
+        // this method gets called everytime the window is resized
+            // may be a major performance issue.
+            // i'm clearing the variable that is storing the timeout
+            // but it may be still running in the background?
+        let beginRedrawingStrokes = (drawingSpace) => {
+            // drawingSpace.setSubmittedStrokeIndex(0)
+            let redrawStrokes = () => {
                 if (drawingSpace.drawingHasBeenDrawn){
                     if (drawingSpace.loop){
                         drawingSpace.drawingHasBeenDrawn = false;
                         drawingSpace.submittedStrokeIndex = 0;
-                        clearTimeout(timeOutVar)
+                        clearTimeout(drawingSpace.timeOut2)
                     } else {
                         return;
                     }
                 }
                 if (drawingSpace.submittedStrokeIndex < drawingSpace.submittedStrokes.length) {
                     drawingSpace.submittedStrokeIndex += 1
-                    timeOutVar = setTimeout(redrawStrokes, 1, timeOutVar);
+                    drawingSpace.timeOut2 = setTimeout(redrawStrokes, 1);
                 } else {
                     drawingSpace.drawingHasBeenDrawn = true;
                     // pause three seconds to display drawing.
                         // then loop if this.displayDrawingSpace.loop
                         // is set to true otherwise return.
-                    timeOutVar = setTimeout(redrawStrokes, 3000,timeOutVar);
+                    drawingSpace.timeOut2 = setTimeout(redrawStrokes, 3000);
                 }
             }
             redrawStrokes();
@@ -227,6 +233,9 @@ export default class FlagInappropriateContentWireframe {
 
         let drawingHasBeenDrawn = false
         let strokeIndex = 0;
+        let timeOutVar = undefined;
+        let color ="lightgrey"
+        let drawingOutline = false;
         // top left row to mirror
         for (let i = 0; i < 3; i++){
             if (previousUI){
@@ -236,30 +245,37 @@ export default class FlagInappropriateContentWireframe {
                         y = previousUI.drawings1[i].y;
                         width = previousUI.drawings1[i].width;
                         height = previousUI.drawings1[i].height;
-                        drawingHasBeenDrawn = windowResized ? previousUI.drawings1[i].drawingHasBeenDrawn : false;
+                        drawingHasBeenDrawn = windowResized && !previousUI.drawings1[i].loop ? previousUI.drawings1[i].drawingHasBeenDrawn : false;
                         clearTimeout(previousUI.drawings1[i].timeOut)
                         strokeIndex = previousUI.drawings1[i].submittedStrokeIndex
+                        timeOutVar = previousUI.drawings1[i].timeOut2
+                        color = previousUI.drawings1[i].color
+                        drawingOutline = previousUI.drawings1[i].hasStroke
                     }
                 }
             }
             wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-            parameters = {p:p,objectToMirror:topLeft[i],x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard}
+            parameters = {p:p,objectToMirror:topLeft[i],x:x,y:y,width:width,height:height,color:color,wildcard:wildcard}
             this.drawings1[i] = new DisplayDrawingContainer(parameters)
             this.drawings1[i].setLengthOfDrawingSquare(this.drawings1[i].width)
             this.drawings1[i].index = i
             console.log(this.drawings1[i].index)
             this.drawings1[i].setFill(true)
+            this.drawings1[i].setStroke(drawingOutline)
+            this.drawings1[i].setInteractivity(true);
             let clickOnce = true;
             this.drawings1[i].setClickType(clickOnce)
-            this.drawings1.submittedStrokeIndex = strokeIndex;
+            this.drawings1[i].submittedStrokeIndex = strokeIndex;
             this.drawings1[i].setSubmittedStrokes(REACT_APP.state.response[i].drawingData)
+            this.drawings1[i].timeOut2 = timeOutVar
             let mouseClickfunc = () => {
                 this.toggleDrawingPresentInFlaggedIndices(this.drawings1[i],p)
             }
             this.drawings1[i].mouseClickfunc = mouseClickfunc
+            // this.drawings1[i].setLoopToTrueToLoopFinishedDrawing()
             _ui.push(this.drawings1[i])
-            if (!windowResized){
-                beginRedrawingStrokesAndAddingCharsFunc(this.drawings1[i]);
+            if (!this.drawings1[i].drawingHasBeenDrawn){
+                beginRedrawingStrokes(this.drawings1[i]);
             }
         }
         // bottom right row to mirror
@@ -274,35 +290,40 @@ export default class FlagInappropriateContentWireframe {
                         drawingHasBeenDrawn = windowResized ? previousUI.drawings2[i].drawingHasBeenDrawn : false;
                         clearTimeout(previousUI.drawings2[i].timeOut)
                         strokeIndex = previousUI.drawings2[i].submittedStrokeIndex
+                        timeOutVar = previousUI.drawings2[i].timeOut2
+                        color = previousUI.drawings2[i].color
+                        drawingOutline = previousUI.drawings2[i].hasStroke
+
                     }
                 }
             }
             wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-            parameters = {p:p,objectToMirror:bottomRight[i],x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard}
+            parameters = {p:p,objectToMirror:bottomRight[i],x:x,y:y,width:width,height:height,color:color,wildcard:wildcard}
             this.drawings2[i] = new DisplayDrawingContainer(parameters)
             this.drawings2[i].setLengthOfDrawingSquare(this.drawings2[i].width)
             this.drawings2[i].index = i + 3
-            console.log(this.drawings2[i].index)
-
             this.drawings2[i].setFill(true)
+            this.drawings2[i].setStroke(drawingOutline)
+            this.drawings2[i].setInteractivity(true);
             let clickOnce = true;
             this.drawings2[i].setClickType(clickOnce)
-            this.drawings2.submittedStrokeIndex = strokeIndex;
-
+            this.drawings2[i].submittedStrokeIndex = strokeIndex;
+            this.drawings2[i].timeOut2 = timeOutVar
             // if user's drawing
             if (i===2){
-                console.log(REACT_APP.state.drawingData)
                 this.drawings2[i].setSubmittedStrokes(REACT_APP.state.drawingData)
             } else {
-                this.drawings2[i].setSubmittedStrokes(REACT_APP.state.response[i].drawingData)
+                this.drawings2[i].setSubmittedStrokes(REACT_APP.state.response[i + 3].drawingData)
             }
             let mouseClickfunc = () => {
                 this.toggleDrawingPresentInFlaggedIndices(this.drawings2[i],p)
             }
             this.drawings2[i].mouseClickfunc = mouseClickfunc
+            // this.drawings2[i].setLoopToTrueToLoopFinishedDrawing()
+
             _ui.push(this.drawings2[i])
-            if (!windowResized){
-                beginRedrawingStrokesAndAddingCharsFunc(this.drawings2[i]);
+            if (!this.drawings2[i].drawingHasBeenDrawn){
+                beginRedrawingStrokes(this.drawings2[i]);
             }
         }
 

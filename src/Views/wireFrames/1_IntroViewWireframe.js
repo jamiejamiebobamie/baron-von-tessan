@@ -133,7 +133,7 @@ export default class testView {
         parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height}//color:"pink"}
         this.dialog = new TextBox(parameters)
         this.dialog.setFill(true)
-        let fontSize = 40//w>h ? 30 : 30 ;
+        let fontSize = w>h ? dialog.width/20 : dialog.width/10 ;
         this.dialog.setFontSize(fontSize)
 
         _ui.push(this.dialog)

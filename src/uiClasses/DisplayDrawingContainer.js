@@ -18,7 +18,9 @@ export default class DisplayDrawingContainer extends Mirror{
 
         this.toLocation = []
         this.fromLocation = []
-        this.timeOut = undefined;
+        this.timeOut1 = undefined;
+        this.timeOut2 = undefined;
+
         this.setNewToLocation()
         // for DrawingContainer functionality.
             // purely storing strokes.
@@ -30,8 +32,8 @@ export default class DisplayDrawingContainer extends Mirror{
             this.toLocation.push({x:(Math.random()*2-1)*this.lengthOfDrawingSquare/1000,y:(Math.random()*2-1)*this.lengthOfDrawingSquare/1000})
         }
         this.fromLocation = this.toLocation
-        clearTimeout(this.timeOut)
-        this.timeOut = setTimeout(()=>{this.setNewToLocation()},100)
+        clearTimeout(this.timeOut1)
+        this.timeOut1 = setTimeout(()=>{this.setNewToLocation()},100)
     }
     setLengthOfDrawingSquare(length){ this.lengthOfDrawingSquare = length }
     setSubmittedStrokeIndex(index){ this.submittedStrokeIndex = index }
