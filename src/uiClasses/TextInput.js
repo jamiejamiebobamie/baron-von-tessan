@@ -26,7 +26,7 @@ export default class TextInput extends Mirror{
         this.toggleShowCursor(this);
     }
     clearFillerText(){
-        if (this.text === "I drew a..."){
+        if (this.text === "I drew a..."||this.text === "I drew a...|"){
             this.text = ""
         }
     }

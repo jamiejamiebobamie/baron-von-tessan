@@ -240,7 +240,7 @@ export default class testView {
         this.drawing.setClickType(performClickOnce)
         this.drawing.penMode = drawingMode
         this.drawing.mouseClickfunc = this.drawing.penMode ? this.buildStroke : this.removeStroke;
-        console.log(this.drawing.strokes)
+        // console.log(this.drawing.strokes)
         _ui.push(this.drawing)
 
         for (let i = 0; i<4;i++){

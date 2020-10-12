@@ -79,7 +79,7 @@ export default class testView {
         wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
         parameters = {p:p,objectToMirror:drawing,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard}
         this.drawing = new DisplayDrawingContainer(parameters)
-        this.drawing.setLengthOfDrawingSquare(this.drawing.width)
+        this.drawing.setLengthOfDrawingSquare(drawing.width)
         this.drawing.setFill(true)
         this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
         this.drawing.submittedStrokeIndex = strokeIndex;

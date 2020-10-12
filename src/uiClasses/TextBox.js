@@ -45,7 +45,6 @@ export default class TextBox extends Mirror{
         //     (this.windowWidth>this.windowHeight ?
         //             this.width / 5 : this.width / 20) ;
         // this.p.textSize(this.textSize);},100);
-        console.log(this.textSize)
     }
     // call this after instantiating the object to set the text
     setString(s) { this.text = s }

@@ -8,8 +8,8 @@ export default class FlagInappropriateContentWireframe {
         this.instructions = undefined
         this.drawings1 = [undefined,undefined,undefined]
         this.drawings2 = [undefined,undefined,undefined]
+        this.drawing = undefined
         this.submitButton = undefined
-        this.drawings2 = [undefined,undefined,undefined]
         this.flaggedIndices = []
     }
     toggleDrawingPresentInFlaggedIndices(drawingReference,p){
@@ -27,7 +27,6 @@ export default class FlagInappropriateContentWireframe {
             drawingReference.setStroke(true)
             drawingReference.color = p.color(100,40,40)
         }
-        console.log(drawingReference.index,this.flaggedIndices)
     }
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI){
@@ -208,6 +207,7 @@ export default class FlagInappropriateContentWireframe {
         let beginRedrawingStrokes = (drawingSpace) => {
             // drawingSpace.setSubmittedStrokeIndex(0)
             let redrawStrokes = () => {
+                console.log('hey')
                 if (drawingSpace.drawingHasBeenDrawn){
                     if (drawingSpace.loop){
                         drawingSpace.drawingHasBeenDrawn = false;
@@ -248,7 +248,9 @@ export default class FlagInappropriateContentWireframe {
                         drawingHasBeenDrawn = windowResized && !previousUI.drawings1[i].loop ? previousUI.drawings1[i].drawingHasBeenDrawn : false;
                         clearTimeout(previousUI.drawings1[i].timeOut)
                         strokeIndex = previousUI.drawings1[i].submittedStrokeIndex
-                        timeOutVar = previousUI.drawings1[i].timeOut2
+                        // timeOutVar = previousUI.drawings1[i].timeOut2
+                        clearTimeout(previousUI.drawings2[i].timeOut2)
+                        
                         color = previousUI.drawings1[i].color
                         drawingOutline = previousUI.drawings1[i].hasStroke
                     }
@@ -257,9 +259,8 @@ export default class FlagInappropriateContentWireframe {
             wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
             parameters = {p:p,objectToMirror:topLeft[i],x:x,y:y,width:width,height:height,color:color,wildcard:wildcard}
             this.drawings1[i] = new DisplayDrawingContainer(parameters)
-            this.drawings1[i].setLengthOfDrawingSquare(this.drawings1[i].width)
+            this.drawings1[i].setLengthOfDrawingSquare(topLeft[i].width)
             this.drawings1[i].index = i
-            console.log(this.drawings1[i].index)
             this.drawings1[i].setFill(true)
             this.drawings1[i].setStroke(drawingOutline)
             this.drawings1[i].setInteractivity(true);
@@ -290,7 +291,9 @@ export default class FlagInappropriateContentWireframe {
                         drawingHasBeenDrawn = windowResized ? previousUI.drawings2[i].drawingHasBeenDrawn : false;
                         clearTimeout(previousUI.drawings2[i].timeOut)
                         strokeIndex = previousUI.drawings2[i].submittedStrokeIndex
-                        timeOutVar = previousUI.drawings2[i].timeOut2
+                        // timeOutVar = previousUI.drawings2[i].timeOut2
+                        clearTimeout(previousUI.drawings2[i].timeOut2)
+
                         color = previousUI.drawings2[i].color
                         drawingOutline = previousUI.drawings2[i].hasStroke
 
@@ -300,7 +303,7 @@ export default class FlagInappropriateContentWireframe {
             wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
             parameters = {p:p,objectToMirror:bottomRight[i],x:x,y:y,width:width,height:height,color:color,wildcard:wildcard}
             this.drawings2[i] = new DisplayDrawingContainer(parameters)
-            this.drawings2[i].setLengthOfDrawingSquare(this.drawings2[i].width)
+            this.drawings2[i].setLengthOfDrawingSquare(bottomRight[i].width)
             this.drawings2[i].index = i + 3
             this.drawings2[i].setFill(true)
             this.drawings2[i].setStroke(drawingOutline)
@@ -321,10 +324,11 @@ export default class FlagInappropriateContentWireframe {
             this.drawings2[i].mouseClickfunc = mouseClickfunc
             // this.drawings2[i].setLoopToTrueToLoopFinishedDrawing()
 
-            _ui.push(this.drawings2[i])
+            // _ui.push(this.drawings2[i])
             if (!this.drawings2[i].drawingHasBeenDrawn){
                 beginRedrawingStrokes(this.drawings2[i]);
             }
+            _ui.push(this.drawings2[i])
         }
 
         return _ui;

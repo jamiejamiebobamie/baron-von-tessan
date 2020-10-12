@@ -164,7 +164,7 @@ export default class testView {
 
         parameters = {p:p,w:w,h:h,objectToMirror:drawing,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard}
         this.drawing = new DisplayDrawingContainer(parameters)
-        this.drawing.setLengthOfDrawingSquare(this.drawing.width)
+        this.drawing.setLengthOfDrawingSquare(drawing.width)
         this.drawing.setFill(true)
         this.drawing.setSubmittedStrokes(baronData.drawingData)
         this.drawing.submittedStrokeIndex = strokeIndex;

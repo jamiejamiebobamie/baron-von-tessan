@@ -1,7 +1,7 @@
 import TextBox from '../../uiClasses/TextBox'
 import Container from '../../uiClasses/Container'
-import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer'
-import TextInput from '../../uiClasses/TextInput'
+import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainerContainer'
+import TextInput from '../../uiClasses/TextInputContainer'
 import Keyboard from '../../uiClasses/Keyboard'
 
 export default class EnterDescriptionView {
@@ -129,7 +129,7 @@ export default class EnterDescriptionView {
                 }
             )
             mobileKeyboard.setReferenceToInputBox(this.inputTextBox)
-            // mobileKeyboard.setStroke(true)
+            mobileKeyboard.setInteractivity(true)
             _ui.push(mobileKeyboard)
             this.inputTextBox.setMobileKeyboardReference(mobileKeyboard)
         }

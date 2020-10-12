@@ -194,9 +194,9 @@ export default class testView {
         let input = new Wireframe(parameters)
         // _ui.push(input)
 
-        // _ui.push(drawing)
 
-        wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
+
+        wildcard = {shrinkAmountWidth:.95,shrinkAmountHeight:.95}
         parameters = { p:p,
                             windowWidth: w,
                            windowHeight: h,
@@ -204,11 +204,16 @@ export default class testView {
                            len:3,
                            index:2,
                            offsetY:REACT_APP.state.isMobile?0:h,
-                           color:"red",
+                           // color:"red",
                            wildcard:wildcard,
                            parent:REACT_APP.state.isMobile?wireFrameElements[3]:wireFrame,
                          }
-        let areaForKeyboard = new Wireframe(parameters)
+        let keyBoardArea = new Wireframe(parameters)
+        // _ui.push(keyBoardArea)
+
+
+        // _ui.push(drawing)
+
         // _ui.push(areaForKeyboard)
 
         let x,y,width,height;
@@ -305,7 +310,7 @@ export default class testView {
 
         parameters = {p:p,w:w,h:h,objectToMirror:drawing,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard}
         this.drawing = new DisplayDrawingContainer(parameters)
-        this.drawing.setLengthOfDrawingSquare(this.drawing.width)
+        this.drawing.setLengthOfDrawingSquare(drawing.width)
         this.drawing.setFill(true)
         let submittedStrokes = REACT_APP.state.drawingData
         this.drawing.setSubmittedStrokes(submittedStrokes)
@@ -344,8 +349,17 @@ export default class testView {
         if (!windowResized){
             beginRedrawingStrokesFunc();
         }
-
         _ui.push(this.drawing)
+
+        // wildcard = {shouldBeSquare:false,shrinkAmountWidth:.95,shrinkAmountHeight:.95}
+        // parameters = { p:p,
+        //                     windowWidth: w,
+        //                    windowHeight: h,
+        //                    row:true,
+        //                    parent:keyBoardArea,
+        //                    wildcard:wildcard,
+        //                  }
+        // this.keyBoard = new Keyboard(parameters)
 
         if (previousUI){
             if (previousUI.keyBoard){
@@ -355,10 +369,13 @@ export default class testView {
                 height = previousUI.keyBoard.height;
             }
         }
-        parameters = {p:p,objectToMirror:areaForKeyboard,x:x,y:y,width:width,height:height}
+        parameters = {p:p,objectToMirror:keyBoardArea,x:x,y:y,width:width,height:height,previousUI:previousUI}
         this.keyBoard = new Keyboard(parameters)
         this.keyBoard.setReferenceToInputBox(this.input)
         this.input.setMobileKeyboardReference(this.keyBoard)
+        // this.keyBoard.setInteractivity(true)
+        this.keyBoard.setStroke(true)
+
         if (REACT_APP.state.isMobile){
             _ui.push(this.keyBoard)
         }

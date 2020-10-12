@@ -26,7 +26,17 @@ export default class TextInput extends Container{
 
         // dummy object
         this.referenceToMobileKeyboard = new Container({p:this.p,w:this.windowWidth,h:this.windowHeight,width:0,height:0})
+        this.mouseClickfunc = this.clearFillerText
+
+        // perform mouseClickFunc once per click.
+
+        this.doOnce = true;
         this.toggleShowCursor(this)
+    }
+    clearFillerText(){
+        if (this.text === "I drew a..."||this.text === "I drew a...|"){
+            this.text = ""
+        }
     }
     setReferenceToAPP(APP){
         this.referenceToAPP = APP;
@@ -82,6 +92,7 @@ export default class TextInput extends Container{
     //         }
     //     }
     handleTyping(keyCode){
+        this.clearFillerText()
         const BACKSPACE = keyCode === 8
         const ENTER = keyCode === 13
         const SPACE = keyCode === 32
