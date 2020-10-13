@@ -1,17 +1,10 @@
-// import testCallBackButton from './uiClasses';
-// import testView from './Views/test/testView';
-// import testView2 from './Views/test/testView2';
-// import IntroView from './Views/oldViews/IntroView';
-// import DrawingView from './Views/oldViews/DrawingView';
-// import EnterDescriptionView from './Views/oldViews/EnterDescriptionView';
 import Menu from './Views/wireFrames/0_MenuViewWireframe';
 import IntroViewWireframe from './Views/wireFrames/1_IntroViewWireframe';
 import SlideshowViewWireframe from './Views/wireFrames/2_SlideshowViewWireframe';
-// import AndViewWireframe from './Views/wireFrames/3_AndViewWireframe';
-import DrawingViewWireframe from './Views/wireFrames/4_DrawingViewWireframe';
-import EnterDescriptionViewWireframe from './Views/wireFrames/5_EnterDescriptionViewWireframe';
-import FlagInappropriateContentWireframe from './Views/wireFrames/6_FlagInappropriateContentWireframe';
-import OutroViewWireframe from './Views/wireFrames/7_OutroViewWireframe';
+import DrawingViewWireframe from './Views/wireFrames/3_DrawingViewWireframe';
+import EnterDescriptionViewWireframe from './Views/wireFrames/4_EnterDescriptionViewWireframe';
+import FlagInappropriateContentWireframe from './Views/wireFrames/5_FlagInappropriateContentWireframe';
+import OutroViewWireframe from './Views/wireFrames/6_OutroViewWireframe';
 
 
 export default class Sketch {
@@ -23,20 +16,18 @@ export default class Sketch {
         view = new Menu();
         this.views.push(view);
 
-        // view = new IntroViewWireframe();
-        // this.views.push(view);
+        view = new IntroViewWireframe();
+        this.views.push(view);
         view = new SlideshowViewWireframe(view);
         this.views.push(view);
-        // view = new AndViewWireframe(view);
-        // this.views.push(view);
         view = new DrawingViewWireframe();
         this.views.push(view);
-        // view = new EnterDescriptionViewWireframe();
-        // this.views.push(view);
-        // view = new FlagInappropriateContentWireframe();
-        // this.views.push(view);
-        // view = new OutroViewWireframe();
-        // this.views.push(view);
+        view = new EnterDescriptionViewWireframe();
+        this.views.push(view);
+        view = new FlagInappropriateContentWireframe();
+        this.views.push(view);
+        view = new OutroViewWireframe();
+        this.views.push(view);
 
         // p5.js media references
 
