@@ -7,7 +7,7 @@
 import Menu from './Views/wireFrames/0_MenuViewWireframe';
 import IntroViewWireframe from './Views/wireFrames/1_IntroViewWireframe';
 import SlideshowViewWireframe from './Views/wireFrames/2_SlideshowViewWireframe';
-import AndViewWireframe from './Views/wireFrames/3_AndViewWireframe';
+// import AndViewWireframe from './Views/wireFrames/3_AndViewWireframe';
 import DrawingViewWireframe from './Views/wireFrames/4_DrawingViewWireframe';
 import EnterDescriptionViewWireframe from './Views/wireFrames/5_EnterDescriptionViewWireframe';
 import FlagInappropriateContentWireframe from './Views/wireFrames/6_FlagInappropriateContentWireframe';
@@ -23,20 +23,20 @@ export default class Sketch {
         view = new Menu();
         this.views.push(view);
 
-        view = new IntroViewWireframe();
-        this.views.push(view);
+        // view = new IntroViewWireframe();
+        // this.views.push(view);
         view = new SlideshowViewWireframe(view);
         this.views.push(view);
-        view = new AndViewWireframe(view);
-        this.views.push(view);
+        // view = new AndViewWireframe(view);
+        // this.views.push(view);
         view = new DrawingViewWireframe();
         this.views.push(view);
-        view = new EnterDescriptionViewWireframe();
-        this.views.push(view);
-        view = new FlagInappropriateContentWireframe();
-        this.views.push(view);
-        view = new OutroViewWireframe();
-        this.views.push(view);
+        // view = new EnterDescriptionViewWireframe();
+        // this.views.push(view);
+        // view = new FlagInappropriateContentWireframe();
+        // this.views.push(view);
+        // view = new OutroViewWireframe();
+        // this.views.push(view);
 
         // p5.js media references
 

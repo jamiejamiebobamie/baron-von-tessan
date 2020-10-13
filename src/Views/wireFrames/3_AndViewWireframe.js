@@ -11,18 +11,21 @@ export default class testView {
         this.responseIndex = 0
         this.charIndex = 0
         this.timeOutVar = undefined
+        this.and = "and . . . "
     }
-    addCharacterToDialogString(REACT_APP){
-        if (this.charIndex<REACT_APP.state.response[this.responseIndex].descriptionData.length){
-            let allOfDialog = REACT_APP.state.response[this.responseIndex].descriptionData
+    addCharacterToDialogString(changeToNextViewMethod){
+        console.log(changeToNextViewMethod)
+        if (this.charIndex<this.and.length){
+            let allOfDialog = this.and
             let dialogString = allOfDialog.slice(0,this.charIndex)
             this.dialog.setString(dialogString)
             clearTimeout(this.timeOutVar)
             this.charIndex += 1
-            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialogString(REACT_APP)},50)
+            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialogString(changeToNextViewMethod)},150)
         }
         else {
             clearTimeout(this.timeOutVar)
+            this.timeOutVar = setTimeout(()=>{changeToNextViewMethod();}, 2000);
             return
         }
     }
@@ -30,99 +33,18 @@ export default class testView {
     setUI(p,w,h,REACT_APP,windowResized,previousUI){
         let _ui = []
 
-        let drawingSpaceWidth = w > h ? w*(2/3) : w;
-        let drawingSpaceHeight = w > h ? h : h*(2/3);
-        let lengthOfDrawingSquare = w > h ? drawingSpaceHeight : drawingSpaceWidth;
-        let longerSideOfScreen = w > h ? w : h;
-        lengthOfDrawingSquare = lengthOfDrawingSquare > longerSideOfScreen*(2/3) ? longerSideOfScreen*(2/3) : lengthOfDrawingSquare;
-        let wildcard = {shouldBeSquare:false,shrinkAmountWidth:.9,shrinkAmountHeight:.9,string:"this is where the drawings will be displayed."}
+        let wildcard = {shouldBeSquare:false,shrinkAmountWidth:.9,shrinkAmountHeight:.9,string:"this is a container to place the description."}
         let parameters = { p:p,
                            windowWidth: w,
                            windowHeight: h,
-                           offsetX:w>h?0:(w-lengthOfDrawingSquare)/2,
-                           offsetY:w>h?(h-lengthOfDrawingSquare)/2:0,
-                           width:lengthOfDrawingSquare,
-                           height:lengthOfDrawingSquare,
-                           len:3,
-                           index:0,
-                           color:"red",
-                           wildcard:wildcard,
-                         }
-        let drawing = new Wireframe(parameters)
-
-        wildcard = {shouldBeSquare:false,shrinkAmountWidth:1.1,shrinkAmountHeight:.7,string:"this is a container to place the description."}
-        parameters = { p:p,
-                           windowWidth: w,
-                           windowHeight: h,
-                           len:3,
-                           index:2,
                            color:"red",
                            wildcard:wildcard,
                            mouseClickfunc: REACT_APP.testViewSwitch
                          }
         let dialog = new Wireframe(parameters)
+        // _ui.push(dialog)
 
-        let x,y,width,height;
-        let drawingHasBeenDrawn = false
-        let strokeIndex = 0;
-        if (previousUI){
-            if (previousUI.drawing){
-                x = previousUI.drawing.x;
-                y = previousUI.drawing.y;
-                width = previousUI.drawing.width;
-                height = previousUI.drawing.height;
-                drawingHasBeenDrawn = windowResized ? previousUI.drawing.drawingHasBeenDrawn : false;
-                clearTimeout(previousUI.drawing.timeOut)
-                strokeIndex = previousUI.drawing.submittedStrokeIndex
-            }
-        }
-        wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-        parameters = {p:p,objectToMirror:drawing,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard}
-        this.drawing = new DisplayDrawingContainer(parameters)
-        this.drawing.setLengthOfDrawingSquare(drawing.width)
-        this.drawing.setFill(true)
-        this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
-        this.drawing.submittedStrokeIndex = strokeIndex;
-
-        let beginRedrawingStrokesAndAddingCharsFunc = () => {
-            this.drawing.setSubmittedStrokeIndex(0)
-            this.charIndex = 0
-            this.addCharacterToDialogString(REACT_APP)
-            let redrawStrokes = (timeOutVar) => {
-                if (this.drawing.drawingHasBeenDrawn){
-                    if (this.drawing.loop){
-                        this.drawing.drawingHasBeenDrawn = false;
-                        this.drawing.submittedStrokeIndex = 0;
-                        clearTimeout(timeOutVar)
-                    } else {
-                        if (this.responseIndex < REACT_APP.state.response.length-1){
-                            this.drawing.drawingHasBeenDrawn = false;
-                            this.drawing.submittedStrokeIndex = 0;
-                            this.charIndex = 0
-                            this.addCharacterToDialogString(REACT_APP)
-                            this.responseIndex += 1
-                            this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
-                        } else {
-                            REACT_APP.testViewSwitch();
-                            return;
-                        }
-                    }
-                }
-                if (this.drawing.submittedStrokeIndex < this.drawing.submittedStrokes.length) {
-                    this.drawing.submittedStrokeIndex += 1
-                    timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
-                } else {
-                    this.drawing.drawingHasBeenDrawn = true;
-                    // pause three seconds to display drawing.
-                        // then loop if this.displayDrawingSpace.loop
-                        // is set to true otherwise return.
-                    timeOutVar = setTimeout(redrawStrokes, 3000,timeOutVar);
-                }
-            }
-            redrawStrokes();
-        }
-        _ui.push(this.drawing)
-
+        let width, height, x, y;
         if (previousUI){
             if (previousUI.dialog){
                 x = previousUI.dialog.x;
@@ -138,15 +60,19 @@ export default class testView {
         let fontSize = 40
         this.dialog.setFontSize(fontSize)
 
-        if (this.charIndex>=REACT_APP.state.response[this.responseIndex].descriptionData.length){
-            let allOfDialog = REACT_APP.state.response[this.responseIndex].descriptionData
+        if (this.charIndex>=this.and.length){
+            let allOfDialog = this.and
             this.dialog.setString(allOfDialog)
         }
 
         _ui.push(this.dialog)
 
+        // this gets called once when the view is first shown
+            // all other calls to the setUI method are due to windowResized
+            // events or similar calls
         if (!windowResized){
-            beginRedrawingStrokesAndAddingCharsFunc();
+            let changeToNextView = REACT_APP.testViewSwitch
+            this.addCharacterToDialogString(changeToNextView)
         }
 
         return _ui;
