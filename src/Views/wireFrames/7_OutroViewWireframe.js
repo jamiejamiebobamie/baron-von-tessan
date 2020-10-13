@@ -11,7 +11,7 @@ export default class testView {
         this.dialog = previousView ? previousView.dialog : undefined;
         this.baronDialogIndex = 0
         this.timeOutVar = undefined
-        this.dialogText = baronData.introDescriptionData
+        this.dialogText = baronData.outroDescriptionData
     }
     addCharacterToDialog(){
         if (this.baronDialogIndex<this.dialogText.length){
@@ -20,7 +20,7 @@ export default class testView {
             let dialogString = allOfDialog.slice(0,this.baronDialogIndex)
             this.dialog.setString(dialogString)
             clearTimeout(this.timeOutVar)
-            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialog()},100)
+            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialog()},50)
         }
         else {
             clearTimeout(this.timeOutVar)
@@ -174,24 +174,16 @@ export default class testView {
         let beginRedrawingStrokesFunc = () => {
             // this.drawing.submittedStrokeIndex = strokeIndex;
 
-            // this.drawing.setSubmittedStrokeIndex(strokeIndex)
+            this.drawing.setSubmittedStrokeIndex(this.drawing.submittedStrokes.length)
             let redrawStrokes = (timeOutVar) => {
-                if (this.drawing.drawingHasBeenDrawn){
-                    if (this.drawing.loop){
-                        this.drawing.drawingHasBeenDrawn = false;
-                        this.drawing.submittedStrokeIndex = 0;
-                        clearTimeout(timeOutVar)
-                    } else {
-                        clearTimeout(timeOutVar)
-                        REACT_APP.testViewSwitch();
-                        return;
-                    }
-                }
-                if (this.drawing.submittedStrokeIndex < this.drawing.submittedStrokes.length) {
-                    this.drawing.submittedStrokeIndex += 1
+                if (this.drawing.submittedStrokeIndex >= 0) {
+                    this.drawing.submittedStrokeIndex -= 1
                     timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
                 } else {
-                    this.drawing.drawingHasBeenDrawn = true;
+                    clearTimeout(timeOutVar)
+                    // want to do a fade out or fade to grey and return to
+                    REACT_APP.testViewSwitch();                    
+                    return
                     // pause three seconds to display drawing.
                         // then loop if this.displayDrawingSpace.loop
                         // is set to true otherwise return.
