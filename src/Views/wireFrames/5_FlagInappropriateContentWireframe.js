@@ -193,7 +193,7 @@ export default class FlagInappropriateContentWireframe {
             }
         }
         // wildcard = {fontSize:500,text:"Did you find any of these drawings offensive?"}
-        parameters = {p:p,objectToMirror:questionArea,x:x,y:y,width:width,height:height,wildcard:{fontSize:questionArea.width/15,text:"Did you find any of these drawings offensive?"}}
+        parameters = {p:p,objectToMirror:questionArea,x:x,y:y,width:width,height:height,wildcard:{fontSize:questionArea.width/15,text:"Click any drawings you find offensive and press submit."}}
         this.instructions = new TextBox(parameters)
         this.instructions.setFill(true)
         this.instructions.setTextColor("black")
@@ -250,7 +250,7 @@ export default class FlagInappropriateContentWireframe {
                         strokeIndex = previousUI.drawings1[i].submittedStrokeIndex
                         // timeOutVar = previousUI.drawings1[i].timeOut2
                         clearTimeout(previousUI.drawings2[i].timeOut2)
-                        
+
                         color = previousUI.drawings1[i].color
                         drawingOutline = previousUI.drawings1[i].hasStroke
                     }

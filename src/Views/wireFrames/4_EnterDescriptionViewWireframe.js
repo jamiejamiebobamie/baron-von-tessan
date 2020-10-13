@@ -209,6 +209,74 @@ export default class testView {
                            parent:REACT_APP.state.isMobile?wireFrameElements[3]:wireFrame,
                          }
         let keyBoardArea = new Wireframe(parameters)
+
+        wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
+        let row;
+        let keyBoardRows = []
+        for (let i = 0; i < 4; i++){
+            row = new Wireframe(
+                                {
+                                    p:p,
+                                    windowWidth: w,
+                                    windowHeight: h,
+                                    parent:keyBoardArea,
+                                    len:4,
+                                    index:i,
+                                    row:true,
+                                    wildcard:wildcard,
+                                    color:"pink"
+                                }
+                            )
+
+            // _ui.push(row)
+
+            keyBoardRows.push(row)
+        }
+        let keys = []
+        let keyLetters = ["qwertyuiop","asdfghjkl","zxcvbnm"]
+        let keyboardButton;
+        wildcard = {shrinkAmountWidth:.9,shrinkAmountHeight:.8}
+        for (let i = 0; i < keyLetters.length; i++){
+            for (let j = 0; j < keyLetters[i].length; j++){
+                parameters = {
+                                   p:p,
+                                   windowWidth: w,
+                                   windowHeight: h,
+                                   parent:keyBoardRows[i],
+                                   len:keyLetters[i].length,
+                                   index:j,
+                                   row:false,
+                                   // color:"blue",
+                                   wildcard:wildcard,
+                              }
+                keyboardButton = new Wireframe(parameters)
+
+                // _ui.push(keyboardButton)
+
+                keys.push(keyboardButton)
+            }
+        }
+        let controlButtons = ["SPACE","BACKSPACE"]
+        for (let i = 0; i < controlButtons.length; i++){
+            parameters = {
+                           p:p,
+                           windowWidth: w,
+                           windowHeight: h,
+                           parent:keyBoardRows[3],
+                           len:controlButtons.length,
+                           index:i,
+                           row:false,
+                           // color:"blue",
+                           wildcard:wildcard,
+                         }
+            keyboardButton = new Wireframe(parameters)
+
+            // _ui.push(keyboardButton)
+
+            keys.push(keyboardButton)
+
+            // this.rowsOfKeys.push(keyboardButton)
+        }
         // _ui.push(keyBoardArea)
 
 
@@ -229,14 +297,14 @@ export default class testView {
             let currentViewIndex = REACT_APP.state.viewIndex
             REACT_APP.testViewSwitch(currentViewIndex-1)
         }
-        wildcard = {fontSize:backButton.width/5}
-        parameters = {p:p,objectToMirror:backButton,x:x,y:y,width:width,height:height,mouseClickfunc:returnToPreviousView}
+        wildcard = {fontSize:backButton.width/10}
+        parameters = {p:p,objectToMirror:backButton,x:x,y:y,width:width,height:height,mouseClickfunc:returnToPreviousView,wildcard:wildcard}
         this.backButton = new TextBox(parameters)
         this.backButton.setInteractivity(true);
         this.backButton.setStroke(true)
         this.backButton.setFill(true)
         this.backButton.setTextColor("black")
-        // this.backButton.setFontSize(100);
+        // this.backButton.setFontSize(backButton.width/5);
 
         this.backButton.setString("<< BACK");
         // this.backButton.setFontSize(100);
@@ -257,7 +325,7 @@ export default class testView {
             REACT_APP.handleSubmitDescription(drawingDescription)
             REACT_APP.testViewSwitch()
         }
-        wildcard = {fontSize:submitButton.width/2}
+        wildcard = {fontSize:backButton.width/10}
         parameters = {p:p,objectToMirror:submitButton,x:x,y:y,width:width,height:height,mouseClickfunc:submitDescription,wildcard:wildcard}
         this.submitButton = new TextBox(parameters)
         this.submitButton.setInteractivity(true);
@@ -278,7 +346,7 @@ export default class testView {
                 textInput = previousUI.input.text;
             }
         }
-        wildcard = {fontSize:submitButton.width/5, REACT_APP:REACT_APP,text:textInput}
+        wildcard = {fontSize:input.width/20, REACT_APP:REACT_APP,text:textInput}
         parameters = {p:p,objectToMirror:input,x:x,y:y,width:width,height:height,wildcard:wildcard}
         this.input = new TextInput(parameters)
         this.input.setStroke(true)
@@ -369,12 +437,13 @@ export default class testView {
                 height = previousUI.keyBoard.height;
             }
         }
-        parameters = {p:p,objectToMirror:keyBoardArea,x:x,y:y,width:width,height:height,previousUI:previousUI}
+        wildcard = {keys:keys}
+        parameters = {p:p,objectToMirror:keyBoardArea,x:x,y:y,width:width,height:height,previousUI:previousUI,wildcard:wildcard}
         this.keyBoard = new Keyboard(parameters)
         this.keyBoard.setReferenceToInputBox(this.input)
         this.input.setMobileKeyboardReference(this.keyBoard)
         // this.keyBoard.setInteractivity(true)
-        this.keyBoard.setStroke(true)
+        // this.keyBoard.setStroke(true)
 
         if (REACT_APP.state.isMobile){
             _ui.push(this.keyBoard)

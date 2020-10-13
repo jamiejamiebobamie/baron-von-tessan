@@ -16,12 +16,12 @@ export default class Sketch {
         this.views= [];
         this.viewIndex = app.state.viewIndex;
         let view;
-        // view = new IntroViewWireframe();
-        // this.views.push(view);
-        // view = new SlideshowViewWireframe(view);
-        // this.views.push(view);
-        // view = new DrawingViewWireframe();
-        // this.views.push(view);
+        view = new IntroViewWireframe();
+        this.views.push(view);
+        view = new SlideshowViewWireframe(view);
+        this.views.push(view);
+        view = new DrawingViewWireframe();
+        this.views.push(view);
         view = new EnterDescriptionViewWireframe();
         this.views.push(view);
         view = new FlagInappropriateContentWireframe();

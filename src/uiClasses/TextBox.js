@@ -54,7 +54,6 @@ export default class TextBox extends Mirror{
     setFontSize(size){this.textSize = size; this.p.textSize(this.textSize);}
     drawRotatedTextBox(){
         this.p.push();
-            super.draw()
             this.p.translate(this.x,this.y)
             this.p.rotate(this.p.radians(90))
             if (this.text){
@@ -66,10 +65,10 @@ export default class TextBox extends Mirror{
                 }
                 this.p.text(this.text, 0, -this.width, this.height, this.width)
             }
+
         this.p.pop();
     }
     drawNormalTextBox(){
-        super.draw()
         if (this.text){
             if (this.textColor){
                 this.p.fill(this.textColor)
@@ -79,9 +78,15 @@ export default class TextBox extends Mirror{
             }
             this.p.text(this.text, this.x, this.y, this.width, this.height)
         }
+
     }
     draw() {
+        super.draw()
+
+        this.p.textSize(this.textSize);
+
         !this.rotated ? this.drawNormalTextBox() : this.drawRotatedTextBox();
         // this.drawNormalTextBox()
+
     }
 }

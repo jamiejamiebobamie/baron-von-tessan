@@ -13,87 +13,16 @@ export default class Keyboard extends Mirror{
         this.setClickType(doOnce);
         this.referenceToInputTextBox = undefined
         this.rowsOfKeys = []
-        {
-            let row;
-            for (let i = 0; i < 4; i++){
-                row = new Container(
-                                    {
-                                        p:this.p,
-                                        windowWidth:this.windowWidth,
-                                        windowHeight:this.windowHeight,
-                                        parent:this,
-                                        width:this.width,//-i*10,
-                                        len:4,
-                                        index:i,
-                                        row:true,
-                                        // offsetX:i*10
-                                    }
-                                )
-                // row.setStroke(true)
-                this.rowsOfKeys.push(row)
-            }
-        }
         this.keyLetters = ["qwertyuiop","asdfghjkl","zxcvbnm"]
-        // wireframe
-        let keys = []
 
-        {
-            // let doOnce = true;
-            let parameters;
-            let keyboardButton;
-            let wildcard = {shrinkAmountWidth:.9,shrinkAmountHeight:.8}
-            for (let i = 0; i < this.keyLetters.length; i++){
-                for (let j = 0; j < this.keyLetters[i].length; j++){
-                    parameters = {
-                                       p:this.p,
-                                       windowWidth:this.windowWidth,
-                                       windowHeight:this.windowHeight,
-                                       parent:this.rowsOfKeys[i],
-                                       len:this.keyLetters[i].length,
-                                       index:j,
-                                       row:false,
-                                       color:"blue",
-                                       wildcard:wildcard,
-                                  }
-                    keyboardButton = new Wireframe(parameters)
-                    // keyboardButton.letter = this.keyLetters[i][j]
-                    // keyboardButton.setClickType(doOnce)
-                    // keyboardButton.setString(this.keyLetters[i][j])
-                    // keyboardButton.setFontSize(this.object.width/30)
-                    // keyboardButton.setInteractivity(true)
-                    // keyboardButton.setFill(true)
-                    // keyboardButton.setStroke(true)
-                    // this.rowsOfKeys.push(keyboardButton)
-                    keys.push(keyboardButton)
+        if (parameterObject){
+            if (parameterObject.wildcard){
+                if (parameterObject.wildcard.keys){
+                this.keys = parameterObject.wildcard.keys
                 }
             }
-            // let controlButtons = ["SUBMIT","SPACE","BACKSPACE"]
-            let controlButtons = ["SPACE","BACKSPACE"]
-
-            for (let i = 0; i < controlButtons.length; i++){
-                parameters = {
-                               p:this.p,
-                               windowWidth:this.windowWidth,
-                               windowHeight:this.windowHeight,
-                               parent:this.rowsOfKeys[3],
-                               len:controlButtons.length,
-                               index:i,
-                               row:false,
-                               color:"blue",
-                               wildcard:wildcard,
-                             }
-                keyboardButton = new Wireframe(parameters)
-                // keyboardButton.setClickType(doOnce)
-                // keyboardButton.setString(controlButtons[i])
-                // keyboardButton.setFontSize(this.object.width/30)
-                // keyboardButton.setInteractivity(true)
-                // keyboardButton.setFill(true)
-                // keyboardButton.setStroke(true)
-                keys.push(keyboardButton)
-
-                // this.rowsOfKeys.push(keyboardButton)
-            }
         }
+
         let count = 0
         let parameters;
         let keyboardButton;
@@ -130,7 +59,7 @@ export default class Keyboard extends Mirror{
                             }
                         }
                     }
-                    parameters = {p:this.p,objectToMirror:keys[count],x:x,y:y,width:width,height:height}//,x:x,y:y,width:width,height:height,wildcard:wildcard}
+                    parameters = {p:this.p,objectToMirror:this.keys[count++],x:x,y:y,width:width,height:height}//,x:x,y:y,width:width,height:height,wildcard:wildcard}
                     keyboardButton = new KeyboardKey(parameters)
                     keyboardButton.setClickType(doOnce)
                     keyboardButton.letter = this.keyLetters[i][j]
@@ -139,7 +68,6 @@ export default class Keyboard extends Mirror{
                     keyboardButton.setInteractivity(true)
                     keyboardButton.setStroke(true)
                     this.rowsOfKeys.push(keyboardButton)
-                    count++
                 }
             }
             // let controlButtons = ["SUBMIT","SPACE","BACKSPACE"]
@@ -167,12 +95,12 @@ export default class Keyboard extends Mirror{
                         }
                     }
                 }
-                parameters = {p:this.p,objectToMirror:keys[count],x:x,y:y,width:width,height:height}//,x:x,y:y,width:width,height:height,wildcard:wildcard}
+                parameters = {p:this.p,objectToMirror:this.keys[count++],x:x,y:y,width:width,height:height}//,x:x,y:y,width:width,height:height,wildcard:wildcard}
                 keyboardButton = new KeyboardKey(parameters)
-                parameters = {p:this.p,objectToMirror:keys[count++]}//,x:x,y:y,width:width,height:height,wildcard:wildcard}
-
+                // parameters = {p:this.p,objectToMirror:this.keys[count++]}//,x:x,y:y,width:width,height:height,wildcard:wildcard}
                 keyboardButton = new KeyboardKey(parameters)
                 keyboardButton.setClickType(doOnce)
+
                 keyboardButton.letter = controlButtons[i]
                 keyboardButton.setKeyLetterToDisplay(keyboardButton.letter)
                 keyboardButton.setFontSize(this.object.width/30)
@@ -189,7 +117,7 @@ export default class Keyboard extends Mirror{
         let newChar = undefined
         // first 4 items of this.rowsOfKeys are the row containers.
             // skip.
-        for (let i = 4; i < this.rowsOfKeys.length; i++){
+        for (let i = 0; i < this.rowsOfKeys.length; i++){
             if(this.rowsOfKeys[i].testForClick()){
                 newChar = this.rowsOfKeys[i].pressKey();
             }

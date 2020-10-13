@@ -1,9 +1,9 @@
-import TextBox from '../uiClasses/TextBoxContainer'
+import TextBox from '../uiClasses/TextBox'
 import Container from '../uiClasses/Container'
 import Mirror from '../uiClasses/Mirror'
 
 
-export default class TextInput extends Mirror{
+export default class TextInput extends TextBox{
     constructor(parameterObject){
         super(parameterObject)
         this.text = "I drew a ..."
@@ -16,7 +16,7 @@ export default class TextInput extends Mirror{
                 this.text = parameterObject.wildcard.text
             }
         }
-        this.displayText = new TextBox({p:this.p,w:this.windowWidth,h:this.windowHeight,row:true,parent:this,wildcard:{text:this.text}})
+        // this.displayText = new TextBox({p:this.p,w:this.windowWidth,h:this.windowHeight,row:true,parent:this,wildcard:{text:this.text}})
         this.setTimeoutVariable = undefined
         // dummy object
         this.referenceToMobileKeyboard = new Container({p:this.p,w:this.windowWidth,h:this.windowHeight,width:0,height:0});
@@ -39,7 +39,6 @@ export default class TextInput extends Mirror{
         } else {
             scope.text = scope.text.replace("|","")
         }
-        scope.displayText.setString(scope.text)
         scope.setTimeoutVariable = setTimeout(function(){scope.toggleShowCursor(scope)},800)
     }
     handleTyping(keyCode){
@@ -54,20 +53,13 @@ export default class TextInput extends Mirror{
         } else if (BACKSPACE) {
             this.text = this.text.replace("|","")
             this.text = this.text.substring(0, this.text.length - 1);
-            this.displayText.setString(this.text)
         } else if (SPACE) {
             this.text = this.text.replace("|","") + " "
-            this.displayText.setString(this.text)
         } else if (keyCode>=65 &&keyCode<=90) {
             if (this.text.length < 100){
                 let newChar = String.fromCharCode(keyCode);
                 this.text = this.text.replace("|","") + newChar.toLowerCase()
-                this.displayText.setString(this.text)
             }
         }
-    }
-    draw() {
-        super.draw()
-        this.displayText.draw();
     }
 }

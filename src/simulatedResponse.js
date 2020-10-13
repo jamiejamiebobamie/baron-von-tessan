@@ -544,7 +544,7 @@ const response = {
            {x: 0.16883852342879446, y: -0.17374776386404298},
            {x: 0.16883852342879446, y: -0.17374776386404298}],
           descriptionData:
-            "Test 1. Hey hey heyh heyheyehyeh"
+            "a gorilla laughing "// add a space after submitted description on backend-sode to get correct output due to recursive draw function.
         },
         { drawingData:
             [
@@ -1091,7 +1091,7 @@ const response = {
            {x: 0.16883852342879446, y: -0.17374776386404298}
            ],
           descriptionData:
-            "Test 2. Hey hey heyh heyheyehyeh"
+            "nuns who kiss "// add a space after description to get correct output
         },
         { drawingData:
             [
@@ -1638,7 +1638,7 @@ const response = {
            {x: 0.16883852342879446, y: -0.17374776386404298}
            ],
           descriptionData:
-            "Test 3. Lol olwhwwd das,sa,s"
+            "bad words "// add a space after description to get correct output
         },
         { drawingData:
             [
@@ -2185,7 +2185,7 @@ const response = {
            {x: 0.16883852342879446, y: -0.17374776386404298}
            ],
           descriptionData:
-            "Test 4. Hey hey heyh heyheyehyeh"
+            "a firm handshake "// add a space after description to get correct output
         },
         { drawingData:
             [
@@ -2732,7 +2732,7 @@ const response = {
            {x: 0.16883852342879446, y: -0.17374776386404298}
            ],
           descriptionData:
-            "Test 5. Lol olwhwwd das,sa,s"
+            "that one guy "// add a space after description to get correct output
         },
     ],
     hashCode: "123fsdGH1290"
