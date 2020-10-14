@@ -2,7 +2,7 @@ import Wireframe from '../../uiClasses/Wireframe';
 import Mirror from '../../uiClasses/Mirror';
 import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer';
 import TextBox from '../../uiClasses/TextBox'
-import baronData from '../../baronDrawingData'
+import baronData from '../../baronDrawingDataReduced'
 
 export default class testView {
     constructor(previousView){
@@ -29,7 +29,7 @@ export default class testView {
         }
     }
     getUI(){return this}
-    setUI(p,w,h,REACT_APP,windowResized,previousUI){
+    setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
         let wireFrameElements = []
         let _ui = []
 
@@ -183,7 +183,7 @@ export default class testView {
                         clearTimeout(timeOutVar)
                     } else {
                         clearTimeout(timeOutVar)
-                        REACT_APP.testViewSwitch();
+                        changeView();
                         return;
                     }
                 }

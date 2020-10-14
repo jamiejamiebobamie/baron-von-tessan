@@ -15,7 +15,7 @@ export default class testView {
         this.keyBoard = undefined;
     }
     getUI(previousUI){return this}
-    setUI(p,w,h,REACT_APP,windowResized,previousUI){
+    setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
         let wireFrameElements = []
         let _ui = []
         let wildcard;
@@ -294,8 +294,8 @@ export default class testView {
             }
         }
         let returnToPreviousView = () => {
-            let currentViewIndex = REACT_APP.state.viewIndex
-            REACT_APP.testViewSwitch(currentViewIndex-1)
+            // let currentViewIndex = REACT_APP.state.viewIndex
+            changeView()
         }
         wildcard = {fontSize:backButton.width/10}
         parameters = {p:p,objectToMirror:backButton,x:x,y:y,width:width,height:height,mouseClickfunc:returnToPreviousView,wildcard:wildcard}
@@ -323,7 +323,7 @@ export default class testView {
         let submitDescription = () => {
             let drawingDescription = this.input.text;
             REACT_APP.handleSubmitDescription(drawingDescription)
-            REACT_APP.testViewSwitch()
+            changeView();
         }
         wildcard = {fontSize:backButton.width/10}
         parameters = {p:p,objectToMirror:submitButton,x:x,y:y,width:width,height:height,mouseClickfunc:submitDescription,wildcard:wildcard}

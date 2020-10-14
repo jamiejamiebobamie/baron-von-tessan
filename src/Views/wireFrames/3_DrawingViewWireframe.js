@@ -15,51 +15,59 @@ export default class testView {
         this.clearStrokes = this.clearStrokes.bind(this)
         this.removeStroke = this.removeStroke.bind(this)
     }
+    // button click functions ------
+        // needs to be fixed so that functions cannot be activated accdientally
+        // while the user is drawing a stroke
+        // needs to work with the eraser...
     toggleTool(buttonObject){
-        this.drawing.penMode = !this.drawing.penMode;
-        let buttonString = this.drawing.penMode ? "ERASER" : "PEN";
-        buttonObject.setString(buttonString);
-        this.drawing.mouseClickfunc = this.drawing.penMode ? this.buildStroke : this.removeStroke;
+        // if (this.drawing.currentStroke.length === 0){
+                this.drawing.penMode = !this.drawing.penMode;
+                let buttonString = this.drawing.penMode ? "ERASER" : "PEN";
+                buttonObject.setString(buttonString);
+                this.drawing.mouseClickfunc = this.drawing.penMode ? this.buildStroke : this.removeStroke;
     }
-    buildStroke(){
-        if (this.drawing !== undefined){
-            if (this.drawing.strokes){
-        this.drawing.currentStroke.push({x:(this.drawing.p.mouseX-this.drawing.x)/this.drawing.lengthOfDrawingSquare,y:(this.drawing.p.mouseY-this.drawing.y)/this.drawing.lengthOfDrawingSquare})
-    }
-}
-}
     undoLastStroke(){
         if (this.drawing){
-            if (this.drawing.strokes){
-        this.drawing.strokes.pop()
-    }
-}
-}
-    clearStrokes(){
-        if (this.drawing){
-            if (this.drawing.strokes){
-        this.drawing.strokes = []
-    }
-}
-}
-    removeStroke(){
-        if (this.drawing){
-            if (this.drawing.strokes){
-        for (let i = 0; i < this.drawing.strokes.length; i++ ){
-            for (let j = 0; j < this.drawing.strokes[i].length; j++ ){
-                if ( this.drawing.p.mouseX > this.drawing.x+this.drawing.strokes[i][j].x*this.drawing.lengthOfDrawingSquare-this.drawing.lengthOfDrawingSquare*.01
-                    && this.drawing.p.mouseX < this.drawing.x+this.drawing.strokes[i][j].x*this.drawing.lengthOfDrawingSquare+this.drawing.lengthOfDrawingSquare*.01
-                    && this.drawing.p.mouseY > this.drawing.y+this.drawing.strokes[i][j].y*this.drawing.lengthOfDrawingSquare-this.drawing.lengthOfDrawingSquare*.01
-                    && this.drawing.p.mouseY < this.drawing.y+this.drawing.strokes[i][j].y*this.drawing.lengthOfDrawingSquare+this.drawing.lengthOfDrawingSquare*.01 ){
-                        this.drawing.strokes[i].splice(j,1)
-                    }
+            if (this.drawing.strokes){// && !this.drawing.userIsDrawingOrErasing){
+                this.drawing.strokes.pop()
             }
         }
     }
-}
+    clearStrokes(){
+        if (this.drawing){
+            if (this.drawing.strokes){// && !this.drawing.userIsDrawingOrErasing){
+                this.drawing.strokes = []
+            }
+        }
+    }
+    // --------
+
+    // this.drawing click functions
+    buildStroke(){
+        if (this.drawing !== undefined){
+            if (this.drawing.strokes){
+                this.drawing.currentStroke.push({x:(this.drawing.p.mouseX-this.drawing.x)/this.drawing.lengthOfDrawingSquare,y:(this.drawing.p.mouseY-this.drawing.y)/this.drawing.lengthOfDrawingSquare})
+            }
+        }
+    }
+    removeStroke(){
+        if (this.drawing){
+            if (this.drawing.strokes){
+                for (let i = 0; i < this.drawing.strokes.length; i++ ){
+                    for (let j = 0; j < this.drawing.strokes[i].length; j++ ){
+                        if ( this.drawing.p.mouseX > this.drawing.x+this.drawing.strokes[i][j].x*this.drawing.lengthOfDrawingSquare-this.drawing.lengthOfDrawingSquare*.01
+                            && this.drawing.p.mouseX < this.drawing.x+this.drawing.strokes[i][j].x*this.drawing.lengthOfDrawingSquare+this.drawing.lengthOfDrawingSquare*.01
+                            && this.drawing.p.mouseY > this.drawing.y+this.drawing.strokes[i][j].y*this.drawing.lengthOfDrawingSquare-this.drawing.lengthOfDrawingSquare*.01
+                            && this.drawing.p.mouseY < this.drawing.y+this.drawing.strokes[i][j].y*this.drawing.lengthOfDrawingSquare+this.drawing.lengthOfDrawingSquare*.01 ){
+                                this.drawing.strokes[i].splice(j,1)
+                        }
+                    }
+                }
+            }
+        }
     }
     getUI(previousUI){return this}
-    setUI(p,w,h,REACT_APP,windowResized,previousUI){
+    setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
         let _ui = []
         // let offsetX = w>h ? w*(-1/10) : 0;
         // let offsetY = w>h ? 0 :  -h/10 ;
@@ -184,7 +192,7 @@ export default class testView {
                                color:"pink",
                                wildcard:wildcard,
                                parent:controlsArea,
-                              mouseClickfunc: REACT_APP.testViewSwitch
+                              // mouseClickfunc: REACT_APP.testViewSwitch
                          }
             let button = new Wireframe(parameters)
             buttons.push(button)
@@ -200,7 +208,7 @@ export default class testView {
                            color:"pink",
                            wildcard:wildcard,
                            parent:controlsArea,
-                          mouseClickfunc: REACT_APP.testViewSwitch
+                          // mouseClickfunc: REACT_APP.testViewSwitch
                      }
         let button = new Wireframe(parameters)
         buttons.push(button)
@@ -289,16 +297,34 @@ export default class testView {
         this.buttons[2].mouseClickfunc = this.clearStrokes;
         // SUBMIT
         let submitFunc = () => {
-            let submittedStrokes = [];
+            // flattens the 2d array of strokes
+                // into a 1d array of vertices
+
+            // removes repeated vertices.
+            // (leaving in repeated strokes does add the element of time to
+                // each drawing as slower-drawn strokes
+                // have more repeated vertices.)
             if (this.drawing){
                 if (this.drawing.strokes){
+                    let drawingData = [];
+                    let vertexX = undefined;
+                    let vertexY = undefined;
+                    let vertexString = undefined
+                    let mySet = new Set()
                     for (let i = 0; i<this.drawing.strokes.length; i++) {
                         for (let j = 0; j<this.drawing.strokes[i].length; j++) {
-                            submittedStrokes.push(this.drawing.strokes[i][j])
+                            vertexX = this.drawing.strokes[i][j].x.toString()
+                            vertexY = this.drawing.strokes[i][j].y.toString()
+                            vertexString = vertexX + vertexY
+                            if (!mySet.has(vertexString)){
+                                mySet.add(vertexString)
+                                drawingData.push(this.drawing.strokes[i][j])
+                            }
                         }
                     }
-                    REACT_APP.handleSubmitDrawing(submittedStrokes)
-                    REACT_APP.testViewSwitch()
+                    REACT_APP.handleSubmitDrawing(drawingData)
+                    console.log(changeView)
+                    changeView()
                 }
             }
         }

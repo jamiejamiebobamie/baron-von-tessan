@@ -6,9 +6,9 @@ export default class DrawingContainer extends Mirror{
         super(parameterObject)
         this.currentStroke = []
         this.strokes = [];
-        // false for eraserMode
-        this.penMode = true;
+        this.penMode = true; // false for eraserMode
         this.lengthOfDrawingSquare = 0;
+        this.userIsDrawingOrErasing = false;
     }
     setLengthOfDrawingSquare(length){
         this.lengthOfDrawingSquare = length
@@ -21,6 +21,15 @@ export default class DrawingContainer extends Mirror{
     }
     setClick(bool){
         let mouseClickReleased = !bool
+        // increase the framerate to 70 to capture user strokes better
+            // and decrease it back to 24 when user is not drawing.
+        if (mouseClickReleased){
+            this.p.frameRate(24);
+        } else {
+            this.p.frameRate(70);
+        }
+        this.userIsDrawingOrErasing = !mouseClickReleased;
+
         let userJustDrewAStroke = this.currentStroke !== undefined ? this.currentStroke.length && mouseClickReleased : false;
         if (userJustDrewAStroke) {
             this.addCurrentStrokeToStrokesArray()

@@ -11,11 +11,10 @@ export default class Sketch {
     constructor(app){
         this.REACT_APP = app;
         this.views= [];
-        this.viewIndex = app.state.viewIndex;
         let view;
+
         view = new Menu();
         this.views.push(view);
-
         view = new IntroViewWireframe();
         this.views.push(view);
         view = new SlideshowViewWireframe(view);
@@ -30,13 +29,47 @@ export default class Sketch {
         this.views.push(view);
 
         // p5.js media references
-
-        // this.img = undefined;
         this.font = undefined
+
+        this.currentViewIndex = 0;
+        this.desiredViewIndex = 0;
+        this.lengthOfViews = this.views.length
+        // 'this' binding is necessary here.
+        this.changeView = this.changeView.bind(this);
+    }
+
+    // lengthOfViews parameter allows early exit from site if user chooses to
+        // only draw or only view other people's drawings.
+    changeView(desiredViewIndex,lengthOfViews){
+        if (lengthOfViews !== undefined){
+            this.lengthOfViews = lengthOfViews;
+        }
+        if (desiredViewIndex===undefined){
+            if (this.currentViewIndex === this.lengthOfViews){
+                this.desiredViewIndex = 0
+                this.lengthOfViews = this.views.length;
+            } else {
+                this.desiredViewIndex += 1
+            }
+        } else {
+            // if the desiredViewIndex is negative,
+                // go backwards that number of views.
+            // if the number of views to go backwards ends up passing the
+                // first view, set the view index to 0.
+            if (desiredViewIndex<0){
+                if (this.currentViewIndex - desiredViewIndex < 0){
+                    this.desiredViewIndex = 0
+                    this.lengthOfViews = this.views.length;
+                } else {
+                    this.desiredViewIndex -= desiredViewIndex
+                }
+            }
+            this.desiredViewIndex = desiredViewIndex
+        }
     }
 
     sketch = (p) => {
-        // GLOBAL VARIABLES:
+        // desired length and width of canvas
         let w, h;
         // ui objects to be drawn to the canvas.
         let _ui = []
@@ -44,10 +77,8 @@ export default class Sketch {
         let mouseIsClicked = false;
         // reference to React App's 'this' variable.
         const REACT_APP = this.REACT_APP;
-        REACT_APP.setNumberOfViews(this.views.length)
         p.preload = () => {
             this.font = p.loadFont('fonts/PrintClearly.otf');
-            // this.img = p.loadImage('images/inspiration.jpg');
          }
         p.setup = () => {
             w = p.windowWidth - (p.windowWidth/10)
@@ -57,23 +88,20 @@ export default class Sketch {
             p.textAlign(p.CENTER,p.CENTER);
             p.textFont(this.font);
             p.rectMode(p.CENTER,p.CENTER);
-            let windowResized = false;
-            _ui = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP,windowResized,undefined)
+            let windowResized = true;
+            let previousUI = undefined
+            _ui = this.views[this.currentViewIndex].setUI(p,w,h,REACT_APP,windowResized,previousUI,this.changeView)
         }
         p.windowResized = () => {
             w = p.windowWidth - (p.windowWidth/10)
             h = p.windowHeight - (p.windowHeight/10)
             p.resizeCanvas(w,h);
             let windowResized = true;
-            let previousUI = this.views[REACT_APP.state.viewIndex].getUI()
-            _ui  = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP,windowResized,previousUI)
+            let previousUI = this.views[this.currentViewIndex].getUI()
+            _ui  = this.views[this.currentViewIndex].setUI(p,w,h,REACT_APP,windowResized,previousUI,this.changeView)
         }
         p.mouseReleased = () => {
             if (mouseIsClicked){
-                // for the drawing method. needs to moved to
-                    // the drawingContainer class.
-                p.frameRate(24);
-
                 mouseIsClicked = false;
                 for (let i = 0; i < _ui.length; i++){
                     _ui[i].setClick(mouseIsClicked);
@@ -82,10 +110,6 @@ export default class Sketch {
         }
         p.mousePressed = () => {
             if (!mouseIsClicked){
-                // for the drawing method. needs to moved to
-                    // the drawingContainer class.
-                p.frameRate(70);
-
                 mouseIsClicked = true;
                 for (let i = 0; i < _ui.length; i++){
                     _ui[i].setClick(mouseIsClicked);
@@ -100,13 +124,11 @@ export default class Sketch {
             }
         }
         p.draw = () => {
-            // temporary setup that works, but is not ideal.
-                // the React App doesn't need to know about the views.
-            if (this.viewIndex !== REACT_APP.state.viewIndex){
-                let previousView = this.views[this.viewIndex].getUI()
+            if (this.currentViewIndex !== this.desiredViewIndex){
+                let previousView = this.views[this.currentViewIndex].getUI()
                 let windowResized = false
-                _ui  = this.views[REACT_APP.state.viewIndex].setUI(p,w,h,REACT_APP,windowResized,previousView)
-                this.viewIndex = REACT_APP.state.viewIndex
+                _ui  = this.views[this.desiredViewIndex].setUI(p,w,h,REACT_APP,windowResized,previousView,this.changeView)
+                this.currentViewIndex = this.desiredViewIndex
             }
             p.background(255)
             for (let i = 0; i < _ui.length; i++){

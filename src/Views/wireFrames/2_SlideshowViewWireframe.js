@@ -27,7 +27,7 @@ export default class testView {
         }
     }
     getUI(previousUI){return this}
-    setUI(p,w,h,REACT_APP,windowResized,previousUI){
+    setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
         let _ui = []
 
         let drawingSpaceWidth = w > h ? w*(2/3) : w;
@@ -103,7 +103,7 @@ export default class testView {
                             this.responseIndex += 1
                             this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
                         } else {
-                            REACT_APP.testViewSwitch();
+                            changeView();
                             return;
                         }
                     }

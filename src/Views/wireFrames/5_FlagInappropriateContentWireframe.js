@@ -29,7 +29,7 @@ export default class FlagInappropriateContentWireframe {
         }
     }
     getUI(previousUI){return this}
-    setUI(p,w,h,REACT_APP,windowResized,previousUI){
+    setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
         let wireFrameElements = []
         let _ui = []
 
@@ -172,7 +172,7 @@ export default class FlagInappropriateContentWireframe {
 
         let submitFunc = () => {
             REACT_APP.handleSubmitFlaggedIndices(this.flaggedIndices)
-            REACT_APP.testViewSwitch()
+            changeView();
         }
         parameters = {p:p,objectToMirror:submitButtonArea,x:x,y:y,width:width,height:height,mouseClickfunc:submitFunc,wildcard:{fontSize:submitButtonArea.width/13}}
         this.submitButton = new TextBox(parameters)

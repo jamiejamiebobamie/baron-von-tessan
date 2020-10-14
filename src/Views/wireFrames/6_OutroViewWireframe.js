@@ -2,7 +2,7 @@ import Wireframe from '../../uiClasses/Wireframe';
 import Mirror from '../../uiClasses/Mirror';
 import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer';
 import TextBox from '../../uiClasses/TextBox'
-import baronData from '../../baronDrawingData'
+import baronData from '../../baronDrawingDataReduced'
 
 export default class testView {
     constructor(previousView){
@@ -29,7 +29,7 @@ export default class testView {
         }
     }
     getUI(){return this}
-    setUI(p,w,h,REACT_APP,windowResized,previousUI){
+    setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
         let wireFrameElements = []
         let _ui = []
 
@@ -182,12 +182,12 @@ export default class testView {
                 } else {
                     clearTimeout(timeOutVar)
                     // want to do a fade out or fade to grey and return to
-                    REACT_APP.testViewSwitch();                    
+                    changeView();
                     return
                     // pause three seconds to display drawing.
                         // then loop if this.displayDrawingSpace.loop
                         // is set to true otherwise return.
-                    timeOutVar = setTimeout(redrawStrokes, 7000,timeOutVar);
+                    // timeOutVar = setTimeout(redrawStrokes, 7000,timeOutVar);
                 }
             }
             redrawStrokes();

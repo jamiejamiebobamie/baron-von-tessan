@@ -15,21 +15,16 @@ class App extends Component {
             response:response.data,
             isMobile: isMobile,
             flaggedIndices:[],
-
-            // temporary
-            viewIndex:0,
-            lengthOfViews:5,
         }
         this.myRef = React.createRef()
         this.SketchWrapper = new Sketch(this)
         this.Sketch = this.SketchWrapper.sketch;
-
-        // callbacks
-        this.handleSubmitDrawing = this.handleSubmitDrawing.bind(this);
-        this.handleSubmitDescription = this.handleSubmitDescription.bind(this);
-        this.setNumberOfViews = this.setNumberOfViews.bind(this);
-        this.testViewSwitch = this.testViewSwitch.bind(this);
+        // callbacks -- binding 'this' isn't necessary...
+        // this.handleSubmitDrawing = this.handleSubmitDrawing.bind(this);
+        // this.handleSubmitDescription = this.handleSubmitDescription.bind(this);
+        // this.handleSubmitFlaggedIndices = this.handleSubmitFlaggedIndices.bind(this);
     }
+
     handleSubmitDrawing(drawingData) {
         this.setState({drawingData:drawingData})
     }
@@ -38,32 +33,12 @@ class App extends Component {
     }
     handleSubmitFlaggedIndices(flaggedIndices){
         this.setState({flaggedIndices:flaggedIndices})
+        console.log(this.state)
     }
+
     componentDidMount() {
         this.myP5 = new p5(this.Sketch, this.myRef.current)
     }
-
-    // ----
-        // temporary
-    setNumberOfViews(number){
-        this.setState({lengthOfViews:number})
-    }
-        // temporary
-    testViewSwitch(viewIndexToSwitchTo){
-        if (viewIndexToSwitchTo===undefined){
-            let viewIndex;
-            if (this.state.viewIndex === this.state.lengthOfViews-1){
-                viewIndex = 0
-                this.setState({viewIndex:viewIndex})
-            } else {
-                viewIndex = this.state.viewIndex+1
-                this.setState({viewIndex:viewIndex})
-            }
-        } else {
-            this.setState({viewIndex:viewIndexToSwitchTo})
-        }
-    }
-    // ----
 
     render(){
         return (
