@@ -33,7 +33,6 @@ export default class testView {
         let wireFrameElements = []
         let _ui = []
 
-
         let wildcard;
         let parameters;
         let wireFrame

@@ -13,12 +13,12 @@ export default class Sketch {
         this.views= [];
         let view;
 
-        // view = new Menu();
-        // this.views.push(view);
-        // view = new IntroViewWireframe();
-        // this.views.push(view);
-        // view = new SlideshowViewWireframe(view);
-        // this.views.push(view);
+        view = new Menu();
+        this.views.push(view);
+        view = new IntroViewWireframe();
+        this.views.push(view);
+        view = new SlideshowViewWireframe(view);
+        this.views.push(view);
         view = new DrawingViewWireframe();
         this.views.push(view);
         view = new EnterDescriptionViewWireframe();
@@ -126,14 +126,14 @@ export default class Sketch {
             }
         }
         p.draw = () => {
+            p.background(255)
             if (this.currentViewIndex !== this.desiredViewIndex){
                 let previousView = this.views[this.currentViewIndex].getUI()
                 let windowResized = false
                 _ui  = this.views[this.desiredViewIndex].setUI(p,w,h,REACT_APP,windowResized,previousView,this.changeView)
                 this.currentViewIndex = this.desiredViewIndex
-                console.log(REACT_APP.state)
+                // console.log(REACT_APP.state)
             }
-            p.background(255)
             for (let i = 0; i < _ui.length; i++){
                 _ui[i].draw();
             }
