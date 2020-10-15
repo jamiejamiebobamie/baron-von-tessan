@@ -13,12 +13,12 @@ export default class Sketch {
         this.views= [];
         let view;
 
-        view = new Menu();
-        this.views.push(view);
-        view = new IntroViewWireframe();
-        this.views.push(view);
-        view = new SlideshowViewWireframe(view);
-        this.views.push(view);
+        // view = new Menu();
+        // this.views.push(view);
+        // view = new IntroViewWireframe();
+        // this.views.push(view);
+        // view = new SlideshowViewWireframe(view);
+        // this.views.push(view);
         view = new DrawingViewWireframe();
         this.views.push(view);
         view = new EnterDescriptionViewWireframe();
@@ -32,7 +32,7 @@ export default class Sketch {
         this.font = undefined
 
         this.currentViewIndex = 0;
-        this.desiredViewIndex = 0;
+        this.desiredViewIndex = this.currentViewIndex;
         this.lengthOfViews = this.views.length
         // 'this' binding is necessary here.
         this.changeView = this.changeView.bind(this);
@@ -45,7 +45,7 @@ export default class Sketch {
             this.lengthOfViews = lengthOfViews;
         }
         if (desiredViewIndex===undefined){
-            if (this.currentViewIndex === this.lengthOfViews){
+            if (this.currentViewIndex === this.lengthOfViews-1){
                 this.desiredViewIndex = 0
                 this.lengthOfViews = this.views.length;
             } else {
@@ -83,6 +83,8 @@ export default class Sketch {
         p.setup = () => {
             w = p.windowWidth - (p.windowWidth/10)
             h = p.windowHeight - (p.windowHeight/10)
+            // necessary despite never being used anywhere else.
+                // p5 won't display anything without a canvas.
             let canvas = p.createCanvas(w,h);
             p.frameRate(24);
             p.textAlign(p.CENTER,p.CENTER);
@@ -129,6 +131,7 @@ export default class Sketch {
                 let windowResized = false
                 _ui  = this.views[this.desiredViewIndex].setUI(p,w,h,REACT_APP,windowResized,previousView,this.changeView)
                 this.currentViewIndex = this.desiredViewIndex
+                console.log(REACT_APP.state)
             }
             p.background(255)
             for (let i = 0; i < _ui.length; i++){

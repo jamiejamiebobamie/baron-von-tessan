@@ -131,11 +131,13 @@ export default class testView {
                 height = previousUI.dialog.height;
             }
         }
-        parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height}//color:"pink"}
+        let fontSize = w>h ? dialog.width/20 : dialog.width/15 ;
+
+        wildcard = {fontSize:fontSize,numberOfLines:4}
+        parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height,wildcard:wildcard}
         this.dialog = new TextBox(parameters)
         this.dialog.setFill(true)
-        let fontSize = w>h ? dialog.width/20 : dialog.width/10 ;
-        this.dialog.setFontSize(fontSize)
+        // this.dialog.setFontSize(fontSize)
 
         _ui.push(this.dialog)
 
@@ -146,6 +148,11 @@ export default class testView {
             if (previousUI.baronDialogIndex){
                 this.baronDialogIndex = previousUI.baronDialogIndex
             }
+        }
+
+        if (this.baronDialogIndex>=this.dialogText.length){
+            let allOfDialog = this.dialogText
+            this.dialog.setString(allOfDialog)
         }
 
         let drawingHasBeenDrawn = false

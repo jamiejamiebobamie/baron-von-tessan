@@ -297,7 +297,7 @@ export default class testView {
             // let currentViewIndex = REACT_APP.state.viewIndex
             changeView()
         }
-        wildcard = {fontSize:backButton.width/10}
+        wildcard = {fontSize:backButton.width/10,numberOfLines:.8}
         parameters = {p:p,objectToMirror:backButton,x:x,y:y,width:width,height:height,mouseClickfunc:returnToPreviousView,wildcard:wildcard}
         this.backButton = new TextBox(parameters)
         this.backButton.setInteractivity(true);
@@ -325,7 +325,7 @@ export default class testView {
             REACT_APP.handleSubmitDescription(drawingDescription)
             changeView();
         }
-        wildcard = {fontSize:backButton.width/10}
+        // wildcard = {fontSize:backButton.width/10}
         parameters = {p:p,objectToMirror:submitButton,x:x,y:y,width:width,height:height,mouseClickfunc:submitDescription,wildcard:wildcard}
         this.submitButton = new TextBox(parameters)
         this.submitButton.setInteractivity(true);
@@ -346,11 +346,11 @@ export default class testView {
                 textInput = previousUI.input.text;
             }
         }
-        wildcard = {fontSize:input.width/20, REACT_APP:REACT_APP,text:textInput}
+        wildcard = {fontSize:input.width/20, REACT_APP:REACT_APP,numberOfLines:1}
         parameters = {p:p,objectToMirror:input,x:x,y:y,width:width,height:height,wildcard:wildcard}
         this.input = new TextInput(parameters)
         this.input.setStroke(true)
-        this.input.text = textInput
+        this.input.setString(textInput)
         _ui.push(this.input)
 
 

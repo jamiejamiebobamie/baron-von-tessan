@@ -207,7 +207,6 @@ export default class FlagInappropriateContentWireframe {
         let beginRedrawingStrokes = (drawingSpace) => {
             // drawingSpace.setSubmittedStrokeIndex(0)
             let redrawStrokes = () => {
-                console.log('hey')
                 if (drawingSpace.drawingHasBeenDrawn){
                     if (drawingSpace.loop){
                         drawingSpace.drawingHasBeenDrawn = false;

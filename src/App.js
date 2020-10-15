@@ -33,7 +33,6 @@ class App extends Component {
     }
     handleSubmitFlaggedIndices(flaggedIndices){
         this.setState({flaggedIndices:flaggedIndices})
-        console.log(this.state)
     }
 
     componentDidMount() {

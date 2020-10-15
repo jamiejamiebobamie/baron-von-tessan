@@ -269,7 +269,7 @@ export default class testView {
                 let buttonString = this.drawing.penMode ? "ERASER" : "PEN";
             }
             let fontSize = w>h ? button.width / 10 :  button.width / 20
-            wildcard = {fontSize:fontSize}
+            wildcard = {fontSize:fontSize, numberOfLines:.8}
             parameters = {p:p,objectToMirror:submitButtonMirror,x:x,y:y,row:true,width:width,height:height, wildcard:wildcard}
             this.buttons[i] = new TextBox(parameters)
             this.buttons[i].setInteractivity(true);

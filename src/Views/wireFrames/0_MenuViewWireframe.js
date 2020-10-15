@@ -27,7 +27,7 @@ export default class testView {
 
                 if (i === 1){
                     // 1: Enter Site
-                    testClass.mouseClickfunc = changeView()
+                    testClass.mouseClickfunc = changeView
                 } else if (i === 2){
                     // 2: I just want to draw!
                     testClass.mouseClickfunc = () => {changeView(3,4)} // need to pass in a variable to the views to signal early exit
