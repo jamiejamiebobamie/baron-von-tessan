@@ -90,7 +90,7 @@ export default class Sketch {
             p.textAlign(p.CENTER,p.CENTER);
             p.textFont(this.font);
             p.rectMode(p.CENTER,p.CENTER);
-            let windowResized = true;
+            let windowResized = false;
             let previousUI = undefined
             _ui = this.views[this.currentViewIndex].setUI(p,w,h,REACT_APP,windowResized,previousUI,this.changeView)
         }

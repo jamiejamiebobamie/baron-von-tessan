@@ -218,6 +218,9 @@ export default class testView {
 //// START OF DRAWN UI ELEMENTS
 
         let x,y,width,height,drawingMode,currentStroke,strokes;
+        drawingMode = true;
+        currentStroke = [];
+        strokes = [];
         if (previousUI !== undefined){
             if (previousUI.drawing){
                 x = previousUI.drawing.x;
@@ -227,19 +230,12 @@ export default class testView {
                 drawingMode = previousUI.drawing.drawingMode ? previousUI.drawing.drawingMode : true;
                 currentStroke = previousUI.drawing.currentStroke ? previousUI.drawing.currentStroke : [];
                 strokes = previousUI.drawing.strokes ? previousUI.drawing.strokes : [];
+                console.log('yo')
             }
-        } else {
-            drawingMode = true;
-            currentStroke = [];
-            strokes = [];
         }
-
-        // if (REACT_APP.state.drawingData.length !== 0){
-        //     strokes = REACT_APP.state.drawingData
-        // }
-
         parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height,p:p,w:w,h:h,color:'lightgrey'}
         this.drawing = new DrawingContainer(parameters)
+        console.log(this.drawing)
         this.drawing.setCurrentStroke(currentStroke);
         this.drawing.setStrokes(strokes);
         this.drawing.setFill(true)
@@ -248,9 +244,7 @@ export default class testView {
         this.drawing.setClickType(performClickOnce)
         this.drawing.penMode = drawingMode
         this.drawing.mouseClickfunc = this.drawing.penMode ? this.buildStroke : this.removeStroke;
-        // console.log(this.drawing.strokes)
         _ui.push(this.drawing)
-
         for (let i = 0; i<4;i++){
             if (previousUI){
                 if (previousUI.buttons){

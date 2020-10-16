@@ -56,6 +56,9 @@ export default class Container extends UIElement{
     setFill(bool){
         this.hasFill = bool
     }
+    setColor(color){
+        this.color= color;
+    }
     setClick(bool){
         this.clicked = bool;
         if (!this.clicked){
