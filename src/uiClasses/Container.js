@@ -72,7 +72,7 @@ export default class Container extends UIElement{
         this.isInteractive = bool;
     }
     enlargeButton(){
-        if (this.isInteractive){
+        if (this.isInteractive && this.screenHasSettled){
             if (this.width < this.mouseOverWidthSize){
                 this.width = this.p.lerp(this.width, this.mouseOverWidthSize+this.scaleAmount, 0.05);
             if (this.height < this.mouseOverHeightSize)
@@ -81,7 +81,7 @@ export default class Container extends UIElement{
         }
     }
     shrinkButton(shrinkSpeed){
-        if (this.isInteractive){
+        if (this.isInteractive && this.screenHasSettled){
             if (this.width > this.mouseOverWidthSize){
                 this.width = this.p.lerp(this.width, this.mouseOverWidthSize, shrinkSpeed);
             if (this.height > this.mouseOverHeightSize)

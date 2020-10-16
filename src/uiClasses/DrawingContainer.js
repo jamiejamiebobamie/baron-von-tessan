@@ -28,7 +28,7 @@ export default class DrawingContainer extends Mirror{
         } else {
             this.p.frameRate(70);
         }
-        this.userIsDrawingOrErasing = !mouseClickReleased;
+        this.userIsDrawingOrErasing = !mouseClickReleased && this.testForClick();
 
         let userJustDrewAStroke = this.currentStroke !== undefined ? this.currentStroke.length && mouseClickReleased : false;
         if (userJustDrewAStroke) {

@@ -1,5 +1,4 @@
 import Wireframe from '../../uiClasses/Wireframe';
-import Mirror from '../../uiClasses/Mirror';
 import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer';
 import TextBox from '../../uiClasses/TextBox'
 import baronData from '../../baronDrawingDataReduced'
@@ -7,7 +6,6 @@ import baronData from '../../baronDrawingDataReduced'
 export default class testView {
     constructor(previousView){
         this.drawing = previousView ? previousView.drawing : undefined;
-
         this.dialog = previousView ? previousView.dialog : undefined;
         this.baronDialogIndex = 0
         this.timeOutVar = undefined

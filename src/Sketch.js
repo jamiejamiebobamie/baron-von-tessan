@@ -12,7 +12,6 @@ export default class Sketch {
         this.REACT_APP = app;
         this.views= [];
         let view;
-
         view = new Menu();
         this.views.push(view);
         view = new IntroViewWireframe();
@@ -57,14 +56,33 @@ export default class Sketch {
             // if the number of views to go backwards ends up passing the
                 // first view, set the view index to 0.
             if (desiredViewIndex<0){
-                if (this.currentViewIndex - desiredViewIndex < 0){
+                if (this.currentViewIndex + desiredViewIndex < 0){
                     this.desiredViewIndex = 0
                     this.lengthOfViews = this.views.length;
                 } else {
-                    this.desiredViewIndex -= desiredViewIndex
+                    this.desiredViewIndex = this.currentViewIndex + desiredViewIndex
                 }
+            } else {
+                this.desiredViewIndex = desiredViewIndex
             }
-            this.desiredViewIndex = desiredViewIndex
+        }
+        if (this.desiredViewIndex===0){
+            this.views= [];
+            let view;
+            view = new Menu();
+            this.views.push(view);
+            view = new IntroViewWireframe();
+            this.views.push(view);
+            view = new SlideshowViewWireframe(view);
+            this.views.push(view);
+            view = new DrawingViewWireframe();
+            this.views.push(view);
+            view = new EnterDescriptionViewWireframe();
+            this.views.push(view);
+            view = new FlagInappropriateContentWireframe();
+            this.views.push(view);
+            view = new OutroViewWireframe();
+            this.views.push(view);
         }
     }
 

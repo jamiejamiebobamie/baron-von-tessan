@@ -34,11 +34,9 @@ class App extends Component {
     handleSubmitFlaggedIndices(flaggedIndices){
         this.setState({flaggedIndices:flaggedIndices})
     }
-
     componentDidMount() {
         this.myP5 = new p5(this.Sketch, this.myRef.current)
     }
-
     render(){
         return (
           <div className="App">

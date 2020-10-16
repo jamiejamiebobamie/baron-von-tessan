@@ -1,5 +1,4 @@
 import Wireframe from '../../uiClasses/Wireframe';
-import Mirror from '../../uiClasses/Mirror';
 import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer';
 import TextInput from '../../uiClasses/TextInput'
 import TextBox from '../../uiClasses/TextBox'
@@ -295,7 +294,7 @@ export default class testView {
         }
         let returnToPreviousView = () => {
             // let currentViewIndex = REACT_APP.state.viewIndex
-            changeView()
+            changeView(-1)
         }
         wildcard = {fontSize:backButton.width/10,numberOfLines:.8}
         parameters = {p:p,objectToMirror:backButton,x:x,y:y,width:width,height:height,mouseClickfunc:returnToPreviousView,wildcard:wildcard}

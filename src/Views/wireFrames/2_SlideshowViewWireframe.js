@@ -1,5 +1,4 @@
 import Wireframe from '../../uiClasses/Wireframe';
-import Mirror from '../../uiClasses/Mirror';
 import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer';
 import TextBox from '../../uiClasses/TextBox'
 

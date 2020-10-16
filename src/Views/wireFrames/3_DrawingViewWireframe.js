@@ -1,5 +1,4 @@
 import Wireframe from '../../uiClasses/Wireframe';
-import Mirror from '../../uiClasses/Mirror';
 import DrawingContainer from '../../uiClasses/DrawingContainer';
 import TextBox from '../../uiClasses/TextBox'
 
@@ -20,22 +19,23 @@ export default class testView {
         // while the user is drawing a stroke
         // needs to work with the eraser...
     toggleTool(buttonObject){
-        // if (this.drawing.currentStroke.length === 0){
+        if (!this.drawing.userIsDrawingOrErasing){
                 this.drawing.penMode = !this.drawing.penMode;
                 let buttonString = this.drawing.penMode ? "ERASER" : "PEN";
                 buttonObject.setString(buttonString);
                 this.drawing.mouseClickfunc = this.drawing.penMode ? this.buildStroke : this.removeStroke;
+            }
     }
     undoLastStroke(){
         if (this.drawing){
-            if (this.drawing.strokes){// && !this.drawing.userIsDrawingOrErasing){
+            if (this.drawing.strokes && !this.drawing.userIsDrawingOrErasing){
                 this.drawing.strokes.pop()
             }
         }
     }
     clearStrokes(){
         if (this.drawing){
-            if (this.drawing.strokes){// && !this.drawing.userIsDrawingOrErasing){
+            if (this.drawing.strokes && !this.drawing.userIsDrawingOrErasing){
                 this.drawing.strokes = []
             }
         }
@@ -230,12 +230,10 @@ export default class testView {
                 drawingMode = previousUI.drawing.drawingMode ? previousUI.drawing.drawingMode : true;
                 currentStroke = previousUI.drawing.currentStroke ? previousUI.drawing.currentStroke : [];
                 strokes = previousUI.drawing.strokes ? previousUI.drawing.strokes : [];
-                console.log('yo')
             }
         }
         parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height,p:p,w:w,h:h,color:'lightgrey'}
         this.drawing = new DrawingContainer(parameters)
-        console.log(this.drawing)
         this.drawing.setCurrentStroke(currentStroke);
         this.drawing.setStrokes(strokes);
         this.drawing.setFill(true)
@@ -299,7 +297,7 @@ export default class testView {
                 // each drawing as slower-drawn strokes
                 // have more repeated vertices.)
             if (this.drawing){
-                if (this.drawing.strokes){
+                if (this.drawing.strokes && !this.drawing.userIsDrawingOrErasing){
                     let drawingData = [];
                     let vertexX = undefined;
                     let vertexY = undefined;
@@ -317,7 +315,6 @@ export default class testView {
                         }
                     }
                     REACT_APP.handleSubmitDrawing(drawingData)
-                    console.log(changeView)
                     changeView()
                 }
             }

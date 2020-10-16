@@ -1,11 +1,9 @@
-import testCallBackButton from '../../uiClasses';
 import TextBox from '../../uiClasses/TextBox';
 import Wireframe from '../../uiClasses/Wireframe';
 
-
 export default class testView {
     constructor(previousView){
-        this.title = undefined;
+        this.title = {text:""}
         this.titleText = "Baron von Tessan";
         this.timeOutVar1 = undefined;
         this.timeOutVar2 = undefined;
@@ -19,30 +17,38 @@ export default class testView {
         if (this.titleTextIndex<this.titleText.length+1){
             let allOfDialog = this.titleText
             let dialogString = allOfDialog.slice(0,this.titleTextIndex++)
-            if (this.title.text){
-                let hasCursor = this.title.text.includes("|")
-                dialogString = hasCursor ? dialogString + "|" : dialogString;
-                this.title.setString(dialogString)
-            } else {
-                this.title.setString("")
+            if (this.title){
+                if (this.title.text){
+                    let hasCursor = this.title.text.includes("|")
+                    dialogString = hasCursor ? dialogString + "|" : dialogString;
+                    this.title.setString(dialogString)
+                } else {
+                    this.title.setString("")
+                }
+                clearTimeout(this.timeOutVar)
+                this.timeOutVar = setTimeout(()=>{this.addCharacterToTitle()},200)
             }
-            clearTimeout(this.timeOutVar)
-            this.timeOutVar = setTimeout(()=>{this.addCharacterToTitle()},200)
-        }
-        else {
+        } else {
             clearTimeout(this.timeOutVar)
             return
         }
     }
     toggleShowCursor(bool){
         if (this.title){
-                bool = !bool
-                if (bool){
+            bool = !bool
+            if (bool){
+                // necessary for if user is resizing window
+                    // while view changes back to menu
+                if (!this.title.text){
+                    this.title.text = ""
+                }
+                if (!this.title.text.includes("|")){
                     this.title.text+="|"
                 } else if (this.title.text) {
                     this.title.text = this.title.text.replace("|","")
                 }
             }
+        }
         this.timeOutVar2 = setTimeout(()=>{this.toggleShowCursor(bool)},700)
     }
     getUI(previousUI){return this}
@@ -63,7 +69,6 @@ export default class testView {
                            wildcard:wildcard,
                          }
          let menuContainer = new Wireframe(parameters)
-         // _ui.push(menuContainer)
 
         let menuSections = []
         let section;
@@ -72,8 +77,8 @@ export default class testView {
             color = i%2 ?"blue" :"red"
             wildcard = {shrinkAmountWidth:.9,shrinkAmountHeight:.6}
             parameters = { p:p,
-                               windowWidth: w,//menuContainer.width, // this might be wrong.
-                               windowHeight: h,//menuContainer.height, // this might be wrong.
+                               windowWidth: w,
+                               windowHeight: h,
                                row:true,
                                parent:menuContainer,
                                len:4,
@@ -104,135 +109,92 @@ export default class testView {
                 this.title = new TextBox(parameters)
                 _ui.push(this.title)
             } else {
-                if (i === 1){
-                    // 1: Enter Site
-                    if (previousUI){
-                        if (previousUI.enterSiteButton){
-                            x = previousUI.enterSiteButton.x;
-                            y = previousUI.enterSiteButton.y;
-                            width = previousUI.enterSiteButton.width;
-                            height = previousUI.enterSiteButton.height;
+                    if (i === 1){
+                        // 1: Enter Site
+                        if (previousUI){
+                            if (previousUI.enterSiteButton){
+                                x = previousUI.enterSiteButton.x;
+                                y = previousUI.enterSiteButton.y;
+                                width = previousUI.enterSiteButton.width;
+                                height = previousUI.enterSiteButton.height;
+                            }
                         }
-                    }
-                    objectToMirror = menuSections[i]
-                    wildcard = {numberOfLines:3}
-                    parameters = {p:p,w:w,h:h,objectToMirror:objectToMirror,x:x,y:y,width:width,height:height,wildcard:wildcard}
-                    this.enterSiteButton = new TextBox(parameters)
-                    let doOnce = true;
-                    this.enterSiteButton.setClickType(doOnce)
-                    let isInteractive = true;
-                    this.enterSiteButton.setInteractivity(isInteractive)
-                    this.enterSiteButton.setStroke(true)
-                    this.enterSiteButton.setFill(true)
-                    this.enterSiteButton.setColor("white")
+                        objectToMirror = menuSections[i]
+                        wildcard = {numberOfLines:4}
+                        parameters = {p:p,w:w,h:h,objectToMirror:objectToMirror,x:x,y:y,width:width,height:height,wildcard:wildcard}
+                        this.enterSiteButton = new TextBox(parameters)
+                        let doOnce = true;
+                        this.enterSiteButton.setClickType(doOnce)
+                        let isInteractive = true;
+                        this.enterSiteButton.setInteractivity(isInteractive)
+                        this.enterSiteButton.setStroke(true)
+                        this.enterSiteButton.setFill(true)
+                        this.enterSiteButton.setColor("white")
 
-                    this.enterSiteButton.mouseClickfunc = changeView
-                    this.enterSiteButton.setString("ENTER SITE")
-                    _ui.push(this.enterSiteButton)
-                } else if (i === 2){
-                    // 2: I just want to draw!
-                    if (previousUI){
-                        if (previousUI.justDrawButton){
-                            x = previousUI.justDrawButton.x;
-                            y = previousUI.justDrawButton.y;
-                            width = previousUI.justDrawButton.width;
-                            height = previousUI.justDrawButton.height;
+                        this.enterSiteButton.mouseClickfunc = changeView
+                        this.enterSiteButton.setString("ENTER SITE")
+                        _ui.push(this.enterSiteButton)
+                    } else if (i === 2){
+                        // 2: I just want to draw!
+                        if (previousUI){
+                            if (previousUI.justDrawButton){
+                                x = previousUI.justDrawButton.x;
+                                y = previousUI.justDrawButton.y;
+                                width = previousUI.justDrawButton.width;
+                                height = previousUI.justDrawButton.height;
+                            }
                         }
-                    }
-                    objectToMirror = menuSections[i]
-                    wildcard = {numberOfLines:3}
-                    parameters = {p:p,w:w,h:h,objectToMirror:objectToMirror,x:x,y:y,width:width,height:height,wildcard:wildcard}
-                    this.justDrawButton = new TextBox(parameters)
-                    let doOnce = true;
-                    this.justDrawButton.setClickType(doOnce)
-                    let isInteractive = true;
-                    this.justDrawButton.setInteractivity(isInteractive)
-                    this.justDrawButton.setStroke(true)
-                    this.justDrawButton.setFill(true)
-                    this.justDrawButton.setColor("white")
+                        objectToMirror = menuSections[i]
+                        wildcard = {numberOfLines:3}
+                        parameters = {p:p,w:w,h:h,objectToMirror:objectToMirror,x:x,y:y,width:width,height:height,wildcard:wildcard}
+                        this.justDrawButton = new TextBox(parameters)
+                        let doOnce = true;
+                        this.justDrawButton.setClickType(doOnce)
+                        let isInteractive = true;
+                        this.justDrawButton.setInteractivity(isInteractive)
+                        this.justDrawButton.setStroke(true)
+                        this.justDrawButton.setFill(true)
+                        this.justDrawButton.setColor("white")
 
-                    this.justDrawButton.mouseClickfunc = () => {changeView(3,5)}
-                    this.justDrawButton.setString("I just want to draw!")
-                    _ui.push(this.justDrawButton)
-                } else if (i === 3) {
-                    // 3: I want to see what other people drew!
-                    if (previousUI){
-                        if (previousUI.justWatchDrawingsButton){
-                            x = previousUI.justWatchDrawingsButton.x;
-                            y = previousUI.justWatchDrawingsButton.y;
-                            width = previousUI.justWatchDrawingsButton.width;
-                            height = previousUI.justWatchDrawingsButton.height;
+                        this.justDrawButton.mouseClickfunc = () => {changeView(3,5)}
+                        this.justDrawButton.setString("I just want to draw!")
+                        _ui.push(this.justDrawButton)
+                    } else if (i === 3) {
+                        // 3: I want to see what other people drew!
+                        if (previousUI){
+                            if (previousUI.justWatchDrawingsButton){
+                                x = previousUI.justWatchDrawingsButton.x;
+                                y = previousUI.justWatchDrawingsButton.y;
+                                width = previousUI.justWatchDrawingsButton.width;
+                                height = previousUI.justWatchDrawingsButton.height;
+                            }
                         }
-                    }
-                    objectToMirror = menuSections[i]
-                    wildcard = {numberOfLines:3}
-                    parameters = {p:p,w:w,h:h,objectToMirror:objectToMirror,x:x,y:y,width:width,height:height,wildcard:wildcard}
-                    this.justWatchDrawingsButton = new TextBox(parameters)
-                    let doOnce = true;
-                    this.justWatchDrawingsButton.setClickType(doOnce)
-                    let isInteractive = true;
-                    this.justWatchDrawingsButton.setInteractivity(isInteractive)
-                    this.justWatchDrawingsButton.setStroke(true)
-                    this.justWatchDrawingsButton.setFill(true)
-                    this.justWatchDrawingsButton.setColor("white")
+                        objectToMirror = menuSections[i]
+                        wildcard = {numberOfLines:3}
+                        parameters = {p:p,w:w,h:h,objectToMirror:objectToMirror,x:x,y:y,width:width,height:height,wildcard:wildcard}
+                        this.justWatchDrawingsButton = new TextBox(parameters)
+                        let doOnce = true;
+                        this.justWatchDrawingsButton.setClickType(doOnce)
+                        let isInteractive = true;
+                        this.justWatchDrawingsButton.setInteractivity(isInteractive)
+                        this.justWatchDrawingsButton.setStroke(true)
+                        this.justWatchDrawingsButton.setFill(true)
+                        this.justWatchDrawingsButton.setColor("white")
 
-                    this.justWatchDrawingsButton.mouseClickfunc = () => {changeView(2,3)}
-                    this.justWatchDrawingsButton.setString("I want to see what other people drew!")
-                    _ui.push(this.justWatchDrawingsButton)
+                        this.justWatchDrawingsButton.mouseClickfunc = () => {changeView(2,3)}
+                        this.justWatchDrawingsButton.setString("I want to see what other people drew!")
+                        _ui.push(this.justWatchDrawingsButton)
+                    }
                 }
             }
-            }
-
             if (!windowResized){
                 this.addCharacterToTitle()
                 this.toggleShowCursor(true)
             }
-
             if (this.titleTextIndex>=this.titleText.length){
                 let allOfDialog = this.titleText
                 this.title.setString(allOfDialog)
             }
-
         return _ui;
     }
-    // setUI(p,w,h,REACT_APP,windowResized,previousView,changeView){
-    //     let _ui = []
-    //     let testClass
-    //     for (let i = 0; i < 4; i++){
-    //         let color = i%2 ?"blue" :"red"
-    //         let parameters = { p:p,
-    //                            windowWidth: w,
-    //                            windowHeight: h,
-    //                            row:true,
-    //                            len:4,
-    //                            index:i,
-    //                            // color:color,
-    //                          }
-    //         if (i !== 0){
-    //             // buttons
-    //             testClass = new testCallBackButton(parameters)
-    //             let doOnce = true;
-    //             testClass.setClickType(doOnce)
-    //             let isInteractive = true;
-    //             testClass.setInteractivity(isInteractive)
-    //             testClass.setStroke(true)
-    //
-    //             if (i === 1){
-    //                 // 1: Enter Site
-    //                 testClass.mouseClickfunc = changeView
-    //             } else if (i === 2){
-    //                 // 2: I just want to draw!
-    //                 testClass.mouseClickfunc = () => {changeView(3,5)} // need to pass in a variable to the views to signal early exit
-    //             } else {
-    //                 // 3: I want to see what other people drew!
-    //                 testClass.mouseClickfunc = () => {changeView(2,3)} // need to pass in a variable to the views to signal early exit
-    //             }
-    //         } else {
-    //             // 0: title: "baron von tessan"
-    //             testClass = new testCallBackButton(parameters)
-    //         }
-    //         _ui.push(testClass)
-    //     }
-    //     return _ui;
-    // }
 }

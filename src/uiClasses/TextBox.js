@@ -32,11 +32,8 @@ export default class TextBox extends Mirror{
         this.numberOfLines = this.numberOfLines ?
             this.numberOfLines : (this.width/this.textSize)/7;
 
-        console.log(this.numberOfLines) // testing.
-
         // sets text size if it exceeds the size of container
         if ((this.textSize*(this.numberOfLines))>this.height){
-            console.log("shrunk by height") // testing.
             this.textSize = this.height*.2
         }
         // this.p.textSize(this.textSize);
