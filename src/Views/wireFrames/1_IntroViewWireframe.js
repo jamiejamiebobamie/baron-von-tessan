@@ -13,7 +13,7 @@ export default class testView {
     }
     addCharacterToDialog(){
         if (this.baronDialogIndex<this.dialogText.length){
-            this.baronDialogIndex += 1
+            this.baronDialogIndex++
             let allOfDialog = this.dialogText
             let dialogString = allOfDialog.slice(0,this.baronDialogIndex)
             this.dialog.setString(dialogString)
@@ -192,7 +192,8 @@ export default class testView {
                     }
                 }
                 if (this.drawing.submittedStrokeIndex < this.drawing.submittedStrokes.length) {
-                    this.drawing.submittedStrokeIndex += 1
+                    this.drawing.submittedStrokeIndex++
+                    clearTimeout(timeOutVar)
                     timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
                 } else {
                     this.drawing.drawingHasBeenDrawn = true;

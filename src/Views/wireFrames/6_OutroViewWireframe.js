@@ -13,7 +13,7 @@ export default class testView {
     }
     addCharacterToDialog(){
         if (this.baronDialogIndex<this.dialogText.length){
-            this.baronDialogIndex += 1
+            this.baronDialogIndex++
             let allOfDialog = this.dialogText
             let dialogString = allOfDialog.slice(0,this.baronDialogIndex)
             this.dialog.setString(dialogString)
@@ -173,13 +173,14 @@ export default class testView {
         this.drawing.submittedStrokeIndex = strokeIndex;
 
 
-        let beginRedrawingStrokesFunc = () => {
+        let beginRemovingStrokesFunc = () => {
             // this.drawing.submittedStrokeIndex = strokeIndex;
 
             this.drawing.setSubmittedStrokeIndex(this.drawing.submittedStrokes.length)
             let redrawStrokes = (timeOutVar) => {
                 if (this.drawing.submittedStrokeIndex >= 0) {
-                    this.drawing.submittedStrokeIndex -= 1
+                    this.drawing.submittedStrokeIndex--
+                    clearTimeout(timeOutVar)
                     timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
                 } else {
                     clearTimeout(timeOutVar)
@@ -196,7 +197,8 @@ export default class testView {
         }
 
         if (!windowResized){
-            beginRedrawingStrokesFunc();
+            beginRemovingStrokesFunc(); // this does not run if I remove the
+                                            // flagInappropriate view...
         }
 
         _ui.push(this.drawing)

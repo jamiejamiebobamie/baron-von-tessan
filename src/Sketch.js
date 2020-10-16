@@ -48,7 +48,7 @@ export default class Sketch {
                 this.desiredViewIndex = 0
                 this.lengthOfViews = this.views.length;
             } else {
-                this.desiredViewIndex += 1
+                this.desiredViewIndex++
             }
         } else {
             // if the desiredViewIndex is negative,

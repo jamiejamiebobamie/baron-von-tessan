@@ -33,7 +33,7 @@ export default class DisplayDrawingContainer extends Mirror{
         }
         this.fromLocation = this.toLocation
         clearTimeout(this.timeOut1)
-        this.timeOut1 = setTimeout(()=>{this.setNewToLocation()},100)
+        this.timeOut1 = setTimeout(()=>{this.setNewToLocation()},300)
     }
     setLengthOfDrawingSquare(length){ this.lengthOfDrawingSquare = length }
     setSubmittedStrokeIndex(index){ this.submittedStrokeIndex = index }
@@ -47,8 +47,11 @@ export default class DisplayDrawingContainer extends Mirror{
         if (this.drawingHasBeenDrawn){
             for (let i = 0; i < this.submittedStrokes.length; i++){
                 if (this.toLocation.length){
-                    driftX = this.p.lerp(this.fromLocation[i].x,this.toLocation[i].x,.2)
-                    driftY = this.p.lerp(this.fromLocation[i].y,this.toLocation[i].y,.2)
+                    // experimenting with this...
+                    // driftX = this.p.lerp(this.fromLocation[i].x,this.toLocation[i].x,.2)
+                    // driftY = this.p.lerp(this.fromLocation[i].y,this.toLocation[i].y,.2)
+                    driftX = this.toLocation[i].x//(this.toLocation[i].x - this.fromLocation[i].x)*.2
+                    driftY = this.toLocation[i].y//(this.toLocation[i].y - this.fromLocation[i].y)*.2
                 }
                 this.p.ellipse(this.submittedStrokes[i].x*this.lengthOfDrawingSquare+driftX+this.x, this.submittedStrokes[i].y*this.lengthOfDrawingSquare+driftY+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
             }
