@@ -6,9 +6,11 @@ import baronData from '../baronDrawingDataReduced'
 export default class OutroView {
     constructor(){
         this.drawing = undefined;
+        this.drawingWireframe = undefined;
         this.dialog = undefined;
         this.baronDialogIndex = 0
-        this.timeOutVar = undefined
+        this.timeOutVar1 = undefined
+        this.timeOutVar2 = undefined
         this.dialogText = baronData.outroDescriptionData
     }
     addCharacterToDialog(){
@@ -17,11 +19,25 @@ export default class OutroView {
             let allOfDialog = this.dialogText
             let dialogString = allOfDialog.slice(0,this.baronDialogIndex)
             this.dialog.setString(dialogString)
-            clearTimeout(this.timeOutVar)
-            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialog()},50)
+            this.timeOutVar1 = setTimeout(()=>{this.addCharacterToDialog()},50)
         }
         else {
-            clearTimeout(this.timeOutVar)
+            clearTimeout(this.timeOutVar1)
+            return
+                // this.timeOutVar = setTimeout(()=>{changeViewMethod()},15000)
+        }
+    }
+    shrinkDrawing(){
+        if (this.drawingWireframe.width>0){
+            this.drawingWireframe.width--
+            this.drawingWireframe.height--
+            if (this.drawing){
+                this.drawing.setLengthOfDrawingSquare(this.drawingWireframe.width)
+            }
+            this.timeOutVar2 = setTimeout(()=>{this.shrinkDrawing()},11)
+        }
+        else {
+            clearTimeout(this.timeOutVar2)
             return
                 // this.timeOutVar = setTimeout(()=>{changeViewMethod()},15000)
         }
@@ -104,8 +120,8 @@ export default class OutroView {
                            wildcard:wildcard,
                            parent:drawingParent,
                          }
-        let drawing = new Wireframe(parameters)
-        // _ui.push(drawing)
+        this.drawingWireframe = new Wireframe(parameters)
+        _ui.push(this.drawingWireframe)
 
         wildcard = {shrinkAmountWidth:.9,shrinkAmountHeight:.9}
         parameters = { p:p,
@@ -165,9 +181,9 @@ export default class OutroView {
         }
         wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
 
-        parameters = {p:p,w:w,h:h,objectToMirror:drawing,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard}
+        parameters = {p:p,w:w,h:h,objectToMirror:this.drawingWireframe,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard}
         this.drawing = new DisplayDrawingContainer(parameters)
-        this.drawing.setLengthOfDrawingSquare(drawing.width)
+        this.drawing.setLengthOfDrawingSquare(this.drawingWireframe.width)
         this.drawing.setFill(true)
         this.drawing.setSubmittedStrokes(baronData.drawingData)
         this.drawing.submittedStrokeIndex = strokeIndex;
@@ -185,7 +201,7 @@ export default class OutroView {
                 } else {
                     clearTimeout(timeOutVar)
                     // want to do a fade out or fade to grey and return to
-                    changeView();
+                    setTimeout(changeView, 2000)
                     return
                     // pause three seconds to display drawing.
                         // then loop if this.displayDrawingSpace.loop
@@ -199,6 +215,7 @@ export default class OutroView {
         if (!windowResized){
             beginRemovingStrokesFunc(); // this does not run if I remove the
                                             // flagInappropriate view...
+            this.shrinkDrawing()
         }
 
         _ui.push(this.drawing)

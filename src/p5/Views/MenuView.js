@@ -98,62 +98,65 @@ export default class MenuView {
         }
         // _ui.push(menuSections[0])
 
-        objectsTotest.push(menuSections[0])
+        // objectsTotest.push(menuSections[0])
 // Math.random()*(w-testWidth+1)
-        for (let i = 0; i < 2; i++){
-            let testWidth = w>h? Math.random()*(w/3-w/4+1)+w/4:Math.random()*(h/3-h/4+1)+h/4
-            // Math.random() * (max - min + 1) + min
 
-            let vertices = [
-                // {offsetX:0,offsetY:0+Math.random()*h/3+h/5},
-                {offsetX:w-testWidth,offsetY:h-testWidth-Math.random()*h/4},
-                {offsetX:0,offsetY:h-testWidth-Math.random()*h/4},
-            ]
+        if (w>800){
+            for (let i = 0; i < 2; i++){
+                let testWidth = w>h? Math.random()*(w/3-w/4+1)+w/4:Math.random()*(h/3-h/4+1)+h/4
+                // Math.random() * (max - min + 1) + min
 
-            wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:.9}
-            parameters = {     p:p,
-                               windowWidth: w,
-                               windowHeight: h,
-                               width:testWidth,
-                               height:testWidth,
-                               offsetX:i>=vertices.length?Math.random() * (w - testWidth + 1):vertices[i].offsetX,
-                               offsetY:i>=vertices.length?Math.random() * (h - testWidth - h/5 + 1) + h/5:vertices[i].offsetY,
-                               row:true,
-                               // color:p.color(Math.random()*255,Math.random()*255,Math.random()*255),
-                               wildcard:wildcard,
-                             }
-            this.test = new Wireframe(parameters);
-            let isOverlapping = false;
-            for (let i = 0; i < objectsTotest.length; i++){
+                let vertices = [
+                    // {offsetX:0,offsetY:0+Math.random()*h/3+h/5},
+                    {offsetX:w-testWidth,offsetY:h-testWidth-Math.random()*h/4},
+                    {offsetX:0,offsetY:h-testWidth-Math.random()*h/4},
+                ]
+
+                wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:.9}
+                parameters = {     p:p,
+                                   windowWidth: w,
+                                   windowHeight: h,
+                                   width:testWidth,
+                                   height:testWidth,
+                                   offsetX:i>=vertices.length?Math.random() * (w - testWidth + 1):vertices[i].offsetX,
+                                   offsetY:i>=vertices.length?Math.random() * (h - testWidth - h/5 + 1) + h/5:vertices[i].offsetY,
+                                   row:true,
+                                   // color:p.color(Math.random()*255,Math.random()*255,Math.random()*255),
+                                   wildcard:wildcard,
+                                 }
+                this.test = new Wireframe(parameters);
+                let isOverlapping = false;
+                for (let i = 0; i < objectsTotest.length; i++){
+                    if (!isOverlapping){
+                        isOverlapping = this.isOverlapping(objectsTotest[i],this.test)
+                    }
+                }
                 if (!isOverlapping){
-                    isOverlapping = this.isOverlapping(objectsTotest[i],this.test)
+                    objectsTotest.push(this.test)
+                    // _ui.push(this.test)
                 }
             }
-            if (!isOverlapping){
-                objectsTotest.push(this.test)
-                _ui.push(this.test)
-            }
         }
-
-
         /// ---- ******** END WIREFRAME OBJECTS
 
         /// ---- ******** BEGIN _UI OBJECTS
         // _ui objects are drawn to screen and mirror a wireframe object
         let x,y,width,height,objectToMirror, drawing
 
-        for (let i = 1; i < objectsTotest.length; i++){
+        for (let i = 0; i < objectsTotest.length; i++){
             let drawingHasBeenDrawn = false
             let strokeIndex = 0
             if (previousUI){
-                if (previousUI.drawings[i]){
-                    x = previousUI.drawings[i].x;
-                    y = previousUI.drawings[i].y;
-                    width = previousUI.drawings[i].width;
-                    height = previousUI.drawings[i].height;
-                    drawingHasBeenDrawn = previousUI.drawings[i].drawingHasBeenDrawn
-                    strokeIndex = previousUI.drawings[i].submittedStrokeIndex
-                    clearTimeout(previousUI.drawings[i].timeOut)
+                if (previousUI.drawings){
+                    if (previousUI.drawings[i]){
+                        x = previousUI.drawings[i].x;
+                        y = previousUI.drawings[i].y;
+                        width = previousUI.drawings[i].width;
+                        height = previousUI.drawings[i].height;
+                        drawingHasBeenDrawn = previousUI.drawings[i].drawingHasBeenDrawn
+                        strokeIndex = previousUI.drawings[i].submittedStrokeIndex
+                        clearTimeout(previousUI.drawings[i].timeOut)
+                    }
                 }
             }
             wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
