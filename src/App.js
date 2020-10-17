@@ -17,24 +17,30 @@ class App extends Component {
             flaggedIndices:[],
         }
         this.myRef = React.createRef()
+        // passing in a reference to the app's scope.
+            // binding 'this' isn't necessary for callbacks
         this.SketchWrapper = new Sketch(this)
         this.Sketch = this.SketchWrapper.sketch;
-        // callbacks -- binding 'this' isn't necessary...
-        // this.handleSubmitDrawing = this.handleSubmitDrawing.bind(this);
-        // this.handleSubmitDescription = this.handleSubmitDescription.bind(this);
-        // this.handleSubmitFlaggedIndices = this.handleSubmitFlaggedIndices.bind(this);
     }
-
     handleSubmitDrawing(drawingData) {
         this.setState({drawingData:drawingData})
     }
     handleSubmitDescription(drawingDescription){
         this.setState({drawingDescription:drawingDescription})
+        // send drawing and description to backend
+        console.log(this.state.drawingData,this.state.drawingDescription)
     }
     handleSubmitFlaggedIndices(flaggedIndices){
         this.setState({flaggedIndices:flaggedIndices})
+        // send flaggedIndices to backend
+        console.log(this.state.flaggedIndices)
+    }
+    resetStateVariables(){
+        this.setState({drawingData:[],drawingDescription:"",flaggedIndices:[]})
     }
     componentDidMount() {
+        // https://p5js.org/reference/#/p5/p5
+        // p5 instance mode. allows for React and p5 to interact.
         this.myP5 = new p5(this.Sketch, this.myRef.current)
     }
     render(){

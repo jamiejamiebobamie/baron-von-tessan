@@ -2,12 +2,11 @@ import Wireframe from '../uiClasses/Wireframe';
 import DrawingContainer from '../uiClasses/DrawingContainer';
 import TextBox from '../uiClasses/TextBox'
 
-
 export default class DrawingView {
     constructor(){
         this.drawing = undefined//previousView ? previousView.drawing : undefined;
         this.buttons = [undefined,undefined,undefined,undefined]
-        // callbacks
+        // callbacks -- necessary
         this.toggleTool = this.toggleTool.bind(this)
         this.buildStroke = this.buildStroke.bind(this)
         this.undoLastStroke = this.undoLastStroke.bind(this)
@@ -232,7 +231,7 @@ export default class DrawingView {
                 strokes = previousUI.drawing.strokes ? previousUI.drawing.strokes : [];
             }
         }
-        parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height,p:p,w:w,h:h,color:'lightgrey'}
+        parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height,w:w,h:h,color:'lightgrey'}
         this.drawing = new DrawingContainer(parameters)
         this.drawing.setCurrentStroke(currentStroke);
         this.drawing.setStrokes(strokes);
@@ -258,7 +257,6 @@ export default class DrawingView {
             // submit button logic
             if (i === 3){
                 submitButtonMirror = w>h ? buttons[3]:buttons[4]
-                let buttonString = this.drawing.penMode ? "ERASER" : "PEN";
             }
             let fontSize = w>h ? button.width / 10 :  button.width / 20
             wildcard = {fontSize:fontSize, numberOfLines:.8}

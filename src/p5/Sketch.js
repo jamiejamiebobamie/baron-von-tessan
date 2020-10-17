@@ -6,11 +6,23 @@ import EnterDescriptionView from './Views/EnterDescriptionView';
 import FlagInappropriateContent from './Views/FlagInappropriateContentView';
 import OutroView from './Views/OutroView';
 
-
 export default class Sketch {
     constructor(app){
         this.REACT_APP = app;
-        this.views= [];
+        this.views = [];
+        this.setViews();
+        // p5.js media references
+        this.font = undefined
+        this.img = undefined;
+        // view variables
+        this.currentViewIndex = 0;
+        this.desiredViewIndex = this.currentViewIndex;
+        this.lengthOfViews = this.views.length
+        // 'this' binding is necessary here.
+        this.changeView = this.changeView.bind(this);
+    }
+    setViews(){
+        this.views = [];
         let view;
         view = new Menu();
         this.views.push(view);
@@ -26,24 +38,17 @@ export default class Sketch {
         this.views.push(view);
         view = new OutroView();
         this.views.push(view);
-
-        // p5.js media references
-        this.font = undefined
-
-        this.currentViewIndex = 0;
-        this.desiredViewIndex = this.currentViewIndex;
-        this.lengthOfViews = this.views.length
-        // 'this' binding is necessary here.
-        this.changeView = this.changeView.bind(this);
+        // reset the state variables of the app.
+            // a method side effect, but place to do this.
+        this.REACT_APP.resetStateVariables()
     }
-
     // lengthOfViews parameter allows early exit from site if user chooses to
         // only draw or only view other people's drawings.
     changeView(desiredViewIndex,lengthOfViews){
         if (lengthOfViews !== undefined){
             this.lengthOfViews = lengthOfViews;
         }
-        if (desiredViewIndex===undefined){
+        if (desiredViewIndex === undefined){
             if (this.currentViewIndex === this.lengthOfViews-1){
                 this.desiredViewIndex = 0
                 this.lengthOfViews = this.views.length;
@@ -55,7 +60,7 @@ export default class Sketch {
                 // go backwards that number of views.
             // if the number of views to go backwards ends up passing the
                 // first view, set the view index to 0.
-            if (desiredViewIndex<0){
+            if (desiredViewIndex < 0){
                 if (this.currentViewIndex + desiredViewIndex < 0){
                     this.desiredViewIndex = 0
                     this.lengthOfViews = this.views.length;
@@ -66,26 +71,11 @@ export default class Sketch {
                 this.desiredViewIndex = desiredViewIndex
             }
         }
-        if (this.desiredViewIndex===0){
-            this.views= [];
-            let view;
-            view = new Menu();
-            this.views.push(view);
-            view = new IntroView();
-            this.views.push(view);
-            view = new SlideshowView();
-            this.views.push(view);
-            view = new DrawingView();
-            this.views.push(view);
-            view = new EnterDescriptionView();
-            this.views.push(view);
-            view = new FlagInappropriateContent();
-            this.views.push(view);
-            view = new OutroView();
-            this.views.push(view);
+        // reset the views if the this.desiredViewIndex reaches 0
+        if (this.desiredViewIndex === 0){
+            this.setViews();
         }
     }
-
     sketch = (p) => {
         // desired length and width of canvas
         let w, h;
@@ -101,9 +91,7 @@ export default class Sketch {
         p.setup = () => {
             w = p.windowWidth - (p.windowWidth/10)
             h = p.windowHeight - (p.windowHeight/10)
-            // necessary despite never being used anywhere else.
-                // p5 won't display anything without a canvas.
-            let canvas = p.createCanvas(w,h);
+            p.createCanvas(w,h);
             p.frameRate(24);
             p.textAlign(p.CENTER,p.CENTER);
             p.textFont(this.font);
@@ -150,7 +138,6 @@ export default class Sketch {
                 let windowResized = false
                 _ui  = this.views[this.desiredViewIndex].setUI(p,w,h,REACT_APP,windowResized,previousView,this.changeView)
                 this.currentViewIndex = this.desiredViewIndex
-                // console.log(REACT_APP.state)
             }
             for (let i = 0; i < _ui.length; i++){
                 _ui[i].draw();
