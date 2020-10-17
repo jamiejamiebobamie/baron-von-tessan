@@ -28,27 +28,24 @@ export default class OutroView {
         else {
             clearTimeout(this.timeOutVar1)
             return
-                // this.timeOutVar = setTimeout(()=>{changeViewMethod()},15000)
         }
     }
-    shrinkDrawing(){
+    shrinkDrawing(changeView){
         if (this.drawingWireframe.width>0){
             this.drawingWireframe.width--
             this.drawingWireframe.height--
             if (this.drawing){
                 this.drawing.setLengthOfDrawingSquare(this.drawingWireframe.width)
             }
-            this.timeOutVar2 = setTimeout(()=>{this.shrinkDrawing()},11)
-        }
-        else {
+            this.timeOutVar2 = setTimeout(()=>{this.shrinkDrawing(changeView)},30)
+        } else {
             clearTimeout(this.timeOutVar2)
-            return
-                // this.timeOutVar = setTimeout(()=>{changeViewMethod()},15000)
+            setTimeout(()=>{changeView()},4000)
         }
     }
     raiseDialog(){
         this.dialogWireframe.y--;
-        this.timeOutVar3 = setTimeout(()=>{this.raiseDialog()},20)
+        this.timeOutVar3 = setTimeout(()=>{this.raiseDialog()},60)
     }
     getUI(){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
@@ -119,16 +116,31 @@ export default class OutroView {
 
         let drawingParent = topTwoThirdsOfView;
 
+        let x,y, width, height;
+        if (previousUI){
+            if (previousUI.drawingWireframe){
+                width = previousUI.drawingWireframe.width;
+                height = previousUI.drawingWireframe.height;
+            }
+        }
         wildcard = {shouldBeSquare:true,shrinkAmountWidth:1,shrinkAmountHeight:REACT_APP.state.isMobile?.9:1,string:"[user drawing just submitted]"}
         parameters = { p:p,
                             windowWidth: w,
                            windowHeight: h,
+                           width:width?width:drawingParent.width,
+                           height:height?height:drawingParent.height,
                            color:"red",
                            wildcard:wildcard,
                            parent:drawingParent,
                          }
         this.drawingWireframe = new Wireframe(parameters)
         // _ui.push(this.drawingWireframe)
+
+        // if (previousUI){
+        //     if (previousUI.dialogWireframe){
+        //         y = previousUI.dialogWireframe.y;
+        //     }
+        // }
 
         wildcard = {shrinkAmountWidth:.9,shrinkAmountHeight:.9}
         parameters = { p:p,
@@ -142,14 +154,14 @@ export default class OutroView {
         this.dialogWireframe = new Wireframe(parameters)
         // _ui.push(dialog)
 
-
-        let x,y,width,height;
+        let text = "";
         if (previousUI){
             if (previousUI.dialog){
                 x = previousUI.dialog.x;
                 y = previousUI.dialog.y;
                 width = previousUI.dialog.width;
                 height = previousUI.dialog.height;
+                text = previousUI.dialog.text;
             }
         }
         let fontSize = w>h ? this.dialogWireframe.width/20 : this.dialogWireframe.width/15 ;
@@ -157,6 +169,7 @@ export default class OutroView {
         parameters = {p:p,objectToMirror:this.dialogWireframe,x:x,y:y,width:width,height:height,wildcard:wildcard}//color:"pink"}
         this.dialog = new TextBox(parameters)
         this.dialog.setFill(true)
+        this.dialog.setString(text)
 
         if (!windowResized){
             this.addCharacterToDialog()
@@ -173,7 +186,7 @@ export default class OutroView {
         }
 
         let drawingHasBeenDrawn = false
-        let strokeIndex = 0
+        let strokeIndex = baronData.drawingData.length
         if (previousUI){
             if (previousUI.drawing){
                 x = previousUI.drawing.x;
@@ -193,36 +206,15 @@ export default class OutroView {
         this.drawing.setFill(true)
         this.drawing.setSubmittedStrokes(baronData.drawingData)
         this.drawing.submittedStrokeIndex = strokeIndex;
-
-
-        let beginRemovingStrokesFunc = () => {
-            // this.drawing.submittedStrokeIndex = strokeIndex;
-
-            this.drawing.setSubmittedStrokeIndex(this.drawing.submittedStrokes.length)
-            let redrawStrokes = (timeOutVar) => {
-                if (this.drawing.submittedStrokeIndex >= 0) {
-                    this.drawing.submittedStrokeIndex--
-                    clearTimeout(timeOutVar)
-                    timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
-                } else {
-                    clearTimeout(timeOutVar)
-                    // want to do a fade out or fade to grey and return to
-                    setTimeout(changeView, 7000)
-                    return
-                    // pause three seconds to display drawing.
-                        // then loop if this.displayDrawingSpace.loop
-                        // is set to true otherwise return.
-                    // timeOutVar = setTimeout(redrawStrokes, 7000,timeOutVar);
-                }
-            }
-            redrawStrokes();
-        }
+        this.drawing.undrawStrokes();
 
         if (!windowResized){
-            beginRemovingStrokesFunc(); // this does not run if I remove the
-                                            // flagInappropriate view...
-            this.shrinkDrawing()
+            this.shrinkDrawing(changeView)
             this.raiseDialog()
+        }
+
+        if (this.baronDialogIndex>=this.dialogText.length){
+            this.dialog.setString(this.dialogText);
         }
 
         _ui.push(this.drawing)

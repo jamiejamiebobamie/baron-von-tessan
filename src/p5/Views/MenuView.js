@@ -1,27 +1,29 @@
 import TextBox from '../uiClasses/TextBox';
 import Wireframe from '../uiClasses/Wireframe';
 import DisplayDrawingContainer from '../uiClasses/DisplayDrawingContainer';
-import baronData from '../baronDrawingDataReduced'
 
 export default class MenuView {
     constructor(){
-        // title object
+        // title ui object
         this.title = undefined;
 
         this.titleText = "Baron von Tessan";
         this.titleTextIndex = -1;
 
+        // timeoutVariables
         this.timeOutVar1 = undefined;
         this.timeOutVar2 = undefined;
 
-        // button objects
+        // button ui objects
         this.enterSiteButton = undefined;
         this.justDrawButton = undefined;
         this.justWatchDrawingsButton = undefined;
 
-        this.test = undefined
+        // background drawing ui objects
         this.backgroundDrawing1 = undefined;
         this.backgroundDrawing2 = undefined;
+        this.backgroundDrawing3 = undefined;
+        this.backgroundDrawing4 = undefined;
     }
     addCharacterToTitle(){
         if (this.titleTextIndex<this.titleText.length+1){
@@ -54,12 +56,13 @@ export default class MenuView {
     // returns true if boxes overlap
     isOverlapping(box1,box2){
         // https://gist.github.com/Daniel-Hug/d7984d82b58d6d2679a087d896ca3d2b
-        // Check if rectangle a overlaps rectangle b
+
     	// no horizontal overlap
         if (box1.x >= box2.x+box2.width || box2.x >= box1.x+box1.width) return false;
         // no vertical overlap
         if (box1.y >= box2.y+box2.height || box2.y >= box1.y+box1.height) return false;
-    	return true;
+
+        return true;
     }
     getUI(previousUI){return this;}
     setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
@@ -97,20 +100,16 @@ export default class MenuView {
             section = new Wireframe(parameters);
             menuSections.push(section);
         }
-        // _ui.push(menuSections[0])
-
-        // objectsTotest.push(menuSections[0])
-// Math.random()*(w-testWidth+1)
-
         if (w>1100){
             for (let i = 0; i < 2; i++){
                 let testWidth = w<h? Math.random()*(w/3-w/4+1)+w/4:Math.random()*(h/3-h/4+1)+h/4
                 // Math.random() * (max - min + 1) + min
 
                 let vertices = [
-                    // {offsetX:0,offsetY:0+Math.random()*h/3+h/5},
-                    {offsetX:w-testWidth,offsetY:h-testWidth-Math.random()*h/4},
-                    {offsetX:0,offsetY:h-testWidth-Math.random()*h/4},
+                    {offsetX:w-testWidth,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
+                    {offsetX:Math.random()*w/10,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
+                    {offsetX:w-testWidth,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
+                    {offsetX:Math.random()*w/10,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
                 ]
 
                 wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:.9}
@@ -122,7 +121,7 @@ export default class MenuView {
                                    offsetX:i>=vertices.length?Math.random() * (w - testWidth + 1):vertices[i].offsetX,
                                    offsetY:i>=vertices.length?Math.random() * (h - testWidth - h/5 + 1) + h/5:vertices[i].offsetY,
                                    row:true,
-                                   color:p.color(Math.random()*255,Math.random()*255,Math.random()*255),
+                                   // color:p.color(Math.random()*255,Math.random()*255,Math.random()*255),
                                    wildcard:wildcard,
                                  }
                 let testWireframe = new Wireframe(parameters);
@@ -135,7 +134,6 @@ export default class MenuView {
                 if (!isOverlapping){
                     objectsTotest.push(testWireframe)
                     // _ui.push(testWireframe)
-
                 }
             }
         }
@@ -165,12 +163,12 @@ export default class MenuView {
                     this.backgroundDrawing1 = new DisplayDrawingContainer(parameters)
                     this.backgroundDrawing1.setLengthOfDrawingSquare(objectsTotest[i].width)
                     this.backgroundDrawing1.setFill(true)
-                    this.backgroundDrawing1.setSubmittedStrokes(baronData.drawingData)
+                    this.backgroundDrawing1.setSubmittedStrokes(REACT_APP.state.backgroundDrawingData[i])
                     this.backgroundDrawing1.submittedStrokeIndex = strokeIndex;
                     this.backgroundDrawing1.redrawStrokes();
 
                     _ui.push(this.backgroundDrawing1)
-                } if (i===1){
+                } else if (i===1){
                     if (previousUI){
                         if (previousUI.backgroundDrawing2){
                             x = previousUI.backgroundDrawing2.x;
@@ -188,51 +186,59 @@ export default class MenuView {
                     this.backgroundDrawing2 = new DisplayDrawingContainer(parameters)
                     this.backgroundDrawing2.setLengthOfDrawingSquare(objectsTotest[i].width)
                     this.backgroundDrawing2.setFill(true)
-                    this.backgroundDrawing2.setSubmittedStrokes(baronData.drawingData)
+                    this.backgroundDrawing2.setSubmittedStrokes(REACT_APP.state.backgroundDrawingData[i])
                     this.backgroundDrawing2.submittedStrokeIndex = strokeIndex;
                     this.backgroundDrawing2.redrawStrokes();
 
                     _ui.push(this.backgroundDrawing2)
-                }
-            }
-            // wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-            // parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard}//,color:"lightgrey",
-            // drawing = new DisplayDrawingContainer(parameters)
-            // drawing.setLengthOfDrawingSquare(objectsTotest[i].width)
-            // drawing.setFill(true)
-            // drawing.setSubmittedStrokes(baronData.drawingData)
-            // drawing.submittedStrokeIndex = strokeIndex;
-            // this.drawings.push(drawing)
-            // _ui.push(drawing)
-        // let beginRedrawingStrokesFunc = (drawing) => {
-        //     if (drawing){
-        //         let redrawStrokes = (timeOutVar) => {
-        //             if (drawing.drawingHasBeenDrawn){
-        //                 if (drawing.loop){
-        //                     drawing.drawingHasBeenDrawn = false;
-        //                     drawing.submittedStrokeIndex = 0;
-        //                     clearTimeout(timeOutVar)
-        //                 } else {
-        //                     clearTimeout(timeOutVar)
-        //                     return;
-        //                 }
-        //             }
-        //             if (drawing.submittedStrokeIndex < drawing.submittedStrokes.length) {
-        //                 drawing.submittedStrokeIndex++
-        //                 clearTimeout(timeOutVar)
-        //                 timeOutVar = setTimeout(redrawStrokes, 10,drawing,timeOutVar);
-        //             } else {
-        //                 drawing.drawingHasBeenDrawn = true;
-        //                 // pause three seconds to display drawing.
-        //                     // then loop if this.displayDrawingSpace.loop
-        //                     // is set to true otherwise return.
-        //                 timeOutVar = setTimeout(redrawStrokes, 7000,drawing,timeOutVar);
-        //             }
-        //         }
-        //         redrawStrokes();
-        //     }
-        // }
+                } else if (i===2){
+                    if (previousUI){
+                        if (previousUI.backgroundDrawing3){
+                            x = previousUI.backgroundDrawing3.x;
+                            y = previousUI.backgroundDrawing3.y;
+                            width = previousUI.backgroundDrawing3.width;
+                            height = previousUI.backgroundDrawing3.height;
+                            drawingHasBeenDrawn = previousUI.backgroundDrawing3.drawingHasBeenDrawn
+                            strokeIndex = previousUI.backgroundDrawing3.submittedStrokeIndex
+                            clearTimeout(previousUI.backgroundDrawing3.timeOut1)
+                            clearTimeout(previousUI.backgroundDrawing3.timeOut2)
+                        }
+                    }
+                    wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
+                    parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard}//,color:"lightgrey"}
+                    this.backgroundDrawing3 = new DisplayDrawingContainer(parameters)
+                    this.backgroundDrawing3.setLengthOfDrawingSquare(objectsTotest[i].width)
+                    this.backgroundDrawing3.setFill(true)
+                    this.backgroundDrawing3.setSubmittedStrokes(REACT_APP.state.backgroundDrawingData[i])
+                    this.backgroundDrawing3.submittedStrokeIndex = strokeIndex;
+                    this.backgroundDrawing3.redrawStrokes();
 
+                    _ui.push(this.backgroundDrawing3)
+                }  else if (i===3){
+                    if (previousUI){
+                        if (previousUI.backgroundDrawing4){
+                            x = previousUI.backgroundDrawing4.x;
+                            y = previousUI.backgroundDrawing4.y;
+                            width = previousUI.backgroundDrawing4.width;
+                            height = previousUI.backgroundDrawing4.height;
+                            drawingHasBeenDrawn = previousUI.backgroundDrawing4.drawingHasBeenDrawn
+                            strokeIndex = previousUI.backgroundDrawing4.submittedStrokeIndex
+                            clearTimeout(previousUI.backgroundDrawing4.timeOut1)
+                            clearTimeout(previousUI.backgroundDrawing4.timeOut2)
+                        }
+                    }
+                    wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
+                    parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard}//,color:"lightgrey"}
+                    this.backgroundDrawing4 = new DisplayDrawingContainer(parameters)
+                    this.backgroundDrawing4.setLengthOfDrawingSquare(objectsTotest[i].width)
+                    this.backgroundDrawing4.setFill(true)
+                    this.backgroundDrawing4.setSubmittedStrokes(REACT_APP.state.backgroundDrawingData[i])
+                    this.backgroundDrawing4.submittedStrokeIndex = strokeIndex;
+                    this.backgroundDrawing4.redrawStrokes();
+
+                    _ui.push(this.backgroundDrawing4)
+                }
+        }
         let text = "";
         for (let i = 0; i < menuSections.length; i++){
             if (i===0){
@@ -333,14 +339,6 @@ export default class MenuView {
         if (!windowResized){
             this.addCharacterToTitle();
             this.toggleShowCursor(true);
-            // if (this.backgroundDrawing1){
-            //     this.backgroundDrawing1.redrawStrokes();
-            // }
-            // if (this.backgroundDrawing2){
-            //     this.backgroundDrawing2.redrawStrokes();
-            //
-            // }
-                // beginRedrawingStrokesFunc(this.drawings[i]);
         }
         // if all of the characters of the title have been added
             // set the title to display all of the text

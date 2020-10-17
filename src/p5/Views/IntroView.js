@@ -69,7 +69,7 @@ export default class IntroView {
                            index:0,
                            parent:topTwoThirdsOfView,
                          }
-        let topTwoThirdsOfViewSplitInTwoFirstHalf = new Wireframe(parameters)
+        // let topTwoThirdsOfViewSplitInTwoFirstHalf = new Wireframe(parameters)
         // _ui.push(topTwoThirdsOfViewSplitInTwoFirstHalf)
 
         wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
@@ -83,12 +83,12 @@ export default class IntroView {
                            index:1,
                            parent:topTwoThirdsOfView,
                          }
-        let topTwoThirdsOfViewSplitInTwoSecondHalf = new Wireframe(parameters)
+        // let topTwoThirdsOfViewSplitInTwoSecondHalf = new Wireframe(parameters)
         // _ui.push(topTwoThirdsOfViewSplitInTwoSecondHalf)
 
-
-        let topThirdOfView = wireFrameElements[0]
-        let middleThirdOfScreen =  wireFrameElements[1];
+        //
+        // let topThirdOfView = wireFrameElements[0]
+        // let middleThirdOfScreen =  wireFrameElements[1];
         let bottomThirdOfScreen = wireFrameElements[2];
 
         let drawingParent = topTwoThirdsOfView;
@@ -125,7 +125,6 @@ export default class IntroView {
                 width = previousUI.dialog.width;
                 height = previousUI.dialog.height;
                 text = previousUI.dialog.text;
-
             }
         }
         let fontSize = w>h ? dialog.width/20 : dialog.width/15 ;

@@ -22,7 +22,9 @@ export default class DisplayDrawingContainer extends Mirror{
 
         this.setNewToLocation()
         // for DrawingContainer functionality.
-            // purely storing strokes.
+            // purely for storing strokes.
+        // lose functionality of undo button without
+            // storing data as a series of strokes.
         this.strokes = []
     }
     setNewToLocation(){
@@ -36,9 +38,7 @@ export default class DisplayDrawingContainer extends Mirror{
     }
     setLengthOfDrawingSquare(length){ this.lengthOfDrawingSquare = length }
     setSubmittedStrokeIndex(index){ this.submittedStrokeIndex = index }
-    setSubmittedStrokes(submittedStrokes){
-        this.submittedStrokes = submittedStrokes
-    }
+    setSubmittedStrokes(submittedStrokes){ this.submittedStrokes = submittedStrokes }
     setLoopToTrueToLoopFinishedDrawing(){ this.loop = true; }
     drawSubmittedStrokes(){
         let driftX = 0
@@ -84,6 +84,21 @@ export default class DisplayDrawingContainer extends Mirror{
                 // then loop if this.displayDrawingSpace.loop
                 // is set to true otherwise return.
             this.timeOut2 = setTimeout(()=>{this.redrawStrokes();}, 7000);
+        }
+        // good for testing:
+        // console.log("hey")
+    }
+    undrawStrokes(){
+        if (this.submittedStrokeIndex>=0) {
+            this.submittedStrokeIndex--
+            this.timeOut2 = setTimeout(()=>{this.undrawStrokes();}, 10);
+        } else {
+            clearTimeout(this.timeOut2)
+            // this.drawingHasBeenDrawn = true;
+            // // pause three seconds to display drawing.
+            //     // then loop if this.displayDrawingSpace.loop
+            //     // is set to true otherwise return.
+            // this.timeOut2 = setTimeout(()=>{this.redrawStrokes();}, 7000);
         }
         // good for testing:
         // console.log("hey")

@@ -3,6 +3,8 @@ import {isMobile} from 'react-device-detect';
 import Sketch from './p5/Sketch.js';
 import './App.css';
 import response from './p5/simulatedResponse'
+import baronData from './p5/baronDrawingDataReduced'
+
 
 const p5 = require("p5")
 
@@ -15,25 +17,24 @@ class App extends Component {
             response:response.data,
             isMobile: isMobile,
             flaggedIndices:[],
+            backgroundDrawingData:[baronData.drawingData,baronData.drawingData,baronData.drawingData,baronData.drawingData]
         }
         this.myRef = React.createRef()
         // passing in a reference to the app's scope.
-            // binding 'this' isn't necessary for callbacks
+            // binding 'this' isn't necessary for callbacks.
         this.SketchWrapper = new Sketch(this)
         this.Sketch = this.SketchWrapper.sketch;
     }
-    handleSubmitDrawing(drawingData) {
-        this.setState({drawingData:drawingData})
-    }
+    handleSubmitDrawing(drawingData) {this.setState({drawingData:drawingData})}
     handleSubmitDescription(drawingDescription){
         this.setState({drawingDescription:drawingDescription})
         // send drawing and description to backend
-        console.log(this.state.drawingData,this.state.drawingDescription)
+        console.log("Sending: "+this.state.drawingData+" "+this.state.drawingDescription+" to backend.")
     }
     handleSubmitFlaggedIndices(flaggedIndices){
         this.setState({flaggedIndices:flaggedIndices})
         // send flaggedIndices to backend
-        console.log(this.state.flaggedIndices)
+        console.log("Sending: "+this.state.flaggedIndices+" to backend.")
     }
     resetStateVariables(){
         // got a weird error about setting state
@@ -42,11 +43,12 @@ class App extends Component {
         if (this.state){
             this.setState({drawingData:[],drawingDescription:"",flaggedIndices:[]})
         }
-        console.log("Queried backend with new data.")
+        // Query backend for new data.
+        console.log("Queried backend for new data.")
     }
     componentDidMount() {
         // https://p5js.org/reference/#/p5/p5
-        // p5 instance mode. allows for React and p5 to interact.
+            // p5 instance mode. allows for React and p5 to interact.
         this.myP5 = new p5(this.Sketch, this.myRef.current)
     }
     render(){
