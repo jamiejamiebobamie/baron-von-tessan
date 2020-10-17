@@ -36,7 +36,13 @@ class App extends Component {
         console.log(this.state.flaggedIndices)
     }
     resetStateVariables(){
-        this.setState({drawingData:[],drawingDescription:"",flaggedIndices:[]})
+        // got a weird error about setting state
+            // before a component did mount...
+        // might be unnecessary.
+        if (this.state){
+            this.setState({drawingData:[],drawingDescription:"",flaggedIndices:[]})
+        }
+        console.log("Queried backend with new data.")
     }
     componentDidMount() {
         // https://p5js.org/reference/#/p5/p5

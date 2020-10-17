@@ -64,6 +64,30 @@ export default class DisplayDrawingContainer extends Mirror{
             }
         }
     }
+    redrawStrokes(){
+        if (this.drawingHasBeenDrawn){
+            if (this.loop){
+                this.drawingHasBeenDrawn = false;
+                this.submittedStrokeIndex = 0;
+                clearTimeout(this.timeOut2)
+            } else {
+                clearTimeout(this.timeOut2)
+                return;
+            }
+        }
+        if (this.submittedStrokeIndex < this.submittedStrokes.length) {
+            this.submittedStrokeIndex++
+            this.timeOut2 = setTimeout(()=>{this.redrawStrokes();}, 10);
+        } else {
+            this.drawingHasBeenDrawn = true;
+            // pause three seconds to display drawing.
+                // then loop if this.displayDrawingSpace.loop
+                // is set to true otherwise return.
+            this.timeOut2 = setTimeout(()=>{this.redrawStrokes();}, 7000);
+        }
+        // good for testing:
+        // console.log("hey")
+    }
     draw() {
         super.draw();
         this.p.noStroke();

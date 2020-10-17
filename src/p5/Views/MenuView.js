@@ -20,7 +20,8 @@ export default class MenuView {
         this.justWatchDrawingsButton = undefined;
 
         this.test = undefined
-        this.drawings = []
+        this.backgroundDrawing1 = undefined;
+        this.backgroundDrawing2 = undefined;
     }
     addCharacterToTitle(){
         if (this.titleTextIndex<this.titleText.length+1){
@@ -101,9 +102,9 @@ export default class MenuView {
         // objectsTotest.push(menuSections[0])
 // Math.random()*(w-testWidth+1)
 
-        if (w>800){
+        if (w>1100){
             for (let i = 0; i < 2; i++){
-                let testWidth = w>h? Math.random()*(w/3-w/4+1)+w/4:Math.random()*(h/3-h/4+1)+h/4
+                let testWidth = w<h? Math.random()*(w/3-w/4+1)+w/4:Math.random()*(h/3-h/4+1)+h/4
                 // Math.random() * (max - min + 1) + min
 
                 let vertices = [
@@ -121,19 +122,20 @@ export default class MenuView {
                                    offsetX:i>=vertices.length?Math.random() * (w - testWidth + 1):vertices[i].offsetX,
                                    offsetY:i>=vertices.length?Math.random() * (h - testWidth - h/5 + 1) + h/5:vertices[i].offsetY,
                                    row:true,
-                                   // color:p.color(Math.random()*255,Math.random()*255,Math.random()*255),
+                                   color:p.color(Math.random()*255,Math.random()*255,Math.random()*255),
                                    wildcard:wildcard,
                                  }
-                this.test = new Wireframe(parameters);
+                let testWireframe = new Wireframe(parameters);
                 let isOverlapping = false;
                 for (let i = 0; i < objectsTotest.length; i++){
                     if (!isOverlapping){
-                        isOverlapping = this.isOverlapping(objectsTotest[i],this.test)
+                        isOverlapping = this.isOverlapping(objectsTotest[i],testWireframe)
                     }
                 }
                 if (!isOverlapping){
-                    objectsTotest.push(this.test)
-                    // _ui.push(this.test)
+                    objectsTotest.push(testWireframe)
+                    // _ui.push(testWireframe)
+
                 }
             }
         }
@@ -141,63 +143,95 @@ export default class MenuView {
 
         /// ---- ******** BEGIN _UI OBJECTS
         // _ui objects are drawn to screen and mirror a wireframe object
-        let x,y,width,height,objectToMirror, drawing
-
+        let x,y,width,height,objectToMirror;
         for (let i = 0; i < objectsTotest.length; i++){
             let drawingHasBeenDrawn = false
             let strokeIndex = 0
-            if (previousUI){
-                if (previousUI.drawings){
-                    if (previousUI.drawings[i]){
-                        x = previousUI.drawings[i].x;
-                        y = previousUI.drawings[i].y;
-                        width = previousUI.drawings[i].width;
-                        height = previousUI.drawings[i].height;
-                        drawingHasBeenDrawn = previousUI.drawings[i].drawingHasBeenDrawn
-                        strokeIndex = previousUI.drawings[i].submittedStrokeIndex
-                        clearTimeout(previousUI.drawings[i].timeOut)
-                    }
-                }
-            }
-            wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-
-            parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard}//,color:"lightgrey",
-            drawing = new DisplayDrawingContainer(parameters)
-            drawing.setLengthOfDrawingSquare(objectsTotest[i].width)
-            drawing.setFill(true)
-            drawing.setSubmittedStrokes(baronData.drawingData)
-            drawing.submittedStrokeIndex = strokeIndex;
-            this.drawings.push(drawing)
-            _ui.push(drawing)
-        }
-        let beginRedrawingStrokesFunc = (drawing) => {
-            if (drawing){
-                let redrawStrokes = (timeOutVar) => {
-                    if (drawing.drawingHasBeenDrawn){
-                        if (drawing.loop){
-                            drawing.drawingHasBeenDrawn = false;
-                            drawing.submittedStrokeIndex = 0;
-                            clearTimeout(timeOutVar)
-                        } else {
-                            clearTimeout(timeOutVar)
-                            return;
+                if (i===0){
+                    if (previousUI){
+                        if (previousUI.backgroundDrawing1){
+                            x = previousUI.backgroundDrawing1.x;
+                            y = previousUI.backgroundDrawing1.y;
+                            width = previousUI.backgroundDrawing1.width;
+                            height = previousUI.backgroundDrawing1.height;
+                            drawingHasBeenDrawn = previousUI.backgroundDrawing1.drawingHasBeenDrawn
+                            strokeIndex = previousUI.backgroundDrawing1.submittedStrokeIndex
+                            clearTimeout(previousUI.backgroundDrawing1.timeOut1)
+                            clearTimeout(previousUI.backgroundDrawing1.timeOut2)
                         }
                     }
-                    if (drawing.submittedStrokeIndex < drawing.submittedStrokes.length) {
-                        drawing.submittedStrokeIndex++
-                        clearTimeout(timeOutVar)
-                        timeOutVar = setTimeout(redrawStrokes, 10,drawing,timeOutVar);
-                    } else {
-                        drawing.drawingHasBeenDrawn = true;
-                        // pause three seconds to display drawing.
-                            // then loop if this.displayDrawingSpace.loop
-                            // is set to true otherwise return.
-                        timeOutVar = setTimeout(redrawStrokes, 7000,drawing,timeOutVar);
+                    wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
+                    parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard}//,color:"lightgrey"}
+                    this.backgroundDrawing1 = new DisplayDrawingContainer(parameters)
+                    this.backgroundDrawing1.setLengthOfDrawingSquare(objectsTotest[i].width)
+                    this.backgroundDrawing1.setFill(true)
+                    this.backgroundDrawing1.setSubmittedStrokes(baronData.drawingData)
+                    this.backgroundDrawing1.submittedStrokeIndex = strokeIndex;
+                    this.backgroundDrawing1.redrawStrokes();
+
+                    _ui.push(this.backgroundDrawing1)
+                } if (i===1){
+                    if (previousUI){
+                        if (previousUI.backgroundDrawing2){
+                            x = previousUI.backgroundDrawing2.x;
+                            y = previousUI.backgroundDrawing2.y;
+                            width = previousUI.backgroundDrawing2.width;
+                            height = previousUI.backgroundDrawing2.height;
+                            drawingHasBeenDrawn = previousUI.backgroundDrawing2.drawingHasBeenDrawn
+                            strokeIndex = previousUI.backgroundDrawing2.submittedStrokeIndex
+                            clearTimeout(previousUI.backgroundDrawing2.timeOut1)
+                            clearTimeout(previousUI.backgroundDrawing2.timeOut2)
+                        }
                     }
+                    wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
+                    parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard}//,color:"lightgrey"}
+                    this.backgroundDrawing2 = new DisplayDrawingContainer(parameters)
+                    this.backgroundDrawing2.setLengthOfDrawingSquare(objectsTotest[i].width)
+                    this.backgroundDrawing2.setFill(true)
+                    this.backgroundDrawing2.setSubmittedStrokes(baronData.drawingData)
+                    this.backgroundDrawing2.submittedStrokeIndex = strokeIndex;
+                    this.backgroundDrawing2.redrawStrokes();
+
+                    _ui.push(this.backgroundDrawing2)
                 }
-                redrawStrokes();
             }
-        }
+            // wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
+            // parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard}//,color:"lightgrey",
+            // drawing = new DisplayDrawingContainer(parameters)
+            // drawing.setLengthOfDrawingSquare(objectsTotest[i].width)
+            // drawing.setFill(true)
+            // drawing.setSubmittedStrokes(baronData.drawingData)
+            // drawing.submittedStrokeIndex = strokeIndex;
+            // this.drawings.push(drawing)
+            // _ui.push(drawing)
+        // let beginRedrawingStrokesFunc = (drawing) => {
+        //     if (drawing){
+        //         let redrawStrokes = (timeOutVar) => {
+        //             if (drawing.drawingHasBeenDrawn){
+        //                 if (drawing.loop){
+        //                     drawing.drawingHasBeenDrawn = false;
+        //                     drawing.submittedStrokeIndex = 0;
+        //                     clearTimeout(timeOutVar)
+        //                 } else {
+        //                     clearTimeout(timeOutVar)
+        //                     return;
+        //                 }
+        //             }
+        //             if (drawing.submittedStrokeIndex < drawing.submittedStrokes.length) {
+        //                 drawing.submittedStrokeIndex++
+        //                 clearTimeout(timeOutVar)
+        //                 timeOutVar = setTimeout(redrawStrokes, 10,drawing,timeOutVar);
+        //             } else {
+        //                 drawing.drawingHasBeenDrawn = true;
+        //                 // pause three seconds to display drawing.
+        //                     // then loop if this.displayDrawingSpace.loop
+        //                     // is set to true otherwise return.
+        //                 timeOutVar = setTimeout(redrawStrokes, 7000,drawing,timeOutVar);
+        //             }
+        //         }
+        //         redrawStrokes();
+        //     }
+        // }
 
         let text = "";
         for (let i = 0; i < menuSections.length; i++){
@@ -299,9 +333,14 @@ export default class MenuView {
         if (!windowResized){
             this.addCharacterToTitle();
             this.toggleShowCursor(true);
-            for (let i = 0; i < this.drawings.length;i++){
-                beginRedrawingStrokesFunc(this.drawings[i]);
-            }
+            // if (this.backgroundDrawing1){
+            //     this.backgroundDrawing1.redrawStrokes();
+            // }
+            // if (this.backgroundDrawing2){
+            //     this.backgroundDrawing2.redrawStrokes();
+            //
+            // }
+                // beginRedrawingStrokesFunc(this.drawings[i]);
         }
         // if all of the characters of the title have been added
             // set the title to display all of the text

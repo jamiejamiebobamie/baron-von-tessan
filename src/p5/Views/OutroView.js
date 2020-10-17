@@ -7,10 +7,14 @@ export default class OutroView {
     constructor(){
         this.drawing = undefined;
         this.drawingWireframe = undefined;
+        this.dialogWireframe = undefined;
+
         this.dialog = undefined;
         this.baronDialogIndex = 0
         this.timeOutVar1 = undefined
         this.timeOutVar2 = undefined
+        this.timeOutVar3 = undefined
+
         this.dialogText = baronData.outroDescriptionData
     }
     addCharacterToDialog(){
@@ -41,6 +45,10 @@ export default class OutroView {
             return
                 // this.timeOutVar = setTimeout(()=>{changeViewMethod()},15000)
         }
+    }
+    raiseDialog(){
+        this.dialogWireframe.y--;
+        this.timeOutVar3 = setTimeout(()=>{this.raiseDialog()},20)
     }
     getUI(){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
@@ -120,7 +128,7 @@ export default class OutroView {
                            parent:drawingParent,
                          }
         this.drawingWireframe = new Wireframe(parameters)
-        _ui.push(this.drawingWireframe)
+        // _ui.push(this.drawingWireframe)
 
         wildcard = {shrinkAmountWidth:.9,shrinkAmountHeight:.9}
         parameters = { p:p,
@@ -131,7 +139,7 @@ export default class OutroView {
                            wildcard:wildcard,
                            parent:bottomThirdOfScreen,
                          }
-        let dialog = new Wireframe(parameters)
+        this.dialogWireframe = new Wireframe(parameters)
         // _ui.push(dialog)
 
 
@@ -144,12 +152,11 @@ export default class OutroView {
                 height = previousUI.dialog.height;
             }
         }
-        let fontSize = w>h ? dialog.width/20 : dialog.width/15 ;
+        let fontSize = w>h ? this.dialogWireframe.width/20 : this.dialogWireframe.width/15 ;
         wildcard = {fontSize:fontSize,numberOfLines:4}
-        parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height,wildcard:wildcard}//color:"pink"}
+        parameters = {p:p,objectToMirror:this.dialogWireframe,x:x,y:y,width:width,height:height,wildcard:wildcard}//color:"pink"}
         this.dialog = new TextBox(parameters)
         this.dialog.setFill(true)
-        _ui.push(this.dialog)
 
         if (!windowResized){
             this.addCharacterToDialog()
@@ -200,7 +207,7 @@ export default class OutroView {
                 } else {
                     clearTimeout(timeOutVar)
                     // want to do a fade out or fade to grey and return to
-                    setTimeout(changeView, 2000)
+                    setTimeout(changeView, 7000)
                     return
                     // pause three seconds to display drawing.
                         // then loop if this.displayDrawingSpace.loop
@@ -215,9 +222,11 @@ export default class OutroView {
             beginRemovingStrokesFunc(); // this does not run if I remove the
                                             // flagInappropriate view...
             this.shrinkDrawing()
+            this.raiseDialog()
         }
 
         _ui.push(this.drawing)
+        _ui.push(this.dialog)
         return _ui;
     }
 }
