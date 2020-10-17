@@ -7,7 +7,7 @@ export default class TextBox extends Mirror{
         this.textColor = "black";
         // for rotating text 90 degrees clockwise
         this.rotated = false;
-        this.text = undefined
+        this.text = ""
         this.textSize = undefined
         this.fontStyle = undefined
         this.numberOfLines = undefined

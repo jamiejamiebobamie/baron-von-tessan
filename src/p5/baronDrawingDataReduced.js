@@ -1647,8 +1647,6 @@ const drawingData = [
 ]
 
 const introDescriptionData = "I am Baron von Tessan\nRossen Blatt the 4th,\npresiding over the affairs of... "
-// const introDescriptionData = "I am Baron von Tessan Rossen Blatt the 4th and I preside over the affairs of "
-
 const outroDescriptionData = "Hmm, forgot about that one...\nWell, thank you for visiting.\nPlease return soon!"
 
 export default {drawingData,introDescriptionData,outroDescriptionData};

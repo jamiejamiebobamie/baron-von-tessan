@@ -1,12 +1,11 @@
-import Wireframe from '../../uiClasses/Wireframe';
-import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer';
-import TextBox from '../../uiClasses/TextBox'
+import Wireframe from '../uiClasses/Wireframe';
+import DisplayDrawingContainer from '../uiClasses/DisplayDrawingContainer';
+import TextBox from '../uiClasses/TextBox'
 
-
-export default class testView {
-    constructor(previousView){
-        this.drawing = previousView ? previousView.drawing : undefined;
-        this.dialog = previousView ? previousView.dialog : undefined;
+export default class SlideshowView {
+    constructor(){
+        this.drawing = undefined;
+        this.dialog = undefined;
         this.responseIndex = 0
         this.charIndex = 0
         this.timeOutVar = undefined
@@ -122,16 +121,19 @@ export default class testView {
         }
         _ui.push(this.drawing)
 
+        let text;
         if (previousUI){
             if (previousUI.dialog){
                 x = previousUI.dialog.x;
                 y = previousUI.dialog.y;
                 width = previousUI.dialog.width;
                 height = previousUI.dialog.height;
-                this.charIndex = previousUI.charIndex;
+                text = previousUI.dialog.text;
+
             }
+            this.charIndex = previousUI.charIndex;
         }
-        parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height}
+        parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height,wildcard:{text:text}}
         this.dialog = new TextBox(parameters)
         this.dialog.setFill(true)
         let fontSize = 40

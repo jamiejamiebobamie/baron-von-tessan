@@ -1,8 +1,8 @@
 import React,{Component}  from 'react';
 import {isMobile} from 'react-device-detect';
-import Sketch from './Sketch.js';
+import Sketch from './p5/Sketch.js';
 import './App.css';
-import response from './simulatedResponse'
+import response from './p5/simulatedResponse'
 
 const p5 = require("p5")
 

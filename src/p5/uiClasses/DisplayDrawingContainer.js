@@ -33,7 +33,7 @@ export default class DisplayDrawingContainer extends Mirror{
         }
         this.fromLocation = this.toLocation
         clearTimeout(this.timeOut1)
-        this.timeOut1 = setTimeout(()=>{this.setNewToLocation()},300)
+        this.timeOut1 = setTimeout(()=>{this.setNewToLocation()},200)
     }
     setLengthOfDrawingSquare(length){ this.lengthOfDrawingSquare = length }
     setSubmittedStrokeIndex(index){ this.submittedStrokeIndex = index }

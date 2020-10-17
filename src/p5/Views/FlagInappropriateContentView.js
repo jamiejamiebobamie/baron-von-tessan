@@ -1,8 +1,8 @@
-import Wireframe from '../../uiClasses/Wireframe';
-import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer';
-import TextBox from '../../uiClasses/TextBox'
+import Wireframe from '../uiClasses/Wireframe';
+import DisplayDrawingContainer from '../uiClasses/DisplayDrawingContainer';
+import TextBox from '../uiClasses/TextBox'
 
-export default class FlagInappropriateContentWireframe {
+export default class FlagInappropriateContentView {
     constructor(){
         this.instructions = undefined
         this.drawings1 = [undefined,undefined,undefined]

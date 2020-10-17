@@ -1,12 +1,12 @@
-import Wireframe from '../../uiClasses/Wireframe';
-import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer';
-import TextBox from '../../uiClasses/TextBox'
-import baronData from '../../baronDrawingDataReduced'
+import Wireframe from '../uiClasses/Wireframe';
+import DisplayDrawingContainer from '../uiClasses/DisplayDrawingContainer';
+import TextBox from '../uiClasses/TextBox'
+import baronData from '../baronDrawingDataReduced'
 
-export default class testView {
-    constructor(previousView){
-        this.drawing = previousView ? previousView.drawing : undefined;
-        this.dialog = previousView ? previousView.dialog : undefined;
+export default class IntroView {
+    constructor(){
+        this.drawing = undefined;
+        this.dialog = undefined;
         this.baronDialogIndex = 0
         this.timeOutVar = undefined
         this.dialogText = baronData.introDescriptionData
@@ -23,7 +23,6 @@ export default class testView {
         else {
             clearTimeout(this.timeOutVar)
             return
-                // this.timeOutVar = setTimeout(()=>{changeViewMethod()},15000)
         }
     }
     getUI(){return this}
@@ -33,7 +32,6 @@ export default class testView {
 
         let wildcard;
         let parameters;
-        let wireFrame
         for (let i = 0; i < 3; i++){
             let color = i%2 ?"orange" :"orange"
             wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1, string:"break the screen into 3 rows"}
@@ -119,18 +117,20 @@ export default class testView {
         // _ui.push(dialog)
 
 
-        let x,y,width,height;
+        let x,y,width,height,text;
         if (previousUI){
             if (previousUI.dialog){
                 x = previousUI.dialog.x;
                 y = previousUI.dialog.y;
                 width = previousUI.dialog.width;
                 height = previousUI.dialog.height;
+                text = previousUI.dialog.text;
+
             }
         }
         let fontSize = w>h ? dialog.width/20 : dialog.width/15 ;
 
-        wildcard = {fontSize:fontSize,numberOfLines:4}
+        wildcard = {text:text,fontSize:fontSize,numberOfLines:4}
         parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height,wildcard:wildcard}
         this.dialog = new TextBox(parameters)
         this.dialog.setFill(true)

@@ -1,10 +1,10 @@
-import Wireframe from '../../uiClasses/Wireframe';
-import DrawingContainer from '../../uiClasses/DrawingContainer';
-import TextBox from '../../uiClasses/TextBox'
+import Wireframe from '../uiClasses/Wireframe';
+import DrawingContainer from '../uiClasses/DrawingContainer';
+import TextBox from '../uiClasses/TextBox'
 
 
-export default class testView {
-    constructor(previousView){
+export default class DrawingView {
+    constructor(){
         this.drawing = undefined//previousView ? previousView.drawing : undefined;
         this.buttons = [undefined,undefined,undefined,undefined]
         // callbacks

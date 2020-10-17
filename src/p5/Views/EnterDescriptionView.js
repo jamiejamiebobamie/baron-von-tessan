@@ -1,12 +1,11 @@
-import Wireframe from '../../uiClasses/Wireframe';
-import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer';
-import TextInput from '../../uiClasses/TextInput'
-import TextBox from '../../uiClasses/TextBox'
-import Keyboard from '../../uiClasses/Keyboard'
+import Wireframe from '../uiClasses/Wireframe';
+import DisplayDrawingContainer from '../uiClasses/DisplayDrawingContainer';
+import TextInput from '../uiClasses/TextInput'
+import TextBox from '../uiClasses/TextBox'
+import Keyboard from '../uiClasses/Keyboard'
 
-
-export default class testView {
-    constructor(previousView){
+export default class EnterDescriptionView {
+    constructor(){
         this.backButton = undefined;
         this.submitButton = undefined;
         this.drawing = undefined;
@@ -397,7 +396,7 @@ export default class testView {
                     }
                 }
                 if (this.drawing.submittedStrokeIndex < this.drawing.submittedStrokes.length) {
-                    this.drawing.submittedStrokeIndex += 1
+                    this.drawing.submittedStrokeIndex++
                     timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
                 } else {
                     this.drawing.drawingHasBeenDrawn = true;

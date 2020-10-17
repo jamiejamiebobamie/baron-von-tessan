@@ -1,10 +1,10 @@
-import Menu from './Views/wireFrames/0_MenuViewWireframe';
-import IntroViewWireframe from './Views/wireFrames/1_IntroViewWireframe';
-import SlideshowViewWireframe from './Views/wireFrames/2_SlideshowViewWireframe';
-import DrawingViewWireframe from './Views/wireFrames/3_DrawingViewWireframe';
-import EnterDescriptionViewWireframe from './Views/wireFrames/4_EnterDescriptionViewWireframe';
-import FlagInappropriateContentWireframe from './Views/wireFrames/5_FlagInappropriateContentWireframe';
-import OutroViewWireframe from './Views/wireFrames/6_OutroViewWireframe';
+import Menu from './Views/MenuView';
+import IntroView from './Views/IntroView';
+import SlideshowView from './Views/SlideshowView';
+import DrawingView from './Views/DrawingView';
+import EnterDescriptionView from './Views/EnterDescriptionView';
+import FlagInappropriateContent from './Views/FlagInappropriateContentView';
+import OutroView from './Views/OutroView';
 
 
 export default class Sketch {
@@ -14,17 +14,17 @@ export default class Sketch {
         let view;
         view = new Menu();
         this.views.push(view);
-        view = new IntroViewWireframe();
+        view = new IntroView();
         this.views.push(view);
-        view = new SlideshowViewWireframe(view);
+        view = new SlideshowView();
         this.views.push(view);
-        view = new DrawingViewWireframe();
+        view = new DrawingView();
         this.views.push(view);
-        view = new EnterDescriptionViewWireframe();
+        view = new EnterDescriptionView();
         this.views.push(view);
-        view = new FlagInappropriateContentWireframe();
+        view = new FlagInappropriateContent();
         this.views.push(view);
-        view = new OutroViewWireframe();
+        view = new OutroView();
         this.views.push(view);
 
         // p5.js media references
@@ -71,17 +71,17 @@ export default class Sketch {
             let view;
             view = new Menu();
             this.views.push(view);
-            view = new IntroViewWireframe();
+            view = new IntroView();
             this.views.push(view);
-            view = new SlideshowViewWireframe(view);
+            view = new SlideshowView();
             this.views.push(view);
-            view = new DrawingViewWireframe();
+            view = new DrawingView();
             this.views.push(view);
-            view = new EnterDescriptionViewWireframe();
+            view = new EnterDescriptionView();
             this.views.push(view);
-            view = new FlagInappropriateContentWireframe();
+            view = new FlagInappropriateContent();
             this.views.push(view);
-            view = new OutroViewWireframe();
+            view = new OutroView();
             this.views.push(view);
         }
     }

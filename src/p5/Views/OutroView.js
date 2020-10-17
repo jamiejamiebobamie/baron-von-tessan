@@ -1,12 +1,12 @@
-import Wireframe from '../../uiClasses/Wireframe';
-import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainer';
-import TextBox from '../../uiClasses/TextBox'
-import baronData from '../../baronDrawingDataReduced'
+import Wireframe from '../uiClasses/Wireframe';
+import DisplayDrawingContainer from '../uiClasses/DisplayDrawingContainer';
+import TextBox from '../uiClasses/TextBox'
+import baronData from '../baronDrawingDataReduced'
 
-export default class testView {
-    constructor(previousView){
-        this.drawing = previousView ? previousView.drawing : undefined;
-        this.dialog = previousView ? previousView.dialog : undefined;
+export default class OutroView {
+    constructor(){
+        this.drawing = undefined;
+        this.dialog = undefined;
         this.baronDialogIndex = 0
         this.timeOutVar = undefined
         this.dialogText = baronData.outroDescriptionData
