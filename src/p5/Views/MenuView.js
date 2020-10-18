@@ -24,6 +24,7 @@ export default class MenuView {
         this.backgroundDrawing2 = undefined;
         this.backgroundDrawing3 = undefined;
         this.backgroundDrawing4 = undefined;
+        this.screenHasSettled = false
     }
     addCharacterToTitle(){
         if (this.titleTextIndex<this.titleText.length+1){
@@ -121,7 +122,7 @@ export default class MenuView {
                                    offsetX:i>=vertices.length?Math.random() * (w - testWidth + 1):vertices[i].offsetX,
                                    offsetY:i>=vertices.length?Math.random() * (h - testWidth - h/5 + 1) + h/5:vertices[i].offsetY,
                                    row:true,
-                                   // color:p.color(Math.random()*255,Math.random()*255,Math.random()*255),
+                                   color:p.color(Math.random()*255,Math.random()*255,Math.random()*255),
                                    wildcard:wildcard,
                                  }
                 let testWireframe = new Wireframe(parameters);

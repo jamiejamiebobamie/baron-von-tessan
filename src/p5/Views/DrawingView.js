@@ -4,7 +4,7 @@ import TextBox from '../uiClasses/TextBox'
 
 export default class DrawingView {
     constructor(){
-        this.drawing = undefined//previousView ? previousView.drawing : undefined;
+        this.drawing = undefined
         this.buttons = [undefined,undefined,undefined,undefined]
         // callbacks -- necessary
         this.toggleTool = this.toggleTool.bind(this)
@@ -13,10 +13,6 @@ export default class DrawingView {
         this.clearStrokes = this.clearStrokes.bind(this)
         this.removeStroke = this.removeStroke.bind(this)
     }
-    // button click functions ------
-        // needs to be fixed so that functions cannot be activated accdientally
-        // while the user is drawing a stroke
-        // needs to work with the eraser...
     toggleTool(buttonObject){
         if (!this.drawing.userIsDrawingOrErasing){
                 this.drawing.penMode = !this.drawing.penMode;
@@ -39,9 +35,6 @@ export default class DrawingView {
             }
         }
     }
-    // --------
-
-    // this.drawing click functions
     buildStroke(){
         if (this.drawing !== undefined){
             if (this.drawing.strokes){
@@ -67,76 +60,8 @@ export default class DrawingView {
     }
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
-        let _ui = []
-        // let offsetX = w>h ? w*(-1/10) : 0;
-        // let offsetY = w>h ? 0 :  -h/10 ;
-        // let width =  w>h ? w*(1/3) :  w;
-        // let height =  w>h ? h :  h*(1/3) ;
-        //
-        // let buttons = new Container({p:p,width:width,height:height,len:3,index:2,row:h>w, offsetX:offsetX, offsetY:offsetY})
-        // // buttons.setStroke(true)
-        // _ui.push(buttons)
-        //
-        // let button1 = new Container({p:p,w:w,h:h,parent:buttons,len:4,index:0,row:w>h})
-        // _ui.push(button1)
-        // this.eraserOrPenButton = new TextBox({p:p,w:w,h:h,parent:button1,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:this.toggleTool});
-        // let buttonString = this.drawingSpace.penMode ? "ERASER" : "PEN";
-        // this.eraserOrPenButton.setString(buttonString);
-        // this.eraserOrPenButton.setTextColor("black")
-        // // this.eraserOrPenButton.setFontStyle(fontStyle);
-        // this.eraserOrPenButton.setInteractivity(true);
-        // this.eraserOrPenButton.setStroke(true)
-        // performClickOnce = true;
-        // this.eraserOrPenButton.setClickType(performClickOnce)
-        // _ui.push(this.eraserOrPenButton)
-        //
-        // let button2 = new Container({p:p,w:w,h:h,parent:buttons,len:4,index:1,row:w>h})
-        // _ui.push(button2)
-        // let undoButton = new TextBox({p:p,w:w,h:h,parent:button2,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:this.undoLastStroke});
-        // undoButton.setString("UNDO");
-        // // undoButton.setFontStyle(fontStyle);
-        // undoButton.setTextColor("black")
-        // undoButton.setInteractivity(true);
-        // undoButton.setStroke(true)
-        // undoButton.setClickType(performClickOnce) // true
-        //
-        // _ui.push(undoButton)
-        //
-        // let button3 = new Container({p:p,w:w,h:h,parent:buttons,len:4,index:2,row:w>h})
-        // _ui.push(button3)
-        // let clearButton = new TextBox({p:p,w:w,h:h,parent:button3,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:this.clearStrokes});
-        // clearButton.setString("CLEAR");
-        // // clearButton.setFontStyle(fontStyle);
-        // clearButton.setTextColor("black")
-        // clearButton.setInteractivity(true);
-        // clearButton.setStroke(true)
-        // clearButton.setClickType(performClickOnce) // true
-        //
-        // _ui.push(clearButton)
-        //
-        // let button4 = new Container({p:p,w:w,h:h,parent:buttons,len:4,index:3,row:w>h})
-        // _ui.push(button4)
-        // let submitFunc = () => {
-        //     let submittedStrokes = [];
-        //     for (let i = 0; i<this.drawingSpace.strokes.length; i++) {
-        //         for (let j = 0; j<this.drawingSpace.strokes[i].length; j++) {
-        //             submittedStrokes.push(this.drawingSpace.strokes[i][j])
-        //         }
-        //     }
-        //     REACT_APP.handleSubmitDrawing(submittedStrokes)
-        //     REACT_APP.testViewSwitch()
-        // }
-        // let submitButton = new TextBox({p:p,w:w,h:h,parent:button4,row:true,width:button1.width/1.5,height:button1.height/3,color:"white",mouseClickfunc:submitFunc});
-        // submitButton.setString("SUBMIT");
-        // // submitButton.setFontStyle(fontStyle);
-        // submitButton.setTextColor("black")
-        // submitButton.setInteractivity(true);
-        // submitButton.setStroke(true)
-        // submitButton.setClickType(performClickOnce) // true
-        //
-        // _ui.push(submitButton)
-
-        ////
+        /// ---- ******** BEGIN WIREFRAME OBJECTS
+            // wireframe objects are not drawn to screen.
         let drawingSpaceWidth = w > h ? w*(2/3) : w;
         let drawingSpaceHeight = w > h ? h : h*(2/3);
         let lengthOfDrawingSquare = w > h ? drawingSpaceHeight : drawingSpaceWidth;
@@ -169,7 +94,6 @@ export default class DrawingView {
 
         let buttons = []
         for (let i = 0; i<4;i++){
-            // wildcard = {shouldBeSquare:false,shrinkAmountWidth:w>h?.7:.9,shrinkAmountHeight:w>h?.5:.3}
             wildcard = {shouldBeSquare:false,shrinkAmountWidth:w>h?.5:.9,shrinkAmountHeight:w>h?.5:.3}
 
             if (i === 0){
@@ -188,10 +112,8 @@ export default class DrawingView {
                                len:w>h?4:3,
                                offsetY:w<h?-controlsArea.height/3:0,
                                index:i,
-                               color:"pink",
                                wildcard:wildcard,
                                parent:controlsArea,
-                              // mouseClickfunc: REACT_APP.testViewSwitch
                          }
             let button = new Wireframe(parameters)
             buttons.push(button)
@@ -204,18 +126,15 @@ export default class DrawingView {
                            len:3,
                            offsetY:-controlsArea.height/4,
                            index:2,
-                           color:"pink",
                            wildcard:wildcard,
                            parent:controlsArea,
-                          // mouseClickfunc: REACT_APP.testViewSwitch
                      }
         let button = new Wireframe(parameters)
         buttons.push(button)
 
-
 //// ---- - - - - - - - -
 //// START OF DRAWN UI ELEMENTS
-
+        let _ui = []
         let x,y,width,height,drawingMode,currentStroke,strokes;
         drawingMode = true;
         currentStroke = [];
@@ -231,7 +150,7 @@ export default class DrawingView {
                 strokes = previousUI.drawing.strokes ? previousUI.drawing.strokes : [];
             }
         }
-        parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height,w:w,h:h,color:'lightgrey'}
+        parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height,w:w,h:h,color:'lightgrey',lerpSpeed:windowResized?.3:.1}
         this.drawing = new DrawingContainer(parameters)
         this.drawing.setCurrentStroke(currentStroke);
         this.drawing.setStrokes(strokes);

@@ -29,9 +29,10 @@ export default class IntroView {
     setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
         let wireFrameElements = []
         let _ui = []
-
         let wildcard;
         let parameters;
+        /// ---- ******** BEGIN WIREFRAME OBJECTS
+            // wireframe objects are not drawn to screen.
         for (let i = 0; i < 3; i++){
             let color = i%2 ?"orange" :"orange"
             wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1, string:"break the screen into 3 rows"}
@@ -116,6 +117,10 @@ export default class IntroView {
         let dialog = new Wireframe(parameters)
         // _ui.push(dialog)
 
+        /// ---- ******** END WIREFRAME OBJECTS
+
+        /// ---- ******** BEGIN _UI OBJECTS
+        // _ui objects are drawn to screen and mirror a wireframe object
 
         let x,y,width,height,text;
         if (previousUI){
@@ -166,7 +171,7 @@ export default class IntroView {
         }
         wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
 
-        parameters = {p:p,w:w,h:h,objectToMirror:drawing,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard}
+        parameters = {p:p,w:w,h:h,objectToMirror:drawing,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard,lerpSpeed:windowResized?.3:.1}
         this.drawing = new DisplayDrawingContainer(parameters)
         this.drawing.setLengthOfDrawingSquare(drawing.width)
         this.drawing.setFill(true)

@@ -28,6 +28,8 @@ export default class SlideshowView {
     setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
         let _ui = []
 
+        /// ---- ******** BEGIN WIREFRAME OBJECTS
+            // wireframe objects are not drawn to screen.
         let drawingSpaceWidth = w > h ? w*(2/3) : w;
         let drawingSpaceHeight = w > h ? h : h*(2/3);
         let lengthOfDrawingSquare = w > h ? drawingSpaceHeight : drawingSpaceWidth;
@@ -75,7 +77,7 @@ export default class SlideshowView {
             }
         }
         wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-        parameters = {p:p,objectToMirror:drawing,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard}
+        parameters = {p:p,objectToMirror:drawing,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard,lerpSpeed:windowResized?.3:.1}
         this.drawing = new DisplayDrawingContainer(parameters)
         this.drawing.setLengthOfDrawingSquare(drawing.width)
         this.drawing.setFill(true)

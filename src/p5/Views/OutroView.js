@@ -51,8 +51,8 @@ export default class OutroView {
     setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
         let wireFrameElements = []
         let _ui = []
-
-
+        /// ---- ******** BEGIN WIREFRAME OBJECTS
+            // wireframe objects are not drawn to screen.
         let wildcard;
         let parameters;
         for (let i = 0; i < 3; i++){
@@ -193,14 +193,18 @@ export default class OutroView {
                 y = previousUI.drawing.y;
                 width = previousUI.drawing.width;
                 height = previousUI.drawing.height;
-                drawingHasBeenDrawn = previousUI.drawing.drawingHasBeenDrawn
-                strokeIndex = previousUI.drawing.submittedStrokeIndex
+                // drawingHasBeenDrawn = previousUI.drawing.drawingHasBeenDrawn
+                // strokeIndex = previousUI.drawing.submittedStrokeIndex
+                // last view's this.drawing is a DrawingContainer and not a DisplayDrawingContainer
+                    // a DrawingContainer does not have a submittedStrokeIndex.
+                // only an issue when the view is changed.
+                strokeIndex = windowResized?previousUI.drawing.submittedStrokeIndex:baronData.drawingData.length;
                 clearTimeout(previousUI.drawing.timeOut)
             }
         }
         wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
 
-        parameters = {p:p,w:w,h:h,objectToMirror:this.drawingWireframe,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard}
+        parameters = {p:p,w:w,h:h,objectToMirror:this.drawingWireframe,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard,lerpSpeed:windowResized?.3:.1}
         this.drawing = new DisplayDrawingContainer(parameters)
         this.drawing.setLengthOfDrawingSquare(this.drawingWireframe.width)
         this.drawing.setFill(true)

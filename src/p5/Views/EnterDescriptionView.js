@@ -14,8 +14,9 @@ export default class EnterDescriptionView {
     }
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
+        /// ---- ******** BEGIN WIREFRAME OBJECTS
+            // wireframe objects are not drawn to screen.
         let wireFrameElements = []
-        let _ui = []
         let wildcard;
         let parameters;
         let wireFrame
@@ -88,7 +89,7 @@ export default class EnterDescriptionView {
             }
         }
 
-        wildcard = {shouldBeSquare:true,shrinkAmountWidth:1,shrinkAmountHeight:REACT_APP.state.isMobile?.9:1,string:"[user drawing just submitted]"}
+        wildcard = {shouldBeSquare:true,shrinkAmountWidth:1,shrinkAmountHeight:REACT_APP.state.isMobile?.9:1}
         parameters = { p:p,
                             windowWidth: w,
                            windowHeight: h,
@@ -99,6 +100,7 @@ export default class EnterDescriptionView {
         let drawing = new Wireframe(parameters)
 
         let inputFormParent = bottomThirdOfScreen;
+
         if (REACT_APP.state.isMobile){
             if (w>h){
                 inputFormParent = topTwoThirdsOfViewSplitInTwoSecondHalf;
@@ -108,10 +110,7 @@ export default class EnterDescriptionView {
             }
         }
 
-         // inputFormParent = REACT_APP.state.isMobile && w>h ? topTwoThirdsOfViewSplitInTwoSecondHalf : bottomThirdOfScreen;
-         // inputFormParent = REACT_APP.state.isMobile && !w>h ? middleThirdOfScreen : bottomThirdOfScreen;
-
-        wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:.5, string:"this is the inputform container"}
+        wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:.5}
         parameters = { p:p,
                             windowWidth: w,
                            windowHeight: h,
@@ -121,7 +120,6 @@ export default class EnterDescriptionView {
                            parent:inputFormParent,
                          }
         let inputform = new Wireframe(parameters)
-        // wireFrameElements.push(inputform)
 
         wildcard = {shrinkAmountWidth:.95,shrinkAmountHeight:1}
         parameters = { p:p,
@@ -135,7 +133,6 @@ export default class EnterDescriptionView {
                            parent:inputform,
                          }
         let inputformContainer1ForInput = new Wireframe(parameters)
-        // _ui.push(inputformContainer1)
 
         wildcard = {shrinkAmountWidth:.95,shrinkAmountHeight:1}
         parameters = { p:p,
@@ -149,9 +146,8 @@ export default class EnterDescriptionView {
                            parent:inputform,
                          }
         let inputformContainer2ForButtons = new Wireframe(parameters)
-        // _ui.push(inputformContainer2)
 
-        wildcard = {shrinkAmountWidth:.9,shrinkAmountHeight:1.5, string:"<< Back"}
+        wildcard = {shrinkAmountWidth:.9,shrinkAmountHeight:1.5}
         parameters = { p:p,
                             windowWidth: w,
                            windowHeight: h,
@@ -163,9 +159,8 @@ export default class EnterDescriptionView {
                            parent:inputformContainer2ForButtons,
                          }
         let backButton = new Wireframe(parameters)
-        // _ui.push(backButton)
 
-        wildcard = {shrinkAmountWidth:.9,shrinkAmountHeight:1.5, string:"Submit"}
+        wildcard = {shrinkAmountWidth:.9,shrinkAmountHeight:1.5}
         parameters = { p:p,
                             windowWidth: w,
                            windowHeight: h,
@@ -177,9 +172,8 @@ export default class EnterDescriptionView {
                            parent:inputformContainer2ForButtons,
                          }
         let submitButton = new Wireframe(parameters)
-        // _ui.push(submitButton)
 
-        wildcard = {shrinkAmountWidth:.95,shrinkAmountHeight:1.8,string:"I drew a... (click me and type)"}
+        wildcard = {shrinkAmountWidth:.95,shrinkAmountHeight:1.8}
         parameters = { p:p,
                             windowWidth: w,
                            windowHeight: h,
@@ -190,21 +184,17 @@ export default class EnterDescriptionView {
                            parent:inputformContainer1ForInput,
                          }
         let input = new Wireframe(parameters)
-        // _ui.push(input)
-
-
 
         wildcard = {shrinkAmountWidth:.95,shrinkAmountHeight:.95}
         parameters = { p:p,
-                            windowWidth: w,
-                           windowHeight: h,
-                           row:true,
-                           len:3,
-                           index:2,
-                           offsetY:REACT_APP.state.isMobile?0:h,
-                           // color:"red",
-                           wildcard:wildcard,
-                           parent:REACT_APP.state.isMobile?wireFrameElements[3]:wireFrame,
+                       windowWidth: w,
+                       windowHeight: h,
+                       row:true,
+                       len:3,
+                       index:2,
+                       offsetY:REACT_APP.state.isMobile?0:h,
+                       wildcard:wildcard,
+                       parent:REACT_APP.state.isMobile?wireFrameElements[3]:wireFrame,
                          }
         let keyBoardArea = new Wireframe(parameters)
 
@@ -222,12 +212,8 @@ export default class EnterDescriptionView {
                                     index:i,
                                     row:true,
                                     wildcard:wildcard,
-                                    color:"pink"
                                 }
                             )
-
-            // _ui.push(row)
-
             keyBoardRows.push(row)
         }
         let keys = []
@@ -244,13 +230,9 @@ export default class EnterDescriptionView {
                                    len:keyLetters[i].length,
                                    index:j,
                                    row:false,
-                                   // color:"blue",
                                    wildcard:wildcard,
                               }
                 keyboardButton = new Wireframe(parameters)
-
-                // _ui.push(keyboardButton)
-
                 keys.push(keyboardButton)
             }
         }
@@ -264,23 +246,17 @@ export default class EnterDescriptionView {
                            len:controlButtons.length,
                            index:i,
                            row:false,
-                           // color:"blue",
                            wildcard:wildcard,
                          }
             keyboardButton = new Wireframe(parameters)
-
-            // _ui.push(keyboardButton)
-
             keys.push(keyboardButton)
-
-            // this.rowsOfKeys.push(keyboardButton)
         }
-        // _ui.push(keyBoardArea)
 
+        /// ---- ******** END WIREFRAME OBJECTS
 
-        // _ui.push(drawing)
-
-        // _ui.push(areaForKeyboard)
+        /// ---- ******** BEGIN _UI OBJECTS
+            // _ui objects are drawn to screen and mirror a wireframe object
+        let _ui = []
 
         let x,y,width,height;
         if (previousUI){
@@ -292,7 +268,6 @@ export default class EnterDescriptionView {
             }
         }
         let returnToPreviousView = () => {
-            // let currentViewIndex = REACT_APP.state.viewIndex
             changeView(-1)
         }
         wildcard = {fontSize:backButton.width/10,numberOfLines:.8}
@@ -302,12 +277,7 @@ export default class EnterDescriptionView {
         this.backButton.setStroke(true)
         this.backButton.setFill(true)
         this.backButton.setTextColor("black")
-        // this.backButton.setFontSize(backButton.width/5);
-
         this.backButton.setString("<< BACK");
-        // this.backButton.setFontSize(100);
-        // this.backButton.textSize = 100//setFontSize(100);
-
         _ui.push(this.backButton)
 
         if (previousUI){
@@ -323,7 +293,6 @@ export default class EnterDescriptionView {
             REACT_APP.handleSubmitDescription(drawingDescription)
             changeView();
         }
-        // wildcard = {fontSize:backButton.width/10}
         parameters = {p:p,objectToMirror:submitButton,x:x,y:y,width:width,height:height,mouseClickfunc:submitDescription,wildcard:wildcard}
         this.submitButton = new TextBox(parameters)
         this.submitButton.setInteractivity(true);
@@ -331,7 +300,6 @@ export default class EnterDescriptionView {
         this.submitButton.setFill(true)
         this.submitButton.setTextColor("black")
         this.submitButton.setString("SUBMIT");
-        // this.submitButton.setFontSize(1);
         _ui.push(this.submitButton)
 
         let textInput = "I drew a..."
@@ -351,7 +319,6 @@ export default class EnterDescriptionView {
         this.input.setString(textInput)
         _ui.push(this.input)
 
-
         let drawingHasBeenDrawn = false
         let strokeIndex = 0;
         let strokes = []
@@ -362,19 +329,23 @@ export default class EnterDescriptionView {
                 width = previousUI.drawing.width;
                 height = previousUI.drawing.height;
                 drawingHasBeenDrawn = previousUI.drawing.drawingHasBeenDrawn
-                clearTimeout(previousUI.drawing.timeOut)
-                strokeIndex = previousUI.drawing.submittedStrokeIndex
-                // in case user returns to the drawing view.
-                    // need to store his strokes.
+                clearTimeout(previousUI.drawing.timeOut1)
+                clearTimeout(previousUI.drawing.timeOut2)
+                // last view's this.drawing is a DrawingContainer and not a DisplayDrawingContainer
+                    // a DrawingContainer does not have a submittedStrokeIndex.
+                // only an issue when the view is changed.
+                strokeIndex = previousUI.drawing.submittedStrokeIndex?previousUI.drawing.submittedStrokeIndex:0;
+                // in case user returns to the drawing view:
+                    // the strokes from the last view need to be stored.
                     // the submitted drawing data stored in the React state
-                    // is a flattened 2d array. so drawing app functionality
-                    // is lost if this version of data is used.
+                    // is a flattened 2d array. so DrawingContainer functionality
+                    // ("UNDO" button) breaks without original stroke data.
+                // original stroke data from last view.
                 strokes = previousUI.drawing.strokes
             }
         }
         wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-
-        parameters = {p:p,w:w,h:h,objectToMirror:drawing,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard}
+        parameters = {p:p,w:w,h:h,objectToMirror:drawing,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard,lerpSpeed:windowResized?.3:.1}
         this.drawing = new DisplayDrawingContainer(parameters)
         this.drawing.setLengthOfDrawingSquare(drawing.width)
         this.drawing.setFill(true)
@@ -382,50 +353,8 @@ export default class EnterDescriptionView {
         this.drawing.setSubmittedStrokes(submittedStrokes)
         this.drawing.submittedStrokeIndex = strokeIndex;
         this.drawing.strokes = strokes
-
-        let beginRedrawingStrokesFunc = () => {
-            this.drawing.setSubmittedStrokeIndex(0)
-            let redrawStrokes = (timeOutVar) => {
-                if (this.drawing.drawingHasBeenDrawn){
-                    if (this.drawing.loop){
-                        this.drawing.drawingHasBeenDrawn = false;
-                        this.drawing.submittedStrokeIndex = 0;
-                        clearTimeout(timeOutVar)
-                    } else {
-                        return;
-                    }
-                }
-                if (this.drawing.submittedStrokeIndex < this.drawing.submittedStrokes.length) {
-                    this.drawing.submittedStrokeIndex++
-                    timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
-                } else {
-                    this.drawing.drawingHasBeenDrawn = true;
-                    // pause three seconds to display drawing.
-                        // then loop if this.displayDrawingSpace.loop
-                        // is set to true otherwise return.
-                    timeOutVar = setTimeout(redrawStrokes, 3000,timeOutVar);
-                }
-            }
-            redrawStrokes();
-        }
-
-        ////// ----- ////// TO LOOP.
-        // this.drawing.setLoopToTrueToLoopFinishedDrawing()
-
-        if (!windowResized){
-            beginRedrawingStrokesFunc();
-        }
+        this.drawing.redrawStrokes(10)
         _ui.push(this.drawing)
-
-        // wildcard = {shouldBeSquare:false,shrinkAmountWidth:.95,shrinkAmountHeight:.95}
-        // parameters = { p:p,
-        //                     windowWidth: w,
-        //                    windowHeight: h,
-        //                    row:true,
-        //                    parent:keyBoardArea,
-        //                    wildcard:wildcard,
-        //                  }
-        // this.keyBoard = new Keyboard(parameters)
 
         if (previousUI){
             if (previousUI.keyBoard){
@@ -440,12 +369,11 @@ export default class EnterDescriptionView {
         this.keyBoard = new Keyboard(parameters)
         this.keyBoard.setReferenceToInputBox(this.input)
         this.input.setMobileKeyboardReference(this.keyBoard)
-        // this.keyBoard.setInteractivity(true)
-        // this.keyBoard.setStroke(true)
 
         if (REACT_APP.state.isMobile){
             _ui.push(this.keyBoard)
         }
+
         return _ui;
     }
 }

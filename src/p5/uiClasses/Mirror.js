@@ -18,37 +18,41 @@ export default class Mirror extends Container{
                 this.height = parameterObject.height === undefined ? parameterObject.objectToMirror.height : this.height;
             // }
                 this.delta = parameterObject.delta ? parameterObject.delta : 1;
+                this.lerpSpeed = parameterObject.lerpSpeed ? parameterObject.lerpSpeed : .3;
         }
     }
     lerpX(){
         if (Math.abs(this.x - this.object.x)>this.delta){
-            this.x = this.p.lerp(this.x,this.object.x,.3)
+            this.x = this.p.lerp(this.x,this.object.x,this.lerpSpeed)
         }
     }
     lerpY(){
         if (Math.abs(this.y - this.object.y)>this.delta){
-            this.y = this.p.lerp(this.y,this.object.y,.3)
+            this.y = this.p.lerp(this.y,this.object.y,this.lerpSpeed)
         }
     }
     lerpWidth(){
         if (Math.abs(this.width - this.object.width)>this.delta){
-            this.width = this.p.lerp(this.width,this.object.width,.3)
+            this.width = this.p.lerp(this.width,this.object.width,this.lerpSpeed)
         }
     }
     lerpHeight(){
         if (Math.abs(this.height - this.object.height)>this.delta){
-            this.height = this.p.lerp(this.height,this.object.height,.3)
+            this.height = this.p.lerp(this.height,this.object.height,this.lerpSpeed)
         }
+    }
+    setObjectToMirror(object){
+        this.object = object
     }
     draw(){
         // this.p.fill("pink")
         // this.p.rect(this.x, this.y, this.width, this.height)
         super.draw()
-
+        // if (this.screenHasSettled){
             this.lerpX()
             this.lerpY()
             this.lerpWidth()
             this.lerpHeight()
-
+        // }
     }
 }

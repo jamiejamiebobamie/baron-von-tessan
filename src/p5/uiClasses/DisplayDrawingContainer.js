@@ -64,7 +64,10 @@ export default class DisplayDrawingContainer extends Mirror{
             }
         }
     }
-    redrawStrokes(){
+    redrawStrokes(redrawSpeed){
+        if (redrawSpeed===undefined){
+            redrawSpeed = 1;
+        }
         if (this.drawingHasBeenDrawn){
             if (this.loop){
                 this.drawingHasBeenDrawn = false;
@@ -77,16 +80,16 @@ export default class DisplayDrawingContainer extends Mirror{
         }
         if (this.submittedStrokeIndex < this.submittedStrokes.length) {
             this.submittedStrokeIndex++
-            this.timeOut2 = setTimeout(()=>{this.redrawStrokes();}, 10);
+            this.timeOut2 = setTimeout(()=>{this.redrawStrokes(redrawSpeed);}, redrawSpeed);
         } else {
             this.drawingHasBeenDrawn = true;
             // pause three seconds to display drawing.
                 // then loop if this.displayDrawingSpace.loop
                 // is set to true otherwise return.
-            this.timeOut2 = setTimeout(()=>{this.redrawStrokes();}, 7000);
+            this.timeOut2 = setTimeout(()=>{this.redrawStrokes(redrawSpeed);}, 3000);
         }
         // good for testing:
-        // console.log("hey")
+        console.log("hey")
     }
     undrawStrokes(){
         if (this.submittedStrokeIndex>=0) {
