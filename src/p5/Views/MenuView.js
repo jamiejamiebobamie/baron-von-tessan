@@ -102,8 +102,8 @@ export default class MenuView {
             menuSections.push(section);
         }
         if (w>1100){
-            for (let i = 0; i < 2; i++){
-                let testWidth = w<h? Math.random()*(w/3-w/4+1)+w/4:Math.random()*(h/3-h/4+1)+h/4
+            for (let i = 0; i < 3; i++){
+                let testWidth = w<h? Math.random()*(w/4-w/5+1)+w/4:Math.random()*(h/4-h/5+1)+h/5
                 // Math.random() * (max - min + 1) + min
 
                 let vertices = [

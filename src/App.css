@@ -8,7 +8,6 @@ body{
     background-color: white;
 }
 
-/* div needs to be locked in place on mobile... */
 .sketch-holder{
     position: absolute;
     display: flex;
@@ -18,4 +17,6 @@ body{
     margin-top: 3vh;
     margin-bottom: auto;
     height: 100%;
+    /* should disable double tapping zoom action on mobile */
+    touch-action: manipulation;
 }
