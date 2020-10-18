@@ -6,6 +6,8 @@ body{
     overflow: hidden;
     position: relative;
     background-color: white;
+    /* should disable double tapping zoom action on mobile */
+    touch-action: manipulation;
 }
 
 .sketch-holder{
@@ -17,6 +19,4 @@ body{
     margin-top: 3vh;
     margin-bottom: auto;
     height: 100%;
-    /* should disable double tapping zoom action on mobile */
-    touch-action: manipulation;
 }
