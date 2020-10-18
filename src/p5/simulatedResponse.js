@@ -2734,12 +2734,8 @@ const response = {
           descriptionData:
             "that one guy "// add a space after description to get correct output
         },
-        {
-         drawingData:       [],
-         descriptionData:   "and . . . ",
-      },
     ],
-    hashCode: "123fsdGH1290"
+    responseID: "123fsdGH1290"
 }
 
 export default response;

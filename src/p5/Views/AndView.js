@@ -9,18 +9,19 @@ export default class SlideshowView {
         this.responseIndex = 0
         this.charIndex = 0
         this.timeOutVar = undefined
+        this.textToDisplay = "and . . . "
     }
-    addCharacterToDialogString(REACT_APP){
-        if (this.charIndex<REACT_APP.state.response[this.responseIndex].descriptionData.length){
-            let allOfDialog = REACT_APP.state.response[this.responseIndex].descriptionData
+    addCharacterToDialogString(changeView){
+        if (this.charIndex<this.textToDisplay.length){
+            let allOfDialog = this.textToDisplay
             let dialogString = allOfDialog.slice(0,this.charIndex)
             this.dialog.setString(dialogString)
-            clearTimeout(this.timeOutVar)
             this.charIndex += 1
-            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialogString(REACT_APP)},50)
+            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialogString(changeView)},50)
         }
         else {
             clearTimeout(this.timeOutVar)
+            setTimeout(()=>{changeView()},2000)
             return
         }
     }
@@ -71,9 +72,9 @@ export default class SlideshowView {
                 y = previousUI.drawing.y;
                 width = previousUI.drawing.width;
                 height = previousUI.drawing.height;
-                drawingHasBeenDrawn = windowResized ? previousUI.drawing.drawingHasBeenDrawn : false;
-                clearTimeout(previousUI.drawing.timeOut)
-                strokeIndex = previousUI.drawing.submittedStrokeIndex
+                // drawingHasBeenDrawn = windowResized ? previousUI.drawing.drawingHasBeenDrawn : false;
+                // clearTimeout(previousUI.drawing.timeOut)
+                // strokeIndex = previousUI.drawing.submittedStrokeIndex
             }
         }
         wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
@@ -81,48 +82,48 @@ export default class SlideshowView {
         this.drawing = new DisplayDrawingContainer(parameters)
         this.drawing.setLengthOfDrawingSquare(drawing.width)
         this.drawing.setFill(true)
-        this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
-        this.drawing.submittedStrokeIndex = strokeIndex;
+        // this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
+        // this.drawing.submittedStrokeIndex = strokeIndex;
         // this.drawing.redrawStrokes();
 
-        let beginRedrawingStrokesAndAddingCharsFunc = () => {
-            this.drawing.setSubmittedStrokeIndex(0)
-            this.charIndex = 0
-            this.addCharacterToDialogString(REACT_APP)
-            let redrawStrokes = (timeOutVar) => {
-                if (this.drawing.drawingHasBeenDrawn){
-                    if (this.drawing.loop){
-                        this.drawing.drawingHasBeenDrawn = false;
-                        this.drawing.submittedStrokeIndex = 0;
-                        clearTimeout(timeOutVar)
-                    } else {
-                        if (this.responseIndex < REACT_APP.state.response.length-1){
-                            this.drawing.drawingHasBeenDrawn = false;
-                            this.drawing.submittedStrokeIndex = 0;
-                            this.charIndex = 0
-                            this.addCharacterToDialogString(REACT_APP)
-                            this.responseIndex += 1
-                            this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
-                        } else {
-                            changeView();
-                            return;
-                        }
-                    }
-                }
-                if (this.drawing.submittedStrokeIndex < this.drawing.submittedStrokes.length) {
-                    this.drawing.submittedStrokeIndex += 1
-                    timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
-                } else {
-                    this.drawing.drawingHasBeenDrawn = true;
-                    // pause three seconds to display drawing.
-                        // then loop if this.displayDrawingSpace.loop
-                        // is set to true otherwise return.
-                    timeOutVar = setTimeout(redrawStrokes, 3000,timeOutVar);
-                }
-            }
-            redrawStrokes();
-        }
 
+        // let beginRedrawingStrokesAndAddingCharsFunc = () => {
+        //     this.drawing.setSubmittedStrokeIndex(0)
+        //     this.charIndex = 0
+        //     this.addCharacterToDialogString(REACT_APP)
+        //     let redrawStrokes = (timeOutVar) => {
+        //         if (this.drawing.drawingHasBeenDrawn){
+        //             if (this.drawing.loop){
+        //                 this.drawing.drawingHasBeenDrawn = false;
+        //                 this.drawing.submittedStrokeIndex = 0;
+        //                 clearTimeout(timeOutVar)
+        //             } else {
+        //                 if (this.responseIndex < REACT_APP.state.response.length-1){
+        //                     this.drawing.drawingHasBeenDrawn = false;
+        //                     this.drawing.submittedStrokeIndex = 0;
+        //                     this.charIndex = 0
+        //                     this.addCharacterToDialogString(REACT_APP)
+        //                     this.responseIndex += 1
+        //                     this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
+        //                 } else {
+        //                     changeView();
+        //                     return;
+        //                 }
+        //             }
+        //         }
+        //         if (this.drawing.submittedStrokeIndex < this.drawing.submittedStrokes.length) {
+        //             this.drawing.submittedStrokeIndex += 1
+        //             timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
+        //         } else {
+        //             this.drawing.drawingHasBeenDrawn = true;
+        //             // pause three seconds to display drawing.
+        //                 // then loop if this.displayDrawingSpace.loop
+        //                 // is set to true otherwise return.
+        //             timeOutVar = setTimeout(redrawStrokes, 3000,timeOutVar);
+        //         }
+        //     }
+        //     redrawStrokes();
+        // }
         _ui.push(this.drawing)
 
         let text;
@@ -143,15 +144,15 @@ export default class SlideshowView {
         let fontSize = 40
         this.dialog.setFontSize(fontSize)
 
-        if (this.charIndex>=REACT_APP.state.response[this.responseIndex].descriptionData.length){
-            let allOfDialog = REACT_APP.state.response[this.responseIndex].descriptionData
-            this.dialog.setString(allOfDialog)
+        if (this.charIndex>=this.textToDisplay.length){
+            let allOfDescription = this.textToDisplay
+            this.dialog.setString(allOfDescription)
         }
 
         _ui.push(this.dialog)
 
         if (!windowResized){
-            beginRedrawingStrokesAndAddingCharsFunc();
+            this.addCharacterToDialogString(changeView)
         }
 
         return _ui;

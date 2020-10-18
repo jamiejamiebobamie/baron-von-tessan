@@ -132,7 +132,7 @@ export default class IntroView {
                 text = previousUI.dialog.text;
             }
         }
-        let fontSize = w>h ? dialog.width/20 : dialog.width/15 ;
+        let fontSize = w>h ? dialog.width/30 : dialog.width/15 ;
 
         wildcard = {text:text,fontSize:fontSize,numberOfLines:4}
         parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height,wildcard:wildcard}

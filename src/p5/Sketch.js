@@ -5,6 +5,8 @@ import DrawingView from './Views/DrawingView';
 import EnterDescriptionView from './Views/EnterDescriptionView';
 import FlagInappropriateContent from './Views/FlagInappropriateContentView';
 import OutroView from './Views/OutroView';
+import AndView from './Views/AndView';
+
 
 export default class Sketch {
     constructor(app){
@@ -30,14 +32,16 @@ export default class Sketch {
         this.views.push(view);
         view = new SlideshowView();
         this.views.push(view);
+        view = new AndView();
+        this.views.push(view);
         view = new DrawingView();
         this.views.push(view);
         view = new EnterDescriptionView();
         this.views.push(view);
         view = new FlagInappropriateContent();
         this.views.push(view);
-        view = new OutroView();
-        this.views.push(view);
+        // view = new OutroView();
+        // this.views.push(view);
         // reset the state variables of the app.
             // a method side effect, but place to do this.
         this.REACT_APP.resetStateVariables()

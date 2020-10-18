@@ -102,14 +102,14 @@ export default class MenuView {
             menuSections.push(section);
         }
         if (w>1100){
-            for (let i = 0; i < 3; i++){
+            for (let i = 0; i < 2; i++){
                 let testWidth = w<h? Math.random()*(w/4-w/5+1)+w/4:Math.random()*(h/4-h/5+1)+h/5
                 // Math.random() * (max - min + 1) + min
 
                 let vertices = [
                     {offsetX:w-testWidth,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
                     {offsetX:Math.random()*w/10,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
-                    {offsetX:w-testWidth,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
+                    {offsetX:w-testWidth,offsetY:Math.random()*(h/2-testWidth-h/4+1)+h/4},
                     {offsetX:Math.random()*w/10,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
                 ]
 
@@ -281,7 +281,7 @@ export default class MenuView {
                     this.enterSiteButton.setStroke(true);
                     this.enterSiteButton.setFill(true);
                     this.enterSiteButton.setColor("white");
-                    this.enterSiteButton.mouseClickfunc = changeView;
+                    this.enterSiteButton.mouseClickfunc = ()=>{setTimeout(()=>{changeView()},250)};
                     this.enterSiteButton.setString("ENTER SITE");
                     _ui.push(this.enterSiteButton);
                 } else if (i === 2){
@@ -305,7 +305,7 @@ export default class MenuView {
                     this.justDrawButton.setStroke(true);
                     this.justDrawButton.setFill(true);
                     this.justDrawButton.setColor("white");
-                    this.justDrawButton.mouseClickfunc = () => {changeView(3,5)};
+                    this.justDrawButton.mouseClickfunc = () => {setTimeout(()=>{changeView(4,6)},250)};
                     this.justDrawButton.setString("I just want to draw!");
                     _ui.push(this.justDrawButton);
                 } else if (i === 3) {
@@ -329,7 +329,7 @@ export default class MenuView {
                     this.justWatchDrawingsButton.setStroke(true);
                     this.justWatchDrawingsButton.setFill(true);
                     this.justWatchDrawingsButton.setColor("white");
-                    this.justWatchDrawingsButton.mouseClickfunc = () => {changeView(2,3)};
+                    this.justWatchDrawingsButton.mouseClickfunc = () => {setTimeout(()=>{changeView(2,3)},250)};
                     this.justWatchDrawingsButton.setString("I want to see what other people drew!");
                     _ui.push(this.justWatchDrawingsButton);
                 }

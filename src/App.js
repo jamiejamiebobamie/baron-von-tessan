@@ -25,16 +25,17 @@ class App extends Component {
         this.SketchWrapper = new Sketch(this)
         this.Sketch = this.SketchWrapper.sketch;
     }
-    handleSubmitDrawing(drawingData) {this.setState({drawingData:drawingData})}
+
+    handleSubmitDrawing(drawingData) {this.setState({drawingData:drawingData});console.log(drawingData)}
     handleSubmitDescription(drawingDescription){
         this.setState({drawingDescription:drawingDescription})
         // send drawing and description to backend
-        console.log("Sending: "+this.state.drawingData+" "+this.state.drawingDescription+" to backend.")
+        console.log("Sending to backend.")
     }
     handleSubmitFlaggedIndices(flaggedIndices){
         this.setState({flaggedIndices:flaggedIndices})
         // send flaggedIndices to backend
-        console.log("Sending: "+this.state.flaggedIndices+" to backend.")
+        console.log("Sending: to backend.")
     }
     resetStateVariables(){
         // got a weird error about setting state

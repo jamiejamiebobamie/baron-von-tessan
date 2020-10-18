@@ -312,7 +312,7 @@ export default class EnterDescriptionView {
                 textInput = previousUI.input.text;
             }
         }
-        wildcard = {fontSize:input.width/20, REACT_APP:REACT_APP,numberOfLines:1}
+        wildcard = {fontSize:input.width/25, REACT_APP:REACT_APP,numberOfLines:1}
         parameters = {p:p,objectToMirror:input,x:x,y:y,width:width,height:height,wildcard:wildcard}
         this.input = new TextInput(parameters)
         this.input.setStroke(true)
@@ -353,7 +353,7 @@ export default class EnterDescriptionView {
         this.drawing.setSubmittedStrokes(submittedStrokes)
         this.drawing.submittedStrokeIndex = strokeIndex;
         this.drawing.strokes = strokes
-        this.drawing.redrawStrokes(10)
+        this.drawing.redrawStrokes()
         _ui.push(this.drawing)
 
         if (previousUI){

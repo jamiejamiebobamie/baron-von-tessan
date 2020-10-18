@@ -157,13 +157,14 @@ export default class FlagInappropriateContentView {
             REACT_APP.handleSubmitFlaggedIndices(this.flaggedIndices)
             changeView();
         }
-        parameters = {p:p,objectToMirror:submitButtonArea,x:x,y:y,width:width,height:height,mouseClickfunc:submitFunc,wildcard:{fontSize:submitButtonArea.width/13}}
+        parameters = {p:p,objectToMirror:submitButtonArea,x:x,y:y,width:width,height:height,mouseClickfunc:submitFunc}//,wildcard:{fontSize:submitButtonArea.width/13}}
         this.submitButton = new TextBox(parameters)
         this.submitButton.setInteractivity(true);
         this.submitButton.setStroke(true)
         this.submitButton.setFill(true)
         this.submitButton.setTextColor("black")
         this.submitButton.setString("SUBMIT");
+        this.submitButton.setFontSize(submitButtonArea.width/13);
         _ui.push(this.submitButton)
 
         // display question
@@ -175,10 +176,14 @@ export default class FlagInappropriateContentView {
                 height = previousUI.instructions.height;
             }
         }
-        parameters = {p:p,objectToMirror:questionArea,x:x,y:y,width:width,height:height,wildcard:{fontSize:questionArea.width/15,text:"Click any drawings you find offensive and press submit."}}
+        parameters = {p:p,objectToMirror:questionArea,x:x,y:y,width:width,height:height}//,wildcard:{fontSize:submitButtonArea.width/13,text:"Click any drawings you find offensive and press submit."}}
         this.instructions = new TextBox(parameters)
         this.instructions.setFill(true)
         this.instructions.setTextColor("black")
+        this.instructions.setString("Click any drawings you find offensive and press submit.");
+        this.instructions.setFontSize(questionArea.width/15);
+
+
 
         _ui.push(this.instructions)
 

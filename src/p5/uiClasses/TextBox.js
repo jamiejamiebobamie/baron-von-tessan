@@ -31,7 +31,6 @@ export default class TextBox extends Mirror{
         // sets number of lines if nothing is passed in.
         this.numberOfLines = this.numberOfLines ?
             this.numberOfLines : (this.width/this.textSize)/7;
-
         // sets text size if it exceeds the size of container
         if ((this.textSize*(this.numberOfLines))>this.height){
             this.textSize = this.height*.2
