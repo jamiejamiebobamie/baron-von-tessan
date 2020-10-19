@@ -40,8 +40,8 @@ export default class Sketch {
         this.views.push(view);
         view = new FlagInappropriateContent();
         this.views.push(view);
-        // view = new OutroView();
-        // this.views.push(view);
+        view = new OutroView();
+        this.views.push(view);
         // reset the state variables of the app.
             // a method side effect, but place to do this.
         this.REACT_APP.resetStateVariables()
@@ -91,6 +91,7 @@ export default class Sketch {
         const REACT_APP = this.REACT_APP;
         p.preload = () => {
             this.font = p.loadFont('fonts/PrintClearly.otf');
+            // this.font = p.loadFont('fonts/PrintBold.otf');
          }
         p.setup = () => {
             w = p.windowWidth - (p.windowWidth/10)

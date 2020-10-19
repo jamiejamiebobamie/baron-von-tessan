@@ -16,8 +16,8 @@ export default class SlideshowView {
             let allOfDialog = this.textToDisplay
             let dialogString = allOfDialog.slice(0,this.charIndex)
             this.dialog.setString(dialogString)
-            this.charIndex += 1
-            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialogString(changeView)},50)
+            this.charIndex++
+            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialogString(changeView)},100)
         }
         else {
             clearTimeout(this.timeOutVar)
@@ -126,7 +126,7 @@ export default class SlideshowView {
         // }
         _ui.push(this.drawing)
 
-        let text;
+        let text = "";
         if (previousUI){
             if (previousUI.dialog){
                 x = previousUI.dialog.x;
@@ -134,15 +134,18 @@ export default class SlideshowView {
                 width = previousUI.dialog.width;
                 height = previousUI.dialog.height;
                 text = previousUI.dialog.text;
-
             }
-            this.charIndex = previousUI.charIndex;
+            this.charIndex = windowResized? previousUI.charIndex:0;
         }
         parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height,wildcard:{text:text}}
         this.dialog = new TextBox(parameters)
         this.dialog.setFill(true)
         let fontSize = 40
         this.dialog.setFontSize(fontSize)
+
+        if (!windowResized){
+            this.addCharacterToDialogString(changeView)
+        }
 
         if (this.charIndex>=this.textToDisplay.length){
             let allOfDescription = this.textToDisplay
@@ -151,9 +154,7 @@ export default class SlideshowView {
 
         _ui.push(this.dialog)
 
-        if (!windowResized){
-            this.addCharacterToDialogString(changeView)
-        }
+
 
         return _ui;
     }

@@ -150,7 +150,6 @@ export default class IntroView {
                 this.baronDialogIndex = previousUI.baronDialogIndex
             }
         }
-
         if (this.baronDialogIndex>=this.dialogText.length){
             let allOfDialog = this.dialogText
             this.dialog.setString(allOfDialog)
@@ -177,7 +176,6 @@ export default class IntroView {
         this.drawing.setFill(true)
         this.drawing.setSubmittedStrokes(baronData.drawingData)
         this.drawing.submittedStrokeIndex = strokeIndex;
-
 
         let beginRedrawingStrokesFunc = () => {
             // this.drawing.submittedStrokeIndex = strokeIndex;
