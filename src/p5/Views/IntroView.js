@@ -202,7 +202,7 @@ export default class IntroView {
                     // pause three seconds to display drawing.
                         // then loop if this.displayDrawingSpace.loop
                         // is set to true otherwise return.
-                    timeOutVar = setTimeout(redrawStrokes, 7000,timeOutVar);
+                    timeOutVar = setTimeout(redrawStrokes, 5000,timeOutVar);
                 }
             }
             redrawStrokes();

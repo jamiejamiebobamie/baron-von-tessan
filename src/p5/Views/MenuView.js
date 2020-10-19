@@ -18,6 +18,8 @@ export default class MenuView {
         this.enterSiteButton = undefined;
         this.justDrawButton = undefined;
         this.justWatchDrawingsButton = undefined;
+        this.justWannaJudgePplButton = undefined;
+
 
         // background drawing ui objects
         this.backgroundDrawing1 = undefined;
@@ -85,14 +87,14 @@ export default class MenuView {
         let menuContainer = new Wireframe(parameters);
         let menuSections = [];
         let section;
-        for (let i = 0; i < 4; i++){
+        for (let i = 0; i < 5; i++){
             wildcard = {shrinkAmountWidth:.9,shrinkAmountHeight:.6};
             parameters = { p:p,
                                windowWidth:w,
                                windowHeight:h,
                                row:true,
                                parent:menuContainer,
-                               len:4,
+                               len:5,
                                index:i,
                                wildcard:wildcard,
                                // color:i===0?"black":undefined,
@@ -333,6 +335,31 @@ export default class MenuView {
                     this.justWatchDrawingsButton.setString("I want to see what other people drew!");
                     _ui.push(this.justWatchDrawingsButton);
                 }
+                else if (i === 4) {
+                   // 3: I want to see what other people drew!
+                   if (previousUI){
+                       if (previousUI.justWannaJudgePplButton){
+                           x = previousUI.justWannaJudgePplButton.x;
+                           y = previousUI.justWannaJudgePplButton.y;
+                           width = previousUI.justWannaJudgePplButton.width;
+                           height = previousUI.justWannaJudgePplButton.height;
+                       }
+                   }
+                   objectToMirror = menuSections[i];
+                   wildcard = {numberOfLines:3};
+                   parameters = {p:p,w:w,h:h,objectToMirror:objectToMirror,x:x,y:y,width:width,height:height,wildcard:wildcard}
+                   this.justWannaJudgePplButton = new TextBox(parameters);
+                   let doOnce = true;
+                   this.justWannaJudgePplButton.setClickType(doOnce);
+                   let isInteractive = true;
+                   this.justWannaJudgePplButton.setInteractivity(isInteractive);
+                   this.justWannaJudgePplButton.setStroke(true);
+                   this.justWannaJudgePplButton.setFill(true);
+                   this.justWannaJudgePplButton.setColor("white");
+                   this.justWannaJudgePplButton.mouseClickfunc = () => {setTimeout(()=>{changeView(6,7)},250)};
+                   this.justWannaJudgePplButton.setString("I just want to judge other people.");
+                   _ui.push(this.justWannaJudgePplButton);
+               }
             }
         }
         // only called once when the view

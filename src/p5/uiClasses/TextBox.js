@@ -1,4 +1,3 @@
-import Container from './Container'
 import Mirror from './Mirror'
 
 export default class TextBox extends Mirror{
@@ -35,13 +34,25 @@ export default class TextBox extends Mirror{
         if ((this.textSize*(this.numberOfLines))>this.height){
             this.textSize = this.height*.2
         }
-        // this.p.textSize(this.textSize);
     }
     // use setters for setting or resetting properties during runtime.
     setString(s) { this.text = s }
     setTextColor(color) { this.textColor = color }
     setFontStyle(fontStyle){this.fontStyle=fontStyle}
+    // sets textSize to whatever you specify.
+        // if textSize exceeds height of container, text disappears.
     setFontSize(size){this.textSize = size; this.p.textSize(this.textSize);}
+    setFontSizeWithRegardToContainerHeight(size, numberOfLines) {
+        this.textSize = size;
+        // sets number of lines of text
+        numberOfLines = numberOfLines ?
+            numberOfLines : (this.width/this.textSize)/7;
+        // sets text size if it exceeds the size of container
+        if ( this.textSize*numberOfLines > this.height ){
+            this.textSize = this.height * .2
+        }
+        this.p.textSize(this.textSize);
+    }
     drawRotatedTextBox(){
         this.p.push();
             this.p.translate(this.x,this.y)
