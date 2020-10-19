@@ -4,8 +4,10 @@ import TextBox from '../uiClasses/TextBox'
 
 export default class DrawingView {
     constructor(){
+        // ui objects
         this.drawing = undefined
         this.buttons = [undefined,undefined,undefined,undefined]
+        this.instructions = undefined;
         // callbacks -- necessary
         this.toggleTool = this.toggleTool.bind(this)
         this.buildStroke = this.buildStroke.bind(this)
@@ -213,6 +215,8 @@ export default class DrawingView {
             // (leaving in repeated strokes does add the element of time to
                 // each drawing as slower-drawn strokes
                 // have more repeated vertices.)
+            // this really should be done inside the DrawingContainer object
+                // as the user is drawing.
             if (this.drawing){
                 if (this.drawing.strokes && !this.drawing.userIsDrawingOrErasing){
                     let drawingData = [];
@@ -237,6 +241,27 @@ export default class DrawingView {
             }
         }
         this.buttons[3].mouseClickfunc = submitFunc;
+
+
+        if (previousUI !== undefined){
+            if (previousUI.instructions){
+                x = previousUI.instructions.x;
+                y = previousUI.instructions.y;
+                width = previousUI.instructions.width;
+                height = previousUI.instructions.height;
+            }
+        }
+        parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height,w:w,h:h}
+        this.instructions = new TextBox(parameters)
+        this.instructions.setString("Click here to draw!")
+        this.instructions.setFontSize(drawingArea.width/15)
+        performClickOnce = true;
+        this.instructions.setClickType(performClickOnce)
+        this.instructions.mouseClickfunc = () => {
+                                                this.instructions.setString("")
+                                                 };
+
+        _ui.push(this.instructions)
 
         return _ui;
     }
