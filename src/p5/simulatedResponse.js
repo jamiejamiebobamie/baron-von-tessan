@@ -544,7 +544,7 @@ const response = {
            {x: 0.16883852342879446, y: -0.17374776386404298},
            {x: 0.16883852342879446, y: -0.17374776386404298}],
           descriptionData:
-            "a gorilla laughing "// add a space after submitted description on backend-sode to get correct output due to recursive draw function.
+            "this is a test to see how quickly words get added and if the speed is fast enough to accomodate really long strings "// add a space after submitted description on backend-sode to get correct output due to recursive draw function.
         },
         { drawingData:
             [

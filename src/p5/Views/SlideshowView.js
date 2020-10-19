@@ -17,7 +17,7 @@ export default class SlideshowView {
             this.dialog.setString(dialogString)
             clearTimeout(this.timeOutVar)
             this.charIndex += 1
-            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialogString(REACT_APP)},50)
+            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialogString(REACT_APP)},15)
         }
         else {
             clearTimeout(this.timeOutVar)
@@ -88,25 +88,19 @@ export default class SlideshowView {
         let beginRedrawingStrokesAndAddingCharsFunc = () => {
             this.drawing.setSubmittedStrokeIndex(0)
             this.charIndex = 0
-            this.addCharacterToDialogString(REACT_APP)
+            // this.addCharacterToDialogString(REACT_APP)
             let redrawStrokes = (timeOutVar) => {
                 if (this.drawing.drawingHasBeenDrawn){
-                    if (this.drawing.loop){
+                    if (this.responseIndex < REACT_APP.state.response.length-1){
                         this.drawing.drawingHasBeenDrawn = false;
                         this.drawing.submittedStrokeIndex = 0;
-                        clearTimeout(timeOutVar)
+                        this.charIndex = 0
+                        this.responseIndex += 1
+                        this.dialog.setString("")
+                        this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
                     } else {
-                        if (this.responseIndex < REACT_APP.state.response.length-1){
-                            this.drawing.drawingHasBeenDrawn = false;
-                            this.drawing.submittedStrokeIndex = 0;
-                            this.charIndex = 0
-                            this.addCharacterToDialogString(REACT_APP)
-                            this.responseIndex += 1
-                            this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
-                        } else {
-                            changeView();
-                            return;
-                        }
+                        changeView();
+                        return;
                     }
                 }
                 if (this.drawing.submittedStrokeIndex < this.drawing.submittedStrokes.length) {
@@ -117,6 +111,7 @@ export default class SlideshowView {
                     // pause three seconds to display drawing.
                         // then loop if this.displayDrawingSpace.loop
                         // is set to true otherwise return.
+                    this.addCharacterToDialogString(REACT_APP)
                     timeOutVar = setTimeout(redrawStrokes, 3000,timeOutVar);
                 }
             }

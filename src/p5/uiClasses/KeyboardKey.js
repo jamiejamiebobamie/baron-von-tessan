@@ -11,7 +11,11 @@ export default class KeyboardKey extends TextBox{
         this.setString(letter)
         this.setFontSize(this.object.width/30)
     }
-    pressKey(){ return this.letter; }
+    pressKey(){
+        this.color = this.p.color(244,129,130)
+        setTimeout(()=>{this.color = "white"},500)
+        return this.letter;
+    }
 }
 
 

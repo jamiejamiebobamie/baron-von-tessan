@@ -11,6 +11,7 @@ export default class EnterDescriptionView {
         this.drawing = undefined;
         this.input = undefined;
         this.keyBoard = undefined;
+        this.showTypedLetter = undefined;
     }
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
@@ -45,6 +46,17 @@ export default class EnterDescriptionView {
                          }
         let topTwoThirdsOfView = new Wireframe(parameters)
         // _ui.push(topTwoThirdsOfView)
+
+        // wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
+        // parameters = { p:p,
+        //                    windowWidth: w*1/3,
+        //                    windowHeight: h,
+        //                    row:true,
+        //                    color:"purple",
+        //                    wildcard:wildcard,
+        //                  }
+        // let topOneThirdsOfView = new Wireframe(parameters)
+        // _ui.push(topOneThirdsOfView)
 
         wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
         parameters = { p:p,
@@ -83,7 +95,6 @@ export default class EnterDescriptionView {
         if (REACT_APP.state.isMobile){
             if (w>h){
                 drawingParent = topTwoThirdsOfViewSplitInTwoFirstHalf;
-
             } else {
                 drawingParent = topThirdOfView;
             }
@@ -103,6 +114,7 @@ export default class EnterDescriptionView {
 
         if (REACT_APP.state.isMobile){
             if (w>h){
+
                 inputFormParent = topTwoThirdsOfViewSplitInTwoSecondHalf;
 
             } else {

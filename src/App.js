@@ -35,7 +35,7 @@ class App extends Component {
     handleSubmitFlaggedIndices(flaggedIndices){
         this.setState({flaggedIndices:flaggedIndices})
         // send flaggedIndices to backend
-        console.log("Sending: to backend.")
+        console.log("Sending to backend.")
     }
     resetStateVariables(){
         // got a weird error about setting state
