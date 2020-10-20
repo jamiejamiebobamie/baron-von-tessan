@@ -1091,7 +1091,7 @@ const response = {
            {x: 0.16883852342879446, y: -0.17374776386404298}
            ],
           descriptionData:
-            "nuns who kiss "// add a space after description to get correct output
+            "the mean pitcher with a wicked curve ball "// add a space after description to get correct output
         },
         { drawingData:
             [
@@ -2185,7 +2185,7 @@ const response = {
            {x: 0.16883852342879446, y: -0.17374776386404298}
            ],
           descriptionData:
-            "a firm handshake "// add a space after description to get correct output
+            "a kid cop who is at the end of his rope "// add a space after description to get correct output
         },
         { drawingData:
             [

@@ -2,15 +2,16 @@ import TextBox from '../uiClasses/TextBox'
 import Container from '../uiClasses/Container'
 import Mirror from '../uiClasses/Mirror'
 
-
 export default class TextInput extends TextBox{
     constructor(parameterObject){
         super(parameterObject)
         this.text = "I drew a ..."
+        this.isMobile = false;
         if (parameterObject.wildcard){
             if (parameterObject.wildcard.REACT_APP){
                 this.handleSubmitDescription = parameterObject.wildcard.REACT_APP.handleSubmitDescription
                 this.testViewSwitch = parameterObject.wildcard.REACT_APP.testViewSwitch
+                this.isMobile = parameterObject.wildcard.REACT_APP.state.isMobile;
             }
             if (parameterObject.wildcard.text){
                 this.text = parameterObject.wildcard.text
@@ -46,10 +47,13 @@ export default class TextInput extends TextBox{
         const ENTER = keyCode === 13
         const SPACE = keyCode === 32
         this.clearFillerText()
-        this.color = this.p.color(244,129,130)
-        setTimeout(()=>{
-            this.color = "white";
-        },500)
+        
+        if (this.isMobile){
+            this.color = this.p.color(244,129,130)
+            setTimeout(()=>{
+                this.color = "white";
+            },500)
+        }
         if (ENTER) {
             let drawingDescriptor = this.text.replace("|","")
             this.handleSubmitDescription(drawingDescriptor)

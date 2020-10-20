@@ -242,19 +242,20 @@ export default class DrawingView {
         }
         this.buttons[3].mouseClickfunc = submitFunc;
 
-
+        let text = "Click here to draw!";
         if (previousUI !== undefined){
             if (previousUI.instructions){
                 x = previousUI.instructions.x;
                 y = previousUI.instructions.y;
                 width = previousUI.instructions.width;
                 height = previousUI.instructions.height;
+                text = previousUI.instructions.text;
             }
         }
-        parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height,w:w,h:h}
+        parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height,w:w,h:h,wildcard:{text:text,fontSize:drawingArea.width/15}}
         this.instructions = new TextBox(parameters)
-        this.instructions.setString("Click here to draw!")
-        this.instructions.setFontSize(drawingArea.width/15)
+        // this.instructions.setString("Click here to draw!")
+        // this.instructions.setFontSize(drawingArea.width/15)
         performClickOnce = true;
         this.instructions.setClickType(performClickOnce)
         this.instructions.mouseClickfunc = () => {

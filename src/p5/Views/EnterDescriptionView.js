@@ -12,6 +12,9 @@ export default class EnterDescriptionView {
         this.input = undefined;
         this.keyBoard = undefined;
         this.showTypedLetter = undefined;
+        // this is a dummy object just meant to store the state of the
+            // the this.instructions object from the last view;
+        this.instructions = undefined;
     }
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
@@ -47,17 +50,6 @@ export default class EnterDescriptionView {
         let topTwoThirdsOfView = new Wireframe(parameters)
         // _ui.push(topTwoThirdsOfView)
 
-        // wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
-        // parameters = { p:p,
-        //                    windowWidth: w*1/3,
-        //                    windowHeight: h,
-        //                    row:true,
-        //                    color:"purple",
-        //                    wildcard:wildcard,
-        //                  }
-        // let topOneThirdsOfView = new Wireframe(parameters)
-        // _ui.push(topOneThirdsOfView)
-
         wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
         parameters = { p:p,
                             windowWidth: w,
@@ -85,7 +77,6 @@ export default class EnterDescriptionView {
                          }
         let topTwoThirdsOfViewSplitInTwoSecondHalf = new Wireframe(parameters)
         // _ui.push(topTwoThirdsOfViewSplitInTwoSecondHalf)
-
 
         let topThirdOfView = wireFrameElements[0]
         let middleThirdOfScreen =  wireFrameElements[1];
@@ -384,6 +375,14 @@ export default class EnterDescriptionView {
 
         if (REACT_APP.state.isMobile){
             _ui.push(this.keyBoard)
+        }
+
+        let text;
+        if (previousUI){
+            if (previousUI.instructions){
+                text = previousUI.instructions.text;
+                this.instructions = {text:text}
+            }
         }
 
         return _ui;

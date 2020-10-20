@@ -9,6 +9,7 @@ export default class SlideshowView {
         this.responseIndex = 0
         this.charIndex = 0
         this.timeOutVar = undefined
+        this.allCharsAdded = false;
     }
     addCharacterToDialogString(REACT_APP){
         if (this.charIndex<REACT_APP.state.response[this.responseIndex].descriptionData.length){
@@ -17,10 +18,18 @@ export default class SlideshowView {
             this.dialog.setString(dialogString)
             clearTimeout(this.timeOutVar)
             this.charIndex += 1
-            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialogString(REACT_APP)},15)
+            this.timeOutVar = setTimeout(()=>{this.addCharacterToDialogString(REACT_APP)},45)
         }
         else {
+            // this.compositeBoolean.allCharsAdded = true;
+            // if (this.compositeBoolean.allCharsAdded && this.compositeBoolean.allStrokesAdded){
+            //     // set both to false to stop other method from running logic
+            //     this.compositeBoolean = {allCharsAdded:false, allStrokesAdded:false}
+            //
+            // }
+            this.allCharsAdded = true;
             clearTimeout(this.timeOutVar)
+            console.log('lolololo',this.allCharsAdded)
             return
         }
     }
@@ -50,7 +59,7 @@ export default class SlideshowView {
                          }
         let drawing = new Wireframe(parameters)
 
-        wildcard = {shouldBeSquare:false,shrinkAmountWidth:1.1,shrinkAmountHeight:.7,string:"this is a container to place the description."}
+        wildcard = {shouldBeSquare:false,shrinkAmountWidth:1,shrinkAmountHeight:.7,string:"this is a container to place the description."}
         parameters = { p:p,
                            windowWidth: w,
                            windowHeight: h,
@@ -94,6 +103,7 @@ export default class SlideshowView {
                     if (this.responseIndex < REACT_APP.state.response.length-1){
                         this.drawing.drawingHasBeenDrawn = false;
                         this.drawing.submittedStrokeIndex = 0;
+                        this.allCharsAdded = false;
                         this.charIndex = 0
                         this.responseIndex += 1
                         this.dialog.setString("")
@@ -106,13 +116,32 @@ export default class SlideshowView {
                 if (this.drawing.submittedStrokeIndex < this.drawing.submittedStrokes.length) {
                     this.drawing.submittedStrokeIndex += 1
                     timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
-                } else {
+                } else if (!this.allCharsAdded) {
+                    this.addCharacterToDialogString(REACT_APP)
+                    setTimeout(()=>{redrawStrokes()},500);
+
+                } else if (this.allCharsAdded) {
+                    console.log('whawha')
                     this.drawing.drawingHasBeenDrawn = true;
                     // pause three seconds to display drawing.
                         // then loop if this.displayDrawingSpace.loop
                         // is set to true otherwise return.
-                    this.addCharacterToDialogString(REACT_APP)
-                    timeOutVar = setTimeout(redrawStrokes, 3000,timeOutVar);
+                    let lengthOfTimeForReading;
+                    // if (REACT_APP.state.response){
+                    //     if (this.responseIndex<REACT_APP.state.response.length){
+                    //         lengthOfTimeForReading = REACT_APP.state.response[this.responseIndex].descriptionData.length*75
+                    //         // max five seconds to read.
+                    //         lengthOfTimeForReading = lengthOfTimeForReading < 1500?lengthOfTimeForReading: 1500;
+                    //         // min seconds to read.
+                    //         lengthOfTimeForReading = lengthOfTimeForReading < 850?850:lengthOfTimeForReading;
+                    //     }
+                    // }
+                    lengthOfTimeForReading = 1500
+                    console.log(lengthOfTimeForReading,REACT_APP.state.response[this.responseIndex].descriptionData,REACT_APP.state.response[this.responseIndex].descriptionData.length)
+                    timeOutVar = setTimeout(redrawStrokes, lengthOfTimeForReading,timeOutVar);
+                } else {
+                    console.log('yayayay')
+                    setTimeout(()=>{redrawStrokes()},500);
                 }
             }
             redrawStrokes();
@@ -127,16 +156,17 @@ export default class SlideshowView {
                 y = previousUI.dialog.y;
                 width = previousUI.dialog.width;
                 height = previousUI.dialog.height;
-                text = previousUI.dialog.text;
-
+                text = windowResized?previousUI.dialog.text:"";
             }
             this.charIndex = previousUI.charIndex;
         }
-        parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height,wildcard:{text:text}}
+        let fontSize = w>h ? dialog.width/10 : dialog.width/10 ;
+        wildcard = {text:text,fontSize:fontSize}//,numberOfLines:4}
+        parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height,wildcard:{text:text,fontSize:fontSize}}
         this.dialog = new TextBox(parameters)
         this.dialog.setFill(true)
-        let fontSize = 40
-        this.dialog.setFontSize(fontSize)
+        // let fontSize = 40
+        // this.dialog.setFontSize(fontSize)
 
         if (this.charIndex>=REACT_APP.state.response[this.responseIndex].descriptionData.length){
             let allOfDialog = REACT_APP.state.response[this.responseIndex].descriptionData
