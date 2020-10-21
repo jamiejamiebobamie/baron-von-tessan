@@ -8,10 +8,16 @@ export default class DisplayDrawingContainer extends Mirror{
         // loops the drawing animation
         this.loop = false;
         this.drawingHasBeenDrawn = false;
+        this.strokeColor = "black"
+
         if (parameterObject.wildcard){
             if (parameterObject.wildcard.drawingHasBeenDrawn){
                 this.drawingHasBeenDrawn = parameterObject.wildcard.drawingHasBeenDrawn;
             }
+            if (parameterObject.wildcard.strokeColor){
+                this.strokeColor = parameterObject.wildcard.strokeColor;
+            }
+
         }
         this.lengthOfDrawingSquare = 0
 
@@ -109,7 +115,7 @@ export default class DisplayDrawingContainer extends Mirror{
     draw() {
         super.draw();
         this.p.noStroke();
-        this.p.fill(0);
+        this.p.fill(this.strokeColor);
         this.drawSubmittedStrokes();
     }
 }

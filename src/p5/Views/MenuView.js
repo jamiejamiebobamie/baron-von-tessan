@@ -8,7 +8,7 @@ export default class MenuView {
         this.title = undefined;
 
         this.titleText = "Baron von Tessan";
-        this.titleTextIndex = -1;
+        this.titleTextIndex = 0;
 
         // timeoutVariables
         this.timeOutVar1 = undefined;
@@ -103,13 +103,13 @@ export default class MenuView {
             section = new Wireframe(parameters);
             menuSections.push(section);
         }
-        if (w>1100){
+        // if (w>1100){
             for (let i = 0; i < 2; i++){
-                let testWidth = w<h? Math.random()*(w/4-w/5+1)+w/4:Math.random()*(h/4-h/5+1)+h/5
+                let testWidth = w<h?w/6:h/6;//w<h? Math.random()*(w/4-w/5+1)+w/4:Math.random()*(h/4-h/5+1)+h/5
                 // Math.random() * (max - min + 1) + min
 
                 let vertices = [
-                    {offsetX:w-testWidth,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
+                    {offsetX:w-testWidth-testWidth,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
                     {offsetX:Math.random()*w/10,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
                     {offsetX:w-testWidth,offsetY:Math.random()*(h/2-testWidth-h/4+1)+h/4},
                     {offsetX:Math.random()*w/10,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
@@ -119,8 +119,8 @@ export default class MenuView {
                 parameters = {     p:p,
                                    windowWidth: w,
                                    windowHeight: h,
-                                   width:testWidth,
-                                   height:testWidth,
+                                   width:w>h?w/6:h/6,
+                                   height:w>h?w/6:h/6,
                                    offsetX:i>=vertices.length?Math.random() * (w - testWidth + 1):vertices[i].offsetX,
                                    offsetY:i>=vertices.length?Math.random() * (h - testWidth - h/5 + 1) + h/5:vertices[i].offsetY,
                                    row:true,
@@ -139,7 +139,7 @@ export default class MenuView {
                     // _ui.push(testWireframe)
                 }
             }
-        }
+        // }
         /// ---- ******** END WIREFRAME OBJECTS
 
         /// ---- ******** BEGIN _UI OBJECTS
@@ -148,6 +148,7 @@ export default class MenuView {
         for (let i = 0; i < objectsTotest.length; i++){
             let drawingHasBeenDrawn = false
             let strokeIndex = 0
+            // parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard,lerpSpeed:.01}//,color:"lightgrey"}
                 if (i===0){
                     if (previousUI){
                         if (previousUI.backgroundDrawing1){
@@ -161,8 +162,8 @@ export default class MenuView {
                             clearTimeout(previousUI.backgroundDrawing1.timeOut2)
                         }
                     }
-                    wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-                    parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard}//,color:"lightgrey"}
+                    wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}//,strokeColor:objectsTotest[i].color}
+                    parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard,lerpSpeed:.01}//,color:"lightgrey"}
                     this.backgroundDrawing1 = new DisplayDrawingContainer(parameters)
                     this.backgroundDrawing1.setLengthOfDrawingSquare(objectsTotest[i].width)
                     this.backgroundDrawing1.setFill(true)
@@ -184,8 +185,8 @@ export default class MenuView {
                             clearTimeout(previousUI.backgroundDrawing2.timeOut2)
                         }
                     }
-                    wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-                    parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard}//,color:"lightgrey"}
+                    wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}//,strokeColor:objectsTotest[i].color}
+                    parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard,lerpSpeed:.01}//,color:"lightgrey"}
                     this.backgroundDrawing2 = new DisplayDrawingContainer(parameters)
                     this.backgroundDrawing2.setLengthOfDrawingSquare(objectsTotest[i].width)
                     this.backgroundDrawing2.setFill(true)
@@ -207,8 +208,8 @@ export default class MenuView {
                             clearTimeout(previousUI.backgroundDrawing3.timeOut2)
                         }
                     }
-                    wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-                    parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard}//,color:"lightgrey"}
+                    wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}//,strokeColor:objectsTotest[i].color}
+                    parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard,lerpSpeed:.01}//,color:"lightgrey"}
                     this.backgroundDrawing3 = new DisplayDrawingContainer(parameters)
                     this.backgroundDrawing3.setLengthOfDrawingSquare(objectsTotest[i].width)
                     this.backgroundDrawing3.setFill(true)
@@ -231,7 +232,6 @@ export default class MenuView {
                         }
                     }
                     wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-                    parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard}//,color:"lightgrey"}
                     this.backgroundDrawing4 = new DisplayDrawingContainer(parameters)
                     this.backgroundDrawing4.setLengthOfDrawingSquare(objectsTotest[i].width)
                     this.backgroundDrawing4.setFill(true)
@@ -285,6 +285,10 @@ export default class MenuView {
                     this.enterSiteButton.setColor("white");
                     this.enterSiteButton.mouseClickfunc = ()=>{setTimeout(()=>{changeView()},250)};
                     this.enterSiteButton.setString("ENTER SITE");
+                    if(REACT_APP.state.isMobile){
+                        let fontSize = w>h?objectToMirror.height/2:objectToMirror.height/3;
+                        this.enterSiteButton.setFontSize(fontSize);
+                    }
                     _ui.push(this.enterSiteButton);
                 } else if (i === 2){
                     // 2: I just want to draw!
@@ -309,6 +313,10 @@ export default class MenuView {
                     this.justDrawButton.setColor("white");
                     this.justDrawButton.mouseClickfunc = () => {setTimeout(()=>{changeView(4,6)},250)};
                     this.justDrawButton.setString("I just want to draw!");
+                    if(REACT_APP.state.isMobile){
+                        let fontSize = w>h?objectToMirror.height/2.5:objectToMirror.height/4;
+                        this.justDrawButton.setFontSize(fontSize);
+                    }
                     _ui.push(this.justDrawButton);
                 } else if (i === 3) {
                     // 3: I want to see what other people drew!
@@ -333,6 +341,10 @@ export default class MenuView {
                     this.justWatchDrawingsButton.setColor("white");
                     this.justWatchDrawingsButton.mouseClickfunc = () => {setTimeout(()=>{changeView(2,3)},250)};
                     this.justWatchDrawingsButton.setString("I want to see what other people drew!");
+                    if(REACT_APP.state.isMobile){
+                        let fontSize = w>h?objectToMirror.height/2.5:objectToMirror.height/4;
+                        this.justWatchDrawingsButton.setFontSize(fontSize);
+                    }
                     _ui.push(this.justWatchDrawingsButton);
                 }
                 else if (i === 4) {
@@ -358,6 +370,10 @@ export default class MenuView {
                    this.justWannaJudgePplButton.setColor("white");
                    this.justWannaJudgePplButton.mouseClickfunc = () => {setTimeout(()=>{changeView(6,7)},250)};
                    this.justWannaJudgePplButton.setString("I just want to judge other people.");
+                   if(REACT_APP.state.isMobile){
+                       let fontSize = w>h?objectToMirror.height/2.5:objectToMirror.height/4;
+                       this.justWannaJudgePplButton.setFontSize(fontSize);
+                   }
                    _ui.push(this.justWannaJudgePplButton);
                }
             }
@@ -373,6 +389,7 @@ export default class MenuView {
             // (only an issue if the user resizes the window after
             // 'addCharacterToTitle' has finished.)
         if (this.titleTextIndex>=this.titleText.length){
+            console.log("heheheheheheh")
             let allOfDialog = this.titleText;
             this.title.setString(allOfDialog);
         }
