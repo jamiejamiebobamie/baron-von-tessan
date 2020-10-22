@@ -100,12 +100,17 @@ export default class SlideshowView {
             // this.addCharacterToDialogString(REACT_APP)
             let redrawStrokes = (timeOutVar) => {
                 if (this.drawing.drawingHasBeenDrawn){
-                    if (this.responseIndex < REACT_APP.state.response.length-1){
+                    // hardcoding five drawings to be show.
+                        // 6 or more will be grabbed from backend
+                        // for just want to judge other people option
+                            // (no user drawing can be shown so showing 6 drawings)
+                        // as well as for the menu background drawings.
+                    if (this.responseIndex < 4){//REACT_APP.state.response.length-1){
                         this.drawing.drawingHasBeenDrawn = false;
                         this.drawing.submittedStrokeIndex = 0;
                         this.allCharsAdded = false;
                         this.charIndex = 0
-                        this.responseIndex += 1
+                        this.responseIndex++
                         this.dialog.setString("")
                         this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
                     } else {
@@ -114,7 +119,7 @@ export default class SlideshowView {
                     }
                 }
                 if (this.drawing.submittedStrokeIndex < this.drawing.submittedStrokes.length) {
-                    this.drawing.submittedStrokeIndex += 1
+                    this.drawing.submittedStrokeIndex++
                     timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
                 } else if (!this.allCharsAdded) {
                     this.addCharacterToDialogString(REACT_APP)

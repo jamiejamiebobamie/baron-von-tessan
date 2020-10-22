@@ -253,7 +253,7 @@ export default class FlagInappropriateContentView {
                     height = previousUI.drawing.height;
 
                     // redrawStrokes properties
-                    drawingHasBeenDrawn = windowResized && !previousUI.drawings.loop ? previousUI.drawing.drawingHasBeenDrawn : false;
+                    drawingHasBeenDrawn = windowResized && !previousUI.drawing.loop ? previousUI.drawing.drawingHasBeenDrawn : false;
                     strokeIndex = previousUI.drawing.submittedStrokeIndex
                     clearTimeout(previousUI.drawing.timeOut1)
                     clearTimeout(previousUI.drawing.timeOut2)
