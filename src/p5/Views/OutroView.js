@@ -206,7 +206,7 @@ export default class OutroView {
 
         parameters = {p:p,w:w,h:h,objectToMirror:this.drawingWireframe,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard,lerpSpeed:windowResized?.3:.1}
         this.drawing = new DisplayDrawingContainer(parameters)
-        this.drawing.setLengthOfDrawingSquare(this.drawingWireframe.width)
+        this.drawing.setLengthOfDrawingSquare(this.drawingWireframe.width+this.drawingWireframe.width*.11)
         this.drawing.setFill(true)
         this.drawing.setSubmittedStrokes(baronData.drawingData)
         this.drawing.submittedStrokeIndex = strokeIndex;

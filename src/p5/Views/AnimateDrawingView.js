@@ -2,8 +2,7 @@ import Wireframe from '../uiClasses/Wireframe';
 import AnimateDrawingContainer from '../uiClasses/AnimateDrawingContainer';
 import TextBox from '../uiClasses/TextBox'
 
-
-export default class AnimateDrawing {
+export default class AnimateDrawingView {
     constructor(){
         // ui objects
         this.drawing = undefined
@@ -11,21 +10,57 @@ export default class AnimateDrawing {
         this.instructions = undefined;
         // callbacks -- necessary
         this.toggleTool = this.toggleTool.bind(this)
-        // this.buildStroke = this.buildStroke.bind(this)
-        // this.undoLastStroke = this.undoLastStroke.bind(this)
-        // this.clearStrokes = this.clearStrokes.bind(this)
-        // this.removeStroke = this.removeStroke.bind(this)
+        this.buildStroke = this.buildStroke.bind(this)
+        this.undoLastStroke = this.undoLastStroke.bind(this)
+        this.clearStrokes = this.clearStrokes.bind(this)
+        this.removeStroke = this.removeStroke.bind(this)
     }
     toggleTool(buttonObject){
+        if (!this.drawing.userIsDrawingOrErasing){
+                this.drawing.penMode = !this.drawing.penMode;
+                let buttonString = this.drawing.penMode ? "SELECT SECTION" : "DRAW NEXT POSITION";
+                buttonObject.setString(buttonString);
+                this.drawing.mouseClickfunc = this.drawing.penMode ? this.buildStroke : this.removeStroke;
+                this.drawing.ink = this.drawing.animationGroups[0].startVertices.length - this.drawing.animationGroups[0].endVertices.length
+            }
+    }
+    undoLastStroke(){
         if (this.drawing){
-            if (!this.drawing.userIsDrawingOrErasing){
-                    this.drawing.penMode = !this.drawing.penMode;
-                    let buttonString = this.drawing.penMode ? "ERASER" : "PEN";
-                    buttonObject.setString(buttonString);
-                    this.drawing.mouseClickfunc = this.drawing.penMode ? this.drawing.addVertices : this.drawing.eraseFromVerticesAndAddToInk;
-                    
+            if (this.drawing.strokes && !this.drawing.userIsDrawingOrErasing){
+                this.drawing.strokes.pop()
+            }
+        }
+    }
+    clearStrokes(){
+        if (this.drawing){
+            if (this.drawing.strokes && !this.drawing.userIsDrawingOrErasing){
+                this.drawing.strokes = []
+            }
+        }
+    }
+    buildStroke(){
+        if (this.drawing !== undefined){
+            if (this.drawing.ink){
+                let vertice = {x:(this.drawing.p.mouseX-this.drawing.x)/this.drawing.lengthOfDrawingSquare,y:(this.drawing.p.mouseY-this.drawing.y)/this.drawing.lengthOfDrawingSquare,finished:false}
+                this.drawing.animationGroups[0].endVertices.push(vertice)
+                this.drawing.ink--;
+            }
+        }
+    }
+    removeStroke(){
+        if (this.drawing){
+            if (this.drawing.submittedStrokes){
+                for (let i = 0; i < this.drawing.submittedStrokes.length; i++ ){
+                    if ( this.drawing.p.mouseX > this.drawing.x+this.drawing.submittedStrokes[i].x*this.drawing.lengthOfDrawingSquare-this.drawing.lengthOfDrawingSquare*.01
+                        && this.drawing.p.mouseX < this.drawing.x+this.drawing.submittedStrokes[i].x*this.drawing.lengthOfDrawingSquare+this.drawing.lengthOfDrawingSquare*.01
+                        && this.drawing.p.mouseY > this.drawing.y+this.drawing.submittedStrokes[i].y*this.drawing.lengthOfDrawingSquare-this.drawing.lengthOfDrawingSquare*.01
+                        && this.drawing.p.mouseY < this.drawing.y+this.drawing.submittedStrokes[i].y*this.drawing.lengthOfDrawingSquare+this.drawing.lengthOfDrawingSquare*.01 ){
+                            this.drawing.submittedStrokes[i].finished=false
+                            this.drawing.animationGroups[0].startVertices.push(this.drawing.submittedStrokes[i]);
+                            this.drawing.submittedStrokes.splice(i,1)
+                    }
                 }
-
+            }
         }
     }
     getUI(previousUI){return this}
@@ -67,7 +102,7 @@ export default class AnimateDrawing {
             wildcard = {shouldBeSquare:false,shrinkAmountWidth:w>h?.5:.9,shrinkAmountHeight:w>h?.5:.3}
 
             if (i === 0){
-                wildcard.string = "PEN"
+                wildcard.string = "SELECT SECTION"
             } else if (i === 1) {
                 wildcard.string = "UNDO"
             } else if (i === 2) {
@@ -104,46 +139,37 @@ export default class AnimateDrawing {
 
 //// ---- - - - - - - - -
 //// START OF DRAWN UI ELEMENTS
-let _ui = []
-let drawingHasBeenDrawn = false
-let strokeIndex = 0;
-let strokes = []
-let x,y,width,height;
-let performClickOnce;
+        let _ui = []
+        let x,y,width,height,drawingMode,currentStroke,strokes;
+        drawingMode = true;
+        currentStroke = [];
+        strokes = [];
+        if (previousUI !== undefined){
+            if (previousUI.drawing){
+                x = previousUI.drawing.x;
+                y = previousUI.drawing.y;
+                width = previousUI.drawing.width;
+                height = previousUI.drawing.height;
+                drawingMode = previousUI.drawing.drawingMode ? previousUI.drawing.drawingMode : true;
+                currentStroke = previousUI.drawing.currentStroke ? previousUI.drawing.currentStroke : [];
+                strokes = previousUI.drawing.strokes ? previousUI.drawing.strokes : [];
+            }
+        }
+        parameters = {p:p,objectToMirror:drawingArea,x:x,y:y,width:width,height:height,w:w,h:h,color:'lightgrey',lerpSpeed:windowResized?.3:.1}
+        this.drawing = new AnimateDrawingContainer(parameters)
+        let submittedStrokes = REACT_APP.state.drawingData
+        this.drawing.setSubmittedStrokes(submittedStrokes)
+        // this.drawing.setCurrentStroke(currentStroke);
+        // this.drawing.setStrokes(strokes);
+        // this.drawing.setFill(true)
+        this.drawing.setStroke(true)
 
-if (previousUI){
-    if (previousUI.drawing){
-        x = previousUI.drawing.x;
-        y = previousUI.drawing.y;
-        width = previousUI.drawing.width;
-        height = previousUI.drawing.height;
-        drawingHasBeenDrawn = previousUI.drawing.drawingHasBeenDrawn
-        clearTimeout(previousUI.drawing.timeOut1)
-        clearTimeout(previousUI.drawing.timeOut2)
-        // last view's this.drawing is a DrawingContainer and not a DisplayDrawingContainer
-            // a DrawingContainer does not have a submittedStrokeIndex.
-        // only an issue when the view is changed.
-        strokeIndex = previousUI.drawing.submittedStrokeIndex?previousUI.drawing.submittedStrokeIndex:0;
-        // in case user returns to the drawing view:
-            // the strokes from the last view need to be stored.
-            // the submitted drawing data stored in the React state
-            // is a flattened 2d array. so DrawingContainer functionality
-            // ("UNDO" button) breaks without original stroke data.
-        // original stroke data from last view.
-        strokes = previousUI.drawing.strokes
-    }
-}
-wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-parameters = {p:p,w:w,h:h,objectToMirror:drawingArea,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard,lerpSpeed:windowResized?.3:.1}
-this.drawing = new AnimateDrawingContainer(parameters)
-this.drawing.setLengthOfDrawingSquare(drawingArea.width+drawingArea.width*.11) // need to increase size by !1^-n (?) (add 10% each time this.drawing is subsequently used if 2 views used it before)
-this.drawing.setFill(true)
-let submittedStrokes = REACT_APP.state.drawingData
-this.drawing.setSubmittedStrokes(submittedStrokes)
-this.drawing.submittedStrokeIndex = REACT_APP.state.drawingData.length;
-// this.drawing.strokes = REACT_APP.state.drawingData.length
-// this.drawing.redrawStrokes()
-_ui.push(this.drawing)
+        this.drawing.setLengthOfDrawingSquare(lengthOfDrawingSquare)
+        let performClickOnce = false;
+        this.drawing.setClickType(performClickOnce)
+        this.drawing.penMode = drawingMode
+        this.drawing.mouseClickfunc = this.drawing.penMode ? this.buildStroke : this.removeStroke;
+        _ui.push(this.drawing)
         for (let i = 0; i<4;i++){
             if (previousUI){
                 if (previousUI.buttons){
@@ -173,7 +199,9 @@ _ui.push(this.drawing)
             // submit button logic
             let buttonString;
             if (i === 0){
-                buttonString = this.drawing.penMode ? "ERASER" : "PEN";
+                buttonString = this.drawing.penMode ? "SELECT SECTION" : "DRAW NEXT POSITION";
+            } else if (i===1) {
+                buttonString = this.drawing.buildAnimationModeIsToggled ? "SHOW ANIMATON" : "BUILD ANIMATON";
             } else {
                 buttonString = buttons[i].wildcard.string
             }
@@ -183,8 +211,8 @@ _ui.push(this.drawing)
         // PEN
         let func = () => {this.toggleTool(this.buttons[0]);}
         this.buttons[0].mouseClickfunc = func;
-        // UNDO
-        this.buttons[1].mouseClickfunc = this.undoLastStroke;
+        // // UNDO
+        // this.buttons[1].mouseClickfunc = ()=>{this.undoLastStroke;
         // CLEAR
         this.buttons[2].mouseClickfunc = this.clearStrokes;
         // SUBMIT
@@ -244,6 +272,14 @@ _ui.push(this.drawing)
                                                  };
 
         _ui.push(this.instructions)
+
+        // TOGGLE MODE BUTTON
+        this.buttons[1].mouseClickfunc = ()=>{
+            this.drawing.buildAnimationModeIsToggled=!this.drawing.buildAnimationModeIsToggled;
+            let buttonString = this.drawing.buildAnimationModeIsToggled ? "SHOW ANIMATON" : "BUILD ANIMATON";
+            this.buttons[1].setString(buttonString);
+            this.drawing.setStartingPostions()
+        };
 
         return _ui;
     }

@@ -104,41 +104,41 @@ export default class MenuView {
             menuSections.push(section);
         }
         // if (w>1100){
-            for (let i = 0; i < 2; i++){
-                let testWidth = w<h?w/6:h/6;//w<h? Math.random()*(w/4-w/5+1)+w/4:Math.random()*(h/4-h/5+1)+h/5
-                // Math.random() * (max - min + 1) + min
-
-                let vertices = [
-                    {offsetX:w-testWidth-testWidth,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
-                    {offsetX:Math.random()*w/10,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
-                    {offsetX:w-testWidth,offsetY:Math.random()*(h/2-testWidth-h/4+1)+h/4},
-                    {offsetX:Math.random()*w/10,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
-                ]
-
-                wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:.9}
-                parameters = {     p:p,
-                                   windowWidth: w,
-                                   windowHeight: h,
-                                   width:w>h?w/6:h/6,
-                                   height:w>h?w/6:h/6,
-                                   offsetX:i>=vertices.length?Math.random() * (w - testWidth + 1):vertices[i].offsetX,
-                                   offsetY:i>=vertices.length?Math.random() * (h - testWidth - h/5 + 1) + h/5:vertices[i].offsetY,
-                                   row:true,
-                                   color:p.color(Math.random()*255,Math.random()*255,Math.random()*255),
-                                   wildcard:wildcard,
-                                 }
-                let testWireframe = new Wireframe(parameters);
-                let isOverlapping = false;
-                for (let i = 0; i < objectsTotest.length; i++){
-                    if (!isOverlapping){
-                        isOverlapping = this.isOverlapping(objectsTotest[i],testWireframe)
-                    }
-                }
-                if (!isOverlapping){
-                    objectsTotest.push(testWireframe)
-                    // _ui.push(testWireframe)
-                }
-            }
+            // for (let i = 0; i < 2; i++){
+            //     let testWidth = w<h?w/6:h/6;//w<h? Math.random()*(w/4-w/5+1)+w/4:Math.random()*(h/4-h/5+1)+h/5
+            //     // Math.random() * (max - min + 1) + min
+            //
+            //     let vertices = [
+            //         {offsetX:w-testWidth-testWidth,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
+            //         {offsetX:Math.random()*w/10,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
+            //         {offsetX:w-testWidth,offsetY:Math.random()*(h/2-testWidth-h/4+1)+h/4},
+            //         {offsetX:Math.random()*w/10,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
+            //     ]
+            //
+            //     wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:.9}
+            //     parameters = {     p:p,
+            //                        windowWidth: w,
+            //                        windowHeight: h,
+            //                        width:w>h?w/6:h/6,
+            //                        height:w>h?w/6:h/6,
+            //                        offsetX:i>=vertices.length?Math.random() * (w - testWidth + 1):vertices[i].offsetX,
+            //                        offsetY:i>=vertices.length?Math.random() * (h - testWidth - h/5 + 1) + h/5:vertices[i].offsetY,
+            //                        row:true,
+            //                        color:p.color(Math.random()*255,Math.random()*255,Math.random()*255),
+            //                        wildcard:wildcard,
+            //                      }
+            //     let testWireframe = new Wireframe(parameters);
+            //     let isOverlapping = false;
+            //     for (let i = 0; i < objectsTotest.length; i++){
+            //         if (!isOverlapping){
+            //             isOverlapping = this.isOverlapping(objectsTotest[i],testWireframe)
+            //         }
+            //     }
+            //     if (!isOverlapping){
+            //         objectsTotest.push(testWireframe)
+            //         // _ui.push(testWireframe)
+            //     }
+            // }
         // }
         /// ---- ******** END WIREFRAME OBJECTS
 

@@ -350,7 +350,7 @@ export default class EnterDescriptionView {
         wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
         parameters = {p:p,w:w,h:h,objectToMirror:drawing,x:x,y:y,width:width,height:height,color:"lightgrey",wildcard:wildcard,lerpSpeed:windowResized?.3:.1}
         this.drawing = new DisplayDrawingContainer(parameters)
-        this.drawing.setLengthOfDrawingSquare(drawing.width)
+        this.drawing.setLengthOfDrawingSquare(drawing.width+drawing.width*.11)
         this.drawing.setFill(true)
         let submittedStrokes = REACT_APP.state.drawingData
         this.drawing.setSubmittedStrokes(submittedStrokes)

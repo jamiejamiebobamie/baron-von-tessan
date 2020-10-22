@@ -1,4 +1,4 @@
-import DisplayDrawingContainer from './DisplayDrawingContainer'
+import DrawingContainer from './DrawingContainer'
 // import KeyFrame from './KeyFrame'
 
 //0.
@@ -50,7 +50,7 @@ import DisplayDrawingContainer from './DisplayDrawingContainer'
 // does not repeat the drawing of vertices.
 // might not look good or even work. ("redrawing" with "ink" feature.)
 
-export default class AnimateDrawingContainer extends DisplayDrawingContainer{
+export default class AnimateDrawingContainer extends DrawingContainer{
     constructor(parameterObject){
         super(parameterObject)
         this.keyFrameIndex = 0
@@ -70,116 +70,94 @@ export default class AnimateDrawingContainer extends DisplayDrawingContainer{
         // when a user erases a vertex from the current keyframe
             // the popped vertex is added to the ink count
         // the vertex can then be redrawn to the screen.
-        this.ink = 0
+        this.ink = 0;
 
         // false for erase mode.
-        this.penMode = true;
+        this.penMode = false;
 
         // false for showKeyFrameMode
-        this.showAnimationMode = false;
+        this.buildAnimationModeIsToggled = true;
 
         //test
         this.AnimationSection = {startVertices:[],endVertices:[]}
-    }
-    checkForDuplicateVertices(vertexObjectToTest){
-        // returns true if the tested vertex is a duplicate
-        let vertexToTestString = vertexObjectToTest.x.toString()
-                                + vertexObjectToTest.y.toString()
-        let isDuplicate = false;
 
-        let vertexX = undefined;
-        let vertexY = undefined;
-        let vertexString = undefined
+        // random color
+        // let color = this.p.color(Math.random()*255,Math.random()*255,Math.random()*255)
+        // this.drawEllipsesToScreen(this.animationGroups[i].vertices, this.animationGroups[i].color?this.animationGroups[i].color:"pink")
 
-        for (let i = 0; i<this.vertices.length; i++) {
-            vertexX = this.vertices[i].x.toString()
-            vertexY = this.vertices[i].y.toString()
-            vertexString = vertexX + vertexY
-            if (vertexToTestString === vertexString){
-                isDuplicate = true;
+        this.animationGroups = [
+            {   currentVertices:[],
+                startVertices:[],
+                endVertices:[],
+                startColor:this.p.color(Math.random()*255,Math.random()*255,Math.random()*255),
+                endColor:this.p.color(Math.random()*255,Math.random()*255,Math.random()*255),
+                finishedVerticesCount:0, // keep a count of the vertices
+                                    // that have interpolated to the finish.
             }
-        }
-        return isDuplicate;
+        ]
     }
-    eraseFromVerticesAndAddToInk(){
-        for (let i = 0; i < this.submittedStrokes.length; i++ ){
-            if ( this.p.mouseX > this.submittedStrokes[i].x*this.lengthOfDrawingSquare-this.lengthOfDrawingSquare*.1
-                && this.p.mouseX < this.submittedStrokes[i].x*this.lengthOfDrawingSquare+this.lengthOfDrawingSquare*.1
-                && this.p.mouseY > this.submittedStrokes[i].y*this.lengthOfDrawingSquare-this.lengthOfDrawingSquare*.1
-                && this.p.mouseY < this.submittedStrokes[i].y*this.lengthOfDrawingSquare+this.lengthOfDrawingSquare*.1 ){
-                    let vertex = {x:this.p.mouseX/this.lengthOfDrawingSquare, y:this.p.mouseY/this.lengthOfDrawingSquare, finished:false}
-                    this.AnimationSection.startVertices.push(vertex)
-                    this.submittedStrokes.splice(i,1);
-                    this.ink++;
-                    console.log('asassas')
-            }
+    setStartingPostions(){
+        for (let i = 0; i < this.animationGroups.length; i++){
+            this.animationGroups[i].currentVertices = this.animationGroups[i].startVertices
         }
     }
-    addVertices(){
-        // if(this.ink>0){
-        //     let vertex = {x:this.p.mouseX/this.lengthOfDrawingSquare, y:this.p.mouseY/this.lengthOfDrawingSquare, finished:false}
-        //     if (!this.checkForDuplicateVertices(vertex)){
-        //         this.keyFrames[this.keyFrameIndex].push(vertex);
-        //     }
-        // }
-    }
-    drawSubmittedStrokes(){}
-    showKeyFrame(){
-        this.p.fill(0);
-        for (let i = 0; i < this.vertices; i++){
-            this.p.ellipse(this.vertices[i].x*this.lengthOfDrawingSquare+this.x, this.vertices[i].y*this.lengthOfDrawingSquare+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
-        }
-        this.p.fill(244,129,130);
-        for (let i = 0; i < this.ink; i++){
-            this.p.ellipse(this.ink[i].x*this.lengthOfDrawingSquare+this.x, this.ink[i].y*this.lengthOfDrawingSquare+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
-        }
-    }
+    buildAnimation(){ this.drawAnimationGroups(); }
     showAnimation(){
-        this.p.fill(0);
-        this.vertices.lerp()
-        for (let i = 0; i < this.vertices; i++){
-            this.p.ellipse(this.vertices[i].x*this.lengthOfDrawingSquare+this.x, this.vertices[i].y*this.lengthOfDrawingSquare+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
-        }
-        if (this.vertices.allKeyFramesAtEndPosition()){
-            this.vertices.resetFinishedBooleans();
-            this.incrementKeyFrames();
-        }
-    }
-    addKeyFrame(){
-        // reset ink count to 0
-        // push current keyFrames to new keyFrame object's startPositions.
-        // increment the keyFrameIndex
-        // set the this.vertices to this.keyFrames[this.keyFrameIndex]
-    }
-    incrementKeyFrames(){
-        let lastKeyFrameVertices = this.vertices;
-        this.keyFrameIndex++
-        if (this.keyFrameIndex > this.keyFrames.length - 1){
-            this.keyFrameIndex = 0
-        }
-        let currentKeyFrameVertices = this.keyFrames[this.keyFrameIndex]
-        // might pop for a millisecond as a result of being initialized.
-        // this.KeyFrame = new KeyFrame(lastKeyFrameVertices,currentKeyFrameVertices)
+        for (let i = 0; i < this.animationGroups.length; i++){
+            this.drawEllipsesToScreen(this.animationGroups[i].currentVertices, 100)
+            this.lerpAnimationGroup(this.animationGroups[i])
+            // when the animation
+            if (this.animationGroups[i].finishedVerticesCount === this.animationGroups[i].currentVertices.length){
+                console.log('ksksksk',this.animationGroups[i].finishedVerticesCount, this.animationGroups[i].currentVertices.length)
 
-        // might need to do this.
-        // let nextKeyFrame = new KeyFrame(lastKeyFrameVertices,currentKeyFrameVertices)
-        // this.KeyFrame = nextKeyFrame;
+                let storeEndVertices = this.animationGroups[i].endVertices;
+                this.animationGroups[i].endVertices = this.animationGroups[i].startVertices
+                this.animationGroups[i].startVertices = storeEndVertices
+                this.animationGroups[i].finishedVerticesCount = 0
+                this.resetVertices(this.animationGroups[i])
+                
+            }
+        }
+    }
+    lerpAnimationGroup(group){
+        for (let i = 0; i < group.currentVertices.length; i++){
+            group.currentVertices[i].x=this.p.lerp(group.currentVertices[i].x,group.endVertices[i].x,.1)
+            group.currentVertices[i].y=this.p.lerp(group.currentVertices[i].y,group.endVertices[i].y,.1)
+            if (!group.currentVertices[i].finished){
+                if (Math.abs(group.currentVertices[i].x-group.endVertices[i].x)<this.lengthOfDrawingSquare*.000001 && Math.abs(group.currentVertices[i].y-group.endVertices[i].y)<this.lengthOfDrawingSquare*.000001){
+                    group.currentVertices[i].finished = true
+                    group.finishedVerticesCount++;
+                    console.log('djdjdj')
+                }
+            }
+        }
+    }
+    resetVertices(group){
+        for (let i = 0; i < group.currentVertices.length; i++){
+            group.currentVertices[i].finished = false
+        }
+    }
+    setSubmittedStrokes(submittedStrokes){ this.submittedStrokes = submittedStrokes }
+    drawEllipsesToScreen(ellipsesData, color){
+        this.p.fill(color)
+        for (let i = 0; i < ellipsesData.length; i++){
+            this.p.ellipse(ellipsesData[i].x*this.lengthOfDrawingSquare+this.x, ellipsesData[i].y*this.lengthOfDrawingSquare+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
+        }
+    }
+    drawSubmittedStrokes(){ this.drawEllipsesToScreen(this.submittedStrokes, 0) }
+    drawAnimationGroups(){
+        for (let i = 0; i < this.animationGroups.length; i++){
+            this.drawEllipsesToScreen(this.animationGroups[i].startVertices, this.animationGroups[i].startColor?this.animationGroups[i].startColor:"pink")
+            this.drawEllipsesToScreen(this.animationGroups[i].endVertices, this.animationGroups[i].endColor?this.animationGroups[i].endColor:"pink")
+        }
     }
     draw() {
         super.draw();
-        this.p.fill(0)
-        for (let i = 0; i < this.submittedStrokes.length; i++){
-            this.p.ellipse(this.submittedStrokes[i].x*this.lengthOfDrawingSquare+this.x, this.submittedStrokes[i].y*this.lengthOfDrawingSquare+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
+        this.drawSubmittedStrokes();
+        if (this.buildAnimationModeIsToggled){
+            this.buildAnimation()
+        } else {
+            this.showAnimation();
         }
-        this.p.fill("pink")
-        for (let i = 0; i < this.AnimationSection.startVertices.length; i++){
-            this.p.ellipse(this.AnimationSection.startVertices[i].x*this.lengthOfDrawingSquare+this.x, this.AnimationSection.startVertices[i].y*this.lengthOfDrawingSquare+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
-        }
-        // super.drawSubmittedStrokes();
-        // if (this.showAnimationMode){
-        //     this.showAnimation();
-        // } else {
-        //     this.showKeyFrame();
-        // }
     }
 }

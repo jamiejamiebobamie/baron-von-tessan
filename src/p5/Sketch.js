@@ -30,25 +30,25 @@ export default class Sketch {
         this.views.push(view);
 
         // testing.
-        view = new IntroView();
-        this.views.push(view);
-        view = new SlideshowView();
-        this.views.push(view);
-        view = new AndView();
-        this.views.push(view);
+        // view = new IntroView();
+        // this.views.push(view);
+        // view = new SlideshowView();
+        // this.views.push(view);
+        // view = new AndView();
+        // this.views.push(view);
         view = new DrawingView();
         this.views.push(view);
 
         // testing.
-        // view = new AnimateDrawingView();
-        // this.views.push(view);
+        view = new AnimateDrawingView();
+        this.views.push(view);
 
-        view = new EnterDescriptionView();
-        this.views.push(view);
-        view = new FlagInappropriateContent();
-        this.views.push(view);
-        view = new OutroView();
-        this.views.push(view);
+        // view = new EnterDescriptionView();
+        // this.views.push(view);
+        // view = new FlagInappropriateContent();
+        // this.views.push(view);
+        // view = new OutroView();
+        // this.views.push(view);
         this.lengthOfViews = this.views.length
         // reset the state variables of the app.
             // a method side effect, but best place to do this.
