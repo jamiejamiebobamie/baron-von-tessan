@@ -74,12 +74,15 @@ export default class AnimateDrawingContainer extends DrawingContainer{
                                     // that have interpolated to the finish.
             }
         ]
-        this.toEnd = true
+        this.currentAnimationGroupIndex = 0;
+
+        this.finishedVerticesCount = 0;
+        this.totalVerticesCount = 0;
     }
     setSubmittedStrokes(submittedStrokes){ this.submittedStrokes = submittedStrokes }
     setDrawnVerticesStartingPostions(){
-        console.log(this.animationGroups[0].startPositions[0],this.animationGroups[0].endPositions[0])
         let vertice;
+        this.totalVerticesCount = 0;
         for (let i = 0; i < this.animationGroups.length; i++){
             // NOT WORKING ___
 
@@ -116,27 +119,47 @@ export default class AnimateDrawingContainer extends DrawingContainer{
             // console.log(this.animationGroups[0].startPositions[0],this.animationGroups[0].endPositions[0])
 
             // set the drawnVertices positions to startPositions
+            this.animationGroups[i].drawnVertices = [];
             for (let j = 0; j < this.animationGroups[i].startPositions.length; j++){
                 vertice = {x:this.animationGroups[i].startPositions[j].x,y:this.animationGroups[i].startPositions[j].y,finished:false}
                 this.animationGroups[i].drawnVertices.push(vertice)
+                this.totalVerticesCount++;
             }
         }
     }
+    incrementDrawingGroupIndex(){
+        this.animationGroups.push(
+            {   drawnVertices:[],
+                startPositions:[],
+                endPositions:[],
+                startColor:this.p.color(Math.random()*255,Math.random()*255,Math.random()*255),
+                endColor:this.p.color(Math.random()*255,Math.random()*255,Math.random()*255),
+                finishedVerticesCount:0, // keep a count of the vertices
+                                    // that have interpolated to the finish.
+            }
+        )
+        this.currentAnimationGroupIndex++;
+    }
     showAnimation(){
-        for (let i = 0; i < this.animationGroups.length; i++){
-            this.drawVerticesToScreen(this.animationGroups[i].drawnVertices, 0)
-            // "when the animation has finished" logic.
-                // right now: loop.
-                // in the future cycle to next keyFrame.
-            if (this.animationGroups[i].finishedVerticesCount === this.animationGroups[i].drawnVertices.length){
-                this.animationGroups[i].finishedVerticesCount = 0
+        // i do not know why, but i actually need three for loops here
+            // and not just one.
+        // it does not work otherwise. (work = all animations sync up and loop w/o popping)
+        if (this.finishedVerticesCount === this.totalVerticesCount){
+            for (let i = 0; i < this.animationGroups.length; i++){
+                this.finishedVerticesCount = 0;
                 this.resetDrawnVerticesFinishedStatus(this.animationGroups[i])
                 // swap starting and ending vertices.
                 let storeStartingPositions = this.animationGroups[i].startPositions
                 this.animationGroups[i].startPositions = this.animationGroups[i].endPositions
                 this.animationGroups[i].endPositions = storeStartingPositions
             }
-            this.lerpAnimationGroup(this.animationGroups[i])
+        } else {
+            for (let i = 0; i < this.animationGroups.length; i++){
+                this.lerpAnimationGroup(this.animationGroups[i])
+            }
+        }
+        for (let i = 0; i < this.animationGroups.length; i++){
+            this.drawVerticesToScreen(this.animationGroups[i].drawnVertices, 0)
         }
     }
     lerpAnimationGroup(group){
@@ -144,9 +167,10 @@ export default class AnimateDrawingContainer extends DrawingContainer{
             group.drawnVertices[i].x=this.p.lerp(group.drawnVertices[i].x,group.endPositions[i].x,.1)
             group.drawnVertices[i].y=this.p.lerp(group.drawnVertices[i].y,group.endPositions[i].y,.1)
             if (!group.drawnVertices[i].finished){
-                if (Math.abs(group.drawnVertices[i].x-group.endPositions[i].x)<this.lengthOfDrawingSquare*.000001 && Math.abs(group.drawnVertices[i].y-group.endPositions[i].y)<this.lengthOfDrawingSquare*.000001){
+                if (Math.abs(group.drawnVertices[i].x-group.endPositions[i].x)<this.lengthOfDrawingSquare*.00001 && Math.abs(group.drawnVertices[i].y-group.endPositions[i].y)<this.lengthOfDrawingSquare*.00001){
                     group.drawnVertices[i].finished = true
-                    group.finishedVerticesCount++;
+                    // group.finishedVerticesCount++;
+                    this.finishedVerticesCount++;
                 }
             }
         }

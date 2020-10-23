@@ -216,7 +216,7 @@ export default class FlagInappropriateContentView {
             wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
             parameters = {p:p,objectToMirror:i<=2?topLeft[i]:bottomRight[i-3],x:x,y:y,width:width,height:height,color:color,wildcard:wildcard}
             this.drawings[i] = new DisplayDrawingContainer(parameters)
-            this.drawings[i].setLengthOfDrawingSquare(topLeft[0].width)
+            this.drawings[i].setLengthOfDrawingSquare(topLeft[0].width+topLeft[0].width*.11)
             // used in the toggleDrawingPresentInFlaggedIndices method
                 // to tell backend which drawings have been selected
             this.drawings[i].index = i
@@ -266,7 +266,7 @@ export default class FlagInappropriateContentView {
         wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
         parameters = {p:p,objectToMirror:bottomRight[2],x:x,y:y,width:width,height:height,color:color,wildcard:wildcard,lerpSpeed:windowResized?.3:.1}
         this.drawing = new DisplayDrawingContainer(parameters)
-        this.drawing.setLengthOfDrawingSquare(topLeft[0].width)
+        this.drawing.setLengthOfDrawingSquare(topLeft[0].width+topLeft[0].width*.11)
         this.drawing.index = 5
         this.drawing.setFill(true)
         this.drawing.setStroke(drawingOutline)

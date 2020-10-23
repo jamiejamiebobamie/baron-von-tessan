@@ -21,7 +21,7 @@ export default class AnimateDrawingView {
                 let buttonString = this.drawing.penMode ? "SELECT SECTION" : "DRAW NEXT POSITION";
                 buttonObject.setString(buttonString);
                 this.drawing.mouseClickfunc = this.drawing.penMode ? this.buildStroke : this.removeStroke;
-                this.drawing.ink = this.drawing.animationGroups[0].startPositions.length - this.drawing.animationGroups[0].endPositions.length
+                this.drawing.ink = this.drawing.animationGroups[this.drawing.currentAnimationGroupIndex].startPositions.length - this.drawing.animationGroups[this.drawing.currentAnimationGroupIndex].endPositions.length
             }
     }
     toggleMode(buttonObject){
@@ -29,7 +29,12 @@ export default class AnimateDrawingView {
             this.drawing.buildAnimationModeIsToggled=!this.drawing.buildAnimationModeIsToggled;
             let buttonString = this.drawing.buildAnimationModeIsToggled ? "SHOW ANIMATON" : "BUILD ANIMATON";
             buttonObject.setString(buttonString);
-            this.drawing.setDrawnVerticesStartingPostions()
+            if (!this.drawing.buildAnimationModeIsToggled){
+                this.drawing.setDrawnVerticesStartingPostions()
+            } else {
+                this.drawing.incrementDrawingGroupIndex()
+            }
+            console.log(this.drawing.animationGroups,this.drawing.currentAnimationGroupIndex)
         }
     }
     undoLastStroke(){
@@ -50,7 +55,7 @@ export default class AnimateDrawingView {
         if (this.drawing !== undefined){
             if (this.drawing.ink){
                 let vertice = {x:(this.drawing.p.mouseX-this.drawing.x)/this.drawing.lengthOfDrawingSquare,y:(this.drawing.p.mouseY-this.drawing.y)/this.drawing.lengthOfDrawingSquare,finished:false}
-                this.drawing.animationGroups[0].endPositions.push(vertice)
+                this.drawing.animationGroups[this.drawing.currentAnimationGroupIndex].endPositions.push(vertice)
                 this.drawing.ink--;
             }
         }
@@ -64,8 +69,8 @@ export default class AnimateDrawingView {
                         && this.drawing.p.mouseY > this.drawing.y+this.drawing.submittedStrokes[i].y*this.drawing.lengthOfDrawingSquare-this.drawing.lengthOfDrawingSquare*.01
                         && this.drawing.p.mouseY < this.drawing.y+this.drawing.submittedStrokes[i].y*this.drawing.lengthOfDrawingSquare+this.drawing.lengthOfDrawingSquare*.01 ){
                             this.drawing.submittedStrokes[i].finished=false
-                            this.drawing.animationGroups[0].startPositions.push(this.drawing.submittedStrokes[i]);
-                            this.drawing.submittedStrokes.splice(i,1)
+                            this.drawing.animationGroups[this.drawing.currentAnimationGroupIndex].startPositions.push(this.drawing.submittedStrokes[i]);
+                            this.drawing.submittedStrokes.splice(i,1);
                     }
                 }
             }
