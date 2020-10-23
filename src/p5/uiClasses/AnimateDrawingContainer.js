@@ -53,20 +53,6 @@ import DrawingContainer from './DrawingContainer'
 export default class AnimateDrawingContainer extends DrawingContainer{
     constructor(parameterObject){
         super(parameterObject)
-        this.keyFrameIndex = 0
-        this.keyFrameVertices = []
-        // by entering animation mode
-            // you start with two keyframes
-            // keyframe1: the submitted drawing's vertices
-            // keyframe2: the submitted drawing's vertices to edit.
-        // only one KeyFrame instance is held at a time.
-        // this.KeyFrame =
-        //         new KeyFrame(
-        //             this.keyFrames[this.keyFrameIndex],
-        //             this.keyFrames[this.keyFrameIndex]
-        //         )
-
-
         // when a user erases a vertex from the current keyframe
             // the popped vertex is added to the ink count
         // the vertex can then be redrawn to the screen.
@@ -75,15 +61,8 @@ export default class AnimateDrawingContainer extends DrawingContainer{
         // false for erase mode.
         this.penMode = false;
 
-        // false for showKeyFrameMode
+        // false for showAnimationMode
         this.buildAnimationModeIsToggled = true;
-
-        //test
-        this.AnimationSection = {startVertices:[],endVertices:[]}
-
-        // random color
-        // let color = this.p.color(Math.random()*255,Math.random()*255,Math.random()*255)
-        // this.drawEllipsesToScreen(this.animationGroups[i].vertices, this.animationGroups[i].color?this.animationGroups[i].color:"pink")
 
         this.animationGroups = [
             {   currentVertices:[],
@@ -100,22 +79,22 @@ export default class AnimateDrawingContainer extends DrawingContainer{
         for (let i = 0; i < this.animationGroups.length; i++){
             this.animationGroups[i].currentVertices = this.animationGroups[i].startVertices
         }
+        console.log(this.animationGroups[0].currentVertices[0],this.animationGroups[0].startVertices[0],this.animationGroups[0].endVertices[0])
     }
     buildAnimation(){ this.drawAnimationGroups(); }
     showAnimation(){
         for (let i = 0; i < this.animationGroups.length; i++){
             this.drawEllipsesToScreen(this.animationGroups[i].currentVertices, 100)
-            this.lerpAnimationGroup(this.animationGroups[i])
-            // when the animation
+            // "when the animation has finished" logic.
+                // right now: loop.
+                // in the future cycle to next keyFrame.
             if (this.animationGroups[i].finishedVerticesCount === this.animationGroups[i].currentVertices.length){
-                console.log('ksksksk',this.animationGroups[i].finishedVerticesCount, this.animationGroups[i].currentVertices.length)
-
-                let storeEndVertices = this.animationGroups[i].endVertices;
-                this.animationGroups[i].endVertices = this.animationGroups[i].startVertices
-                this.animationGroups[i].startVertices = storeEndVertices
                 this.animationGroups[i].finishedVerticesCount = 0
-                this.resetVertices(this.animationGroups[i])
-                
+                let animationGroupIndex = i;
+                this.swapStartAndEndingVertices(animationGroupIndex)
+                this.resetCurrentVerticesFinishedStatus(this.animationGroups[i])
+            } else {
+                this.lerpAnimationGroup(this.animationGroups[i])
             }
         }
     }
@@ -132,7 +111,17 @@ export default class AnimateDrawingContainer extends DrawingContainer{
             }
         }
     }
-    resetVertices(group){
+    swapStartAndEndingVertices(animationGroupIndex){
+        let newEnd = []
+        let newStart = []
+        for (let i = 0; i < this.animationGroups[animationGroupIndex].startVertices.length; i++){
+            newEnd.push(this.animationGroups[animationGroupIndex].startVertices[i])
+            newStart.push(this.animationGroups[animationGroupIndex].endVertices[i])
+        }
+        this.animationGroups[animationGroupIndex].startVertices = newEnd;
+        this.animationGroups[animationGroupIndex].endVertices = newStart;
+    }
+    resetCurrentVerticesFinishedStatus(group){
         for (let i = 0; i < group.currentVertices.length; i++){
             group.currentVertices[i].finished = false
         }
@@ -152,6 +141,7 @@ export default class AnimateDrawingContainer extends DrawingContainer{
         }
     }
     draw() {
+        console.log(this.animationGroups[0].currentVertices[0],this.animationGroups[0].startVertices[0],this.animationGroups[0].endVertices[0])
         super.draw();
         this.drawSubmittedStrokes();
         if (this.buildAnimationModeIsToggled){
