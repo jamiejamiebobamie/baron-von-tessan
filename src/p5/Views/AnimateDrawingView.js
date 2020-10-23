@@ -278,7 +278,7 @@ export default class AnimateDrawingView {
             this.drawing.buildAnimationModeIsToggled=!this.drawing.buildAnimationModeIsToggled;
             let buttonString = this.drawing.buildAnimationModeIsToggled ? "SHOW ANIMATON" : "BUILD ANIMATON";
             this.buttons[1].setString(buttonString);
-            this.drawing.setStartingPostions()
+            this.drawing.setCurrentVerticesStartingPostions()
         };
 
         return _ui;

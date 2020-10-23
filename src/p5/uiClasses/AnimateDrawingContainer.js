@@ -74,28 +74,33 @@ export default class AnimateDrawingContainer extends DrawingContainer{
                                     // that have interpolated to the finish.
             }
         ]
+        this.toEnd = true
     }
-    setStartingPostions(){
+    setCurrentVerticesStartingPostions(){
+        let vertice;
         for (let i = 0; i < this.animationGroups.length; i++){
-            this.animationGroups[i].currentVertices = this.animationGroups[i].startVertices
+            for (let j = 0; j < this.animationGroups[i].startVertices.length; j++){
+                vertice = {x:this.animationGroups[i].startVertices[j].x,y:this.animationGroups[i].startVertices[j].y,finished:false}
+                this.animationGroups[i].currentVertices.push(vertice)
+            }
         }
-        console.log(this.animationGroups[0].currentVertices[0],this.animationGroups[0].startVertices[0],this.animationGroups[0].endVertices[0])
     }
     buildAnimation(){ this.drawAnimationGroups(); }
     showAnimation(){
         for (let i = 0; i < this.animationGroups.length; i++){
-            this.drawEllipsesToScreen(this.animationGroups[i].currentVertices, 100)
+            this.drawVerticesToScreen(this.animationGroups[i].currentVertices, 0)
             // "when the animation has finished" logic.
                 // right now: loop.
                 // in the future cycle to next keyFrame.
             if (this.animationGroups[i].finishedVerticesCount === this.animationGroups[i].currentVertices.length){
                 this.animationGroups[i].finishedVerticesCount = 0
-                let animationGroupIndex = i;
-                this.swapStartAndEndingVertices(animationGroupIndex)
                 this.resetCurrentVerticesFinishedStatus(this.animationGroups[i])
-            } else {
-                this.lerpAnimationGroup(this.animationGroups[i])
+                // swap starting and ending vertices.
+                let storeStartingPositions = this.animationGroups[i].startVertices
+                this.animationGroups[i].startVertices = this.animationGroups[i].endVertices
+                this.animationGroups[i].endVertices = storeStartingPositions
             }
+            this.lerpAnimationGroup(this.animationGroups[i])
         }
     }
     lerpAnimationGroup(group){
@@ -106,20 +111,9 @@ export default class AnimateDrawingContainer extends DrawingContainer{
                 if (Math.abs(group.currentVertices[i].x-group.endVertices[i].x)<this.lengthOfDrawingSquare*.000001 && Math.abs(group.currentVertices[i].y-group.endVertices[i].y)<this.lengthOfDrawingSquare*.000001){
                     group.currentVertices[i].finished = true
                     group.finishedVerticesCount++;
-                    console.log('djdjdj')
                 }
             }
         }
-    }
-    swapStartAndEndingVertices(animationGroupIndex){
-        let newEnd = []
-        let newStart = []
-        for (let i = 0; i < this.animationGroups[animationGroupIndex].startVertices.length; i++){
-            newEnd.push(this.animationGroups[animationGroupIndex].startVertices[i])
-            newStart.push(this.animationGroups[animationGroupIndex].endVertices[i])
-        }
-        this.animationGroups[animationGroupIndex].startVertices = newEnd;
-        this.animationGroups[animationGroupIndex].endVertices = newStart;
     }
     resetCurrentVerticesFinishedStatus(group){
         for (let i = 0; i < group.currentVertices.length; i++){
@@ -127,17 +121,18 @@ export default class AnimateDrawingContainer extends DrawingContainer{
         }
     }
     setSubmittedStrokes(submittedStrokes){ this.submittedStrokes = submittedStrokes }
-    drawEllipsesToScreen(ellipsesData, color){
+    drawVerticesToScreen(verticesData, color){
+        this.p.noStroke();
         this.p.fill(color)
-        for (let i = 0; i < ellipsesData.length; i++){
-            this.p.ellipse(ellipsesData[i].x*this.lengthOfDrawingSquare+this.x, ellipsesData[i].y*this.lengthOfDrawingSquare+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
+        for (let i = 0; i < verticesData.length; i++){
+            this.p.ellipse(verticesData[i].x*this.lengthOfDrawingSquare+this.x, verticesData[i].y*this.lengthOfDrawingSquare+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
         }
     }
-    drawSubmittedStrokes(){ this.drawEllipsesToScreen(this.submittedStrokes, 0) }
+    drawSubmittedStrokes(){ this.drawVerticesToScreen(this.submittedStrokes, 0) }
     drawAnimationGroups(){
         for (let i = 0; i < this.animationGroups.length; i++){
-            this.drawEllipsesToScreen(this.animationGroups[i].startVertices, this.animationGroups[i].startColor?this.animationGroups[i].startColor:"pink")
-            this.drawEllipsesToScreen(this.animationGroups[i].endVertices, this.animationGroups[i].endColor?this.animationGroups[i].endColor:"pink")
+            this.drawVerticesToScreen(this.animationGroups[i].startVertices, this.animationGroups[i].startColor?this.animationGroups[i].startColor:"pink")
+            this.drawVerticesToScreen(this.animationGroups[i].endVertices, this.animationGroups[i].endColor?this.animationGroups[i].endColor:"pink")
         }
     }
     draw() {
