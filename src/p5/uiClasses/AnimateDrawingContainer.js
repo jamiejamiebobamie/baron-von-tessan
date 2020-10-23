@@ -65,9 +65,9 @@ export default class AnimateDrawingContainer extends DrawingContainer{
         this.buildAnimationModeIsToggled = true;
 
         this.animationGroups = [
-            {   currentVertices:[],
-                startVertices:[],
-                endVertices:[],
+            {   drawnVertices:[],
+                startPositions:[],
+                endPositions:[],
                 startColor:this.p.color(Math.random()*255,Math.random()*255,Math.random()*255),
                 endColor:this.p.color(Math.random()*255,Math.random()*255,Math.random()*255),
                 finishedVerticesCount:0, // keep a count of the vertices
@@ -76,51 +76,86 @@ export default class AnimateDrawingContainer extends DrawingContainer{
         ]
         this.toEnd = true
     }
-    setCurrentVerticesStartingPostions(){
+    setSubmittedStrokes(submittedStrokes){ this.submittedStrokes = submittedStrokes }
+    setDrawnVerticesStartingPostions(){
+        console.log(this.animationGroups[0].startPositions[0],this.animationGroups[0].endPositions[0])
         let vertice;
         for (let i = 0; i < this.animationGroups.length; i++){
-            for (let j = 0; j < this.animationGroups[i].startVertices.length; j++){
-                vertice = {x:this.animationGroups[i].startVertices[j].x,y:this.animationGroups[i].startVertices[j].y,finished:false}
-                this.animationGroups[i].currentVertices.push(vertice)
+            // NOT WORKING ___
+
+            // iterate through all of the startPositions
+                // find the overall minimum distance from one startVertex to one endVertex
+                    // swap these values in their respective arrays with the j index
+            // for (let j = 0; j < this.animationGroups[i].startPositions.length; j++){
+            //     let minDist = Number.MAX_VALUE
+            //     let testMin;
+            //     let storeIndices = {start:0,end:0}
+            //     // in the future, the endPositions.length
+            //         // may be larger or smaller than the startPositions.length
+            //         // will add vertices to starting position
+            //     for (let k = j; k < this.animationGroups[i].endPositions.length; k++){
+            //         testMin = Math.sqrt(
+            //         (this.animationGroups[i].endPositions[k].x - this.animationGroups[i].startPositions[j].x)*(this.animationGroups[i].endPositions[k].x - this.animationGroups[i].startPositions[j].x)
+            //               + (this.animationGroups[i].endPositions[k].y - this.animationGroups[i].startPositions[j].y)*(this.animationGroups[i].endPositions[k].y - this.animationGroups[i].startPositions[j].y)
+            //         )
+            //         minDist = Math.min(testMin,minDist)
+            //         if (testMin === minDist){
+            //             console.log("hi")
+            //             storeIndices.start = j;
+            //             storeIndices.end = k;
+            //         }
+            //     }
+            //     // swap the found min pairs with the front of each array
+            //     let storeStartValueToSwap = this.animationGroups[i].startPositions[j]
+            //     this.animationGroups[i].startPositions[j] = this.animationGroups[i].startPositions[storeIndices.start]
+            //     this.animationGroups[i].startPositions[storeIndices.start] = storeStartValueToSwap
+            //     let storeEndValueToSwap = this.animationGroups[i].endPositions[j]
+            //     this.animationGroups[i].endPositions[j] = this.animationGroups[i].endPositions[storeIndices.end]
+            //     this.animationGroups[i].endPositions[storeIndices.end] = storeEndValueToSwap
+            // }
+            // console.log(this.animationGroups[0].startPositions[0],this.animationGroups[0].endPositions[0])
+
+            // set the drawnVertices positions to startPositions
+            for (let j = 0; j < this.animationGroups[i].startPositions.length; j++){
+                vertice = {x:this.animationGroups[i].startPositions[j].x,y:this.animationGroups[i].startPositions[j].y,finished:false}
+                this.animationGroups[i].drawnVertices.push(vertice)
             }
         }
     }
-    buildAnimation(){ this.drawAnimationGroups(); }
     showAnimation(){
         for (let i = 0; i < this.animationGroups.length; i++){
-            this.drawVerticesToScreen(this.animationGroups[i].currentVertices, 0)
+            this.drawVerticesToScreen(this.animationGroups[i].drawnVertices, 0)
             // "when the animation has finished" logic.
                 // right now: loop.
                 // in the future cycle to next keyFrame.
-            if (this.animationGroups[i].finishedVerticesCount === this.animationGroups[i].currentVertices.length){
+            if (this.animationGroups[i].finishedVerticesCount === this.animationGroups[i].drawnVertices.length){
                 this.animationGroups[i].finishedVerticesCount = 0
-                this.resetCurrentVerticesFinishedStatus(this.animationGroups[i])
+                this.resetDrawnVerticesFinishedStatus(this.animationGroups[i])
                 // swap starting and ending vertices.
-                let storeStartingPositions = this.animationGroups[i].startVertices
-                this.animationGroups[i].startVertices = this.animationGroups[i].endVertices
-                this.animationGroups[i].endVertices = storeStartingPositions
+                let storeStartingPositions = this.animationGroups[i].startPositions
+                this.animationGroups[i].startPositions = this.animationGroups[i].endPositions
+                this.animationGroups[i].endPositions = storeStartingPositions
             }
             this.lerpAnimationGroup(this.animationGroups[i])
         }
     }
     lerpAnimationGroup(group){
-        for (let i = 0; i < group.currentVertices.length; i++){
-            group.currentVertices[i].x=this.p.lerp(group.currentVertices[i].x,group.endVertices[i].x,.1)
-            group.currentVertices[i].y=this.p.lerp(group.currentVertices[i].y,group.endVertices[i].y,.1)
-            if (!group.currentVertices[i].finished){
-                if (Math.abs(group.currentVertices[i].x-group.endVertices[i].x)<this.lengthOfDrawingSquare*.000001 && Math.abs(group.currentVertices[i].y-group.endVertices[i].y)<this.lengthOfDrawingSquare*.000001){
-                    group.currentVertices[i].finished = true
+        for (let i = 0; i < group.drawnVertices.length; i++){
+            group.drawnVertices[i].x=this.p.lerp(group.drawnVertices[i].x,group.endPositions[i].x,.1)
+            group.drawnVertices[i].y=this.p.lerp(group.drawnVertices[i].y,group.endPositions[i].y,.1)
+            if (!group.drawnVertices[i].finished){
+                if (Math.abs(group.drawnVertices[i].x-group.endPositions[i].x)<this.lengthOfDrawingSquare*.000001 && Math.abs(group.drawnVertices[i].y-group.endPositions[i].y)<this.lengthOfDrawingSquare*.000001){
+                    group.drawnVertices[i].finished = true
                     group.finishedVerticesCount++;
                 }
             }
         }
     }
-    resetCurrentVerticesFinishedStatus(group){
-        for (let i = 0; i < group.currentVertices.length; i++){
-            group.currentVertices[i].finished = false
+    resetDrawnVerticesFinishedStatus(group){
+        for (let i = 0; i < group.drawnVertices.length; i++){
+            group.drawnVertices[i].finished = false
         }
     }
-    setSubmittedStrokes(submittedStrokes){ this.submittedStrokes = submittedStrokes }
     drawVerticesToScreen(verticesData, color){
         this.p.noStroke();
         this.p.fill(color)
@@ -128,15 +163,17 @@ export default class AnimateDrawingContainer extends DrawingContainer{
             this.p.ellipse(verticesData[i].x*this.lengthOfDrawingSquare+this.x, verticesData[i].y*this.lengthOfDrawingSquare+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
         }
     }
-    drawSubmittedStrokes(){ this.drawVerticesToScreen(this.submittedStrokes, 0) }
+    buildAnimation(){
+        this.drawAnimationGroups();
+     }
     drawAnimationGroups(){
         for (let i = 0; i < this.animationGroups.length; i++){
-            this.drawVerticesToScreen(this.animationGroups[i].startVertices, this.animationGroups[i].startColor?this.animationGroups[i].startColor:"pink")
-            this.drawVerticesToScreen(this.animationGroups[i].endVertices, this.animationGroups[i].endColor?this.animationGroups[i].endColor:"pink")
+            this.drawVerticesToScreen(this.animationGroups[i].startPositions, this.animationGroups[i].startColor?this.animationGroups[i].startColor:"pink")
+            this.drawVerticesToScreen(this.animationGroups[i].endPositions, this.animationGroups[i].endColor?this.animationGroups[i].endColor:"pink")
         }
     }
+    drawSubmittedStrokes(){ this.drawVerticesToScreen(this.submittedStrokes, 0) }
     draw() {
-        console.log(this.animationGroups[0].currentVertices[0],this.animationGroups[0].startVertices[0],this.animationGroups[0].endVertices[0])
         super.draw();
         this.drawSubmittedStrokes();
         if (this.buildAnimationModeIsToggled){

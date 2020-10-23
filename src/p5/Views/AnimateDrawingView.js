@@ -21,8 +21,16 @@ export default class AnimateDrawingView {
                 let buttonString = this.drawing.penMode ? "SELECT SECTION" : "DRAW NEXT POSITION";
                 buttonObject.setString(buttonString);
                 this.drawing.mouseClickfunc = this.drawing.penMode ? this.buildStroke : this.removeStroke;
-                this.drawing.ink = this.drawing.animationGroups[0].startVertices.length - this.drawing.animationGroups[0].endVertices.length
+                this.drawing.ink = this.drawing.animationGroups[0].startPositions.length - this.drawing.animationGroups[0].endPositions.length
             }
+    }
+    toggleMode(buttonObject){
+        if (this.drawing){
+            this.drawing.buildAnimationModeIsToggled=!this.drawing.buildAnimationModeIsToggled;
+            let buttonString = this.drawing.buildAnimationModeIsToggled ? "SHOW ANIMATON" : "BUILD ANIMATON";
+            buttonObject.setString(buttonString);
+            this.drawing.setDrawnVerticesStartingPostions()
+        }
     }
     undoLastStroke(){
         if (this.drawing){
@@ -42,7 +50,7 @@ export default class AnimateDrawingView {
         if (this.drawing !== undefined){
             if (this.drawing.ink){
                 let vertice = {x:(this.drawing.p.mouseX-this.drawing.x)/this.drawing.lengthOfDrawingSquare,y:(this.drawing.p.mouseY-this.drawing.y)/this.drawing.lengthOfDrawingSquare,finished:false}
-                this.drawing.animationGroups[0].endVertices.push(vertice)
+                this.drawing.animationGroups[0].endPositions.push(vertice)
                 this.drawing.ink--;
             }
         }
@@ -56,7 +64,7 @@ export default class AnimateDrawingView {
                         && this.drawing.p.mouseY > this.drawing.y+this.drawing.submittedStrokes[i].y*this.drawing.lengthOfDrawingSquare-this.drawing.lengthOfDrawingSquare*.01
                         && this.drawing.p.mouseY < this.drawing.y+this.drawing.submittedStrokes[i].y*this.drawing.lengthOfDrawingSquare+this.drawing.lengthOfDrawingSquare*.01 ){
                             this.drawing.submittedStrokes[i].finished=false
-                            this.drawing.animationGroups[0].startVertices.push(this.drawing.submittedStrokes[i]);
+                            this.drawing.animationGroups[0].startPositions.push(this.drawing.submittedStrokes[i]);
                             this.drawing.submittedStrokes.splice(i,1)
                     }
                 }
@@ -274,12 +282,7 @@ export default class AnimateDrawingView {
         _ui.push(this.instructions)
 
         // TOGGLE MODE BUTTON
-        this.buttons[1].mouseClickfunc = ()=>{
-            this.drawing.buildAnimationModeIsToggled=!this.drawing.buildAnimationModeIsToggled;
-            let buttonString = this.drawing.buildAnimationModeIsToggled ? "SHOW ANIMATON" : "BUILD ANIMATON";
-            this.buttons[1].setString(buttonString);
-            this.drawing.setCurrentVerticesStartingPostions()
-        };
+        this.buttons[1].mouseClickfunc = () => { this.toggleMode(this.buttons[1])};
 
         return _ui;
     }
