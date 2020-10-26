@@ -2,7 +2,7 @@ import React,{Component}  from 'react';
 import {isMobile} from 'react-device-detect';
 import Sketch from './p5/Sketch.js';
 import './App.css';
-import response from './p5/simulatedResponse'
+import response from './p5/simulatedResponse2'
 import baronData from './p5/baronDrawingDataReduced'
 
 
@@ -17,13 +17,15 @@ class App extends Component {
             response:response.data,
             isMobile: isMobile,
             flaggedIndices:[],
-            backgroundDrawingData:[baronData.drawingData,baronData.drawingData,baronData.drawingData,baronData.drawingData]
+            backgroundDrawingData:[baronData.drawingData,baronData.drawingData,baronData.drawingData,baronData.drawingData],
+            isUsingSimulatedData:true,
         }
         this.myRef = React.createRef()
         // passing in a reference to the app's scope.
             // binding 'this' isn't necessary for callbacks.
         this.SketchWrapper = new Sketch(this)
         this.Sketch = this.SketchWrapper.sketch;
+        console.log(response.data)
     }
 
     handleSubmitDrawing(drawingData) {this.setState({drawingData:drawingData});console.log(drawingData)}

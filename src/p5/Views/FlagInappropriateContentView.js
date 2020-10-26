@@ -183,8 +183,13 @@ export default class FlagInappropriateContentView {
         setTimeout(()=>{this.instructions.setFontSizeWithRegardToContainerHeight(questionArea.width/15);},5);
         _ui.push(this.instructions)
 
-        let drawingHasBeenDrawn = false
-        let strokeIndex = 0;
+
+        // commented-out code below has to do with
+            // the redrawStrokes() method being too intensive
+
+        // let drawingHasBeenDrawn = false
+        // let strokeIndex = 0;
+        let drawingHasBeenDrawn = true
         let timeOutVar = undefined;
         let color = "lightgrey"
         let drawingOutline = false;
@@ -202,10 +207,10 @@ export default class FlagInappropriateContentView {
                         height = previousUI.drawings[i].height;
 
                         // redrawStrokes properties
-                        drawingHasBeenDrawn = windowResized && !previousUI.drawings[i].loop ? previousUI.drawings[i].drawingHasBeenDrawn : false;
-                        strokeIndex = previousUI.drawings[i].submittedStrokeIndex
-                        clearTimeout(previousUI.drawings[i].timeOut1)
-                        clearTimeout(previousUI.drawings[i].timeOut2)
+                        // drawingHasBeenDrawn = windowResized && !previousUI.drawings[i].loop ? previousUI.drawings[i].drawingHasBeenDrawn : false;
+                        // strokeIndex = previousUI.drawings[i].submittedStrokeIndex
+                        // clearTimeout(previousUI.drawings[i].timeOut1)
+                        // clearTimeout(previousUI.drawings[i].timeOut2)
 
                         // picture selected properties
                         color = previousUI.drawings[i].color
@@ -216,7 +221,7 @@ export default class FlagInappropriateContentView {
             wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
             parameters = {p:p,objectToMirror:i<=2?topLeft[i]:bottomRight[i-3],x:x,y:y,width:width,height:height,color:color,wildcard:wildcard}
             this.drawings[i] = new DisplayDrawingContainer(parameters)
-            this.drawings[i].setLengthOfDrawingSquare(topLeft[0].width+topLeft[0].width*.11)
+            this.drawings[i].setLengthOfDrawingSquare(topLeft[0].width+topLeft[0].width*.07)
             // used in the toggleDrawingPresentInFlaggedIndices method
                 // to tell backend which drawings have been selected
             this.drawings[i].index = i
@@ -225,19 +230,14 @@ export default class FlagInappropriateContentView {
             this.drawings[i].setInteractivity(true);
             let clickOnce = true;
             this.drawings[i].setClickType(clickOnce)
-            this.drawings[i].submittedStrokeIndex = strokeIndex;
-                // if (i===5){
-                //     this.drawings[i].setSubmittedStrokes(REACT_APP.state.drawingData)
-                // } else {
-                    this.drawings[i].setSubmittedStrokes(REACT_APP.state.response[i].drawingData)
-                // }
+            this.drawings[i].setSubmittedStrokes(REACT_APP.state.response[i].drawingData)
             this.drawings[i].timeOut2 = timeOutVar
             let mouseClickfunc = () => {
                 this.toggleDrawingPresentInFlaggedIndices(this.drawings[i],p)
             }
             this.drawings[i].mouseClickfunc = mouseClickfunc
-            this.drawings[i].redrawStrokes();
-            this.drawings[i].setLoopToTrueToLoopFinishedDrawing()
+            // this.drawings[i].redrawStrokes();
+            // this.drawings[i].setLoopToTrueToLoopFinishedDrawing()
 
             _ui.push(this.drawings[i])
         }
@@ -253,8 +253,8 @@ export default class FlagInappropriateContentView {
                     height = previousUI.drawing.height;
 
                     // redrawStrokes properties
-                    drawingHasBeenDrawn = windowResized && !previousUI.drawing.loop ? previousUI.drawing.drawingHasBeenDrawn : false;
-                    strokeIndex = previousUI.drawing.submittedStrokeIndex
+                    // drawingHasBeenDrawn = windowResized && !previousUI.drawing.loop ? previousUI.drawing.drawingHasBeenDrawn : false;
+                    // strokeIndex = previousUI.drawing.submittedStrokeIndex
                     clearTimeout(previousUI.drawing.timeOut1)
                     clearTimeout(previousUI.drawing.timeOut2)
 
@@ -266,26 +266,24 @@ export default class FlagInappropriateContentView {
         wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
         parameters = {p:p,objectToMirror:bottomRight[2],x:x,y:y,width:width,height:height,color:color,wildcard:wildcard,lerpSpeed:windowResized?.3:.1}
         this.drawing = new DisplayDrawingContainer(parameters)
-        this.drawing.setLengthOfDrawingSquare(topLeft[0].width+topLeft[0].width*.11)
+        this.drawing.setLengthOfDrawingSquare(topLeft[0].width+topLeft[0].width*.07)
         this.drawing.index = 5
         this.drawing.setFill(true)
         this.drawing.setStroke(drawingOutline)
         this.drawing.setInteractivity(true);
         let clickOnce = true;
         this.drawing.setClickType(clickOnce)
-        this.drawing.submittedStrokeIndex = strokeIndex;
-            // if (i===5){
+        // the last drawing on the view is either a user drawing or a drawing
+            // from the response depending on which option the user chose in the
+            // menuView
         REACT_APP.state.drawingData.length?this.drawing.setSubmittedStrokes(REACT_APP.state.drawingData):this.drawing.setSubmittedStrokes(REACT_APP.state.response[5].drawingData);
-            // } else {
-                // this.drawings[i].setSubmittedStrokes(REACT_APP.state.response[i].drawingData)
-            // }
         this.drawing.timeOut2 = timeOutVar
         let mouseClickfunc = () => {
             this.toggleDrawingPresentInFlaggedIndices(this.drawing,p)
         }
         this.drawing.mouseClickfunc = mouseClickfunc
-        this.drawing.redrawStrokes();
-        this.drawing.setLoopToTrueToLoopFinishedDrawing()
+        // this.drawing.redrawStrokes();
+        // this.drawing.setLoopToTrueToLoopFinishedDrawing()
 
         _ui.push(this.drawing)
 

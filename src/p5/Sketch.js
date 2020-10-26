@@ -23,37 +23,53 @@ export default class Sketch {
         // 'this' binding is necessary here.
         this.changeView = this.changeView.bind(this);
     }
+    shuffleSimulatedData(){
+        let randomIndex, storedValue;
+        let copiedResponse = this.REACT_APP.state.response
+        for (let i = copiedResponse.length-1; i >= 0; i--){
+            randomIndex = Math.floor(Math.random() * copiedResponse.length)
+            storedValue = copiedResponse[randomIndex];
+            copiedResponse[randomIndex] = copiedResponse[i]
+            copiedResponse[i] = storedValue;
+
+        }
+        this.REACT_APP.setState({response:copiedResponse})
+    }
     setViews(){
         this.views = [];
         let view;
         view = new Menu();
         this.views.push(view);
-        // view = new IntroView();
-        // this.views.push(view);
-        // view = new SlideshowView();
-        // this.views.push(view);
-        // view = new AndView();
-        // this.views.push(view);
+        view = new IntroView();
+        this.views.push(view);
+        view = new SlideshowView();
+        this.views.push(view);
+        view = new AndView();
+        this.views.push(view);
         view = new DrawingView();
         this.views.push(view);
 
         // testing.
-        view = new AnimateDrawingView();
-        this.views.push(view);
+        // view = new AnimateDrawingView();
+        // this.views.push(view);
 
-        // view = new EnterDescriptionView();
-        // this.views.push(view);
-        // view = new FlagInappropriateContent();
-        // this.views.push(view);
-        // view = new OutroView();
-        // this.views.push(view);
+        view = new EnterDescriptionView();
+        this.views.push(view);
+        view = new FlagInappropriateContent();
+        this.views.push(view);
+        view = new OutroView();
+        this.views.push(view);
         this.lengthOfViews = this.views.length
         // reset the state variables of the app.
             // a method side effect, but best place to do this.
         this.REACT_APP.resetStateVariables()
+        // shuffle simulatedData.
+        if (this.REACT_APP.state.isUsingSimulatedData){
+            this.shuffleSimulatedData()
+        }
     }
-    // lengthOfViews parameter allows early exit from site if user chooses to
-        // only draw or only view other people's drawings.
+    // lengthOfViews parameter allows early exit from site if user chooses
+        // one of the options on the menu view other than 'ENTER SITE'
     changeView(desiredViewIndex,lengthOfViews){
         if (lengthOfViews !== undefined){
             this.lengthOfViews = lengthOfViews;
