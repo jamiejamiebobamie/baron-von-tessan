@@ -27,12 +27,12 @@ export default class IntroView {
     }
     getUI(){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
-        let wireFrameElements = []
-        let _ui = []
         let wildcard;
         let parameters;
         /// ---- ******** BEGIN WIREFRAME OBJECTS
             // wireframe objects are not drawn to screen.
+        let wireFrameElements = [];
+
         for (let i = 0; i < 3; i++){
             let color = i%2 ?"orange" :"orange"
             wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1, string:"break the screen into 3 rows"}
@@ -121,7 +121,7 @@ export default class IntroView {
 
         /// ---- ******** BEGIN _UI OBJECTS
         // _ui objects are drawn to screen and mirror a wireframe object
-
+        let _ui = [];
         let x,y,width,height,text;
         if (previousUI){
             if (previousUI.dialog){
@@ -194,7 +194,7 @@ export default class IntroView {
                     timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
                 } else {
                     this.drawing.drawingHasBeenDrawn = true;
-                    // pause three seconds to display drawing.
+                    // pause to display drawing.
                         // then loop if this.displayDrawingSpace.loop
                         // is set to true otherwise return.
                     timeOutVar = setTimeout(redrawStrokes, 5000,timeOutVar);

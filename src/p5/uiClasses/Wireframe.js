@@ -1,5 +1,5 @@
 import Container from './Container'
-import TextBox from './TextBox'
+import TextBox from './TextBoxContainer'
 
 export default class Wireframe extends Container{
     constructor(parameterObject){

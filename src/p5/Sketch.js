@@ -6,7 +6,9 @@ import EnterDescriptionView from './Views/EnterDescriptionView';
 import FlagInappropriateContent from './Views/FlagInappropriateContentView';
 import OutroView from './Views/OutroView';
 import AndView from './Views/AndView';
-import AnimateDrawingView from './Views/AnimateDrawingView';
+// import AnimateDrawingView from './Views/AnimateDrawingView';
+import ViewDrawingsView from './Views/ViewDrawingsView';
+
 
 export default class Sketch {
     constructor(app){
@@ -40,25 +42,30 @@ export default class Sketch {
         let view;
         view = new Menu();
         this.views.push(view);
-        view = new IntroView();
-        this.views.push(view);
-        view = new SlideshowView();
-        this.views.push(view);
-        view = new AndView();
-        this.views.push(view);
-        view = new DrawingView();
-        this.views.push(view);
+        // view = new IntroView();
+        // this.views.push(view);
+        // view = new SlideshowView();
+        // this.views.push(view);
+        // view = new AndView();
+        // this.views.push(view);
+        // view = new DrawingView();
+        // this.views.push(view);
 
         // testing.
         // view = new AnimateDrawingView();
         // this.views.push(view);
 
-        view = new EnterDescriptionView();
+        // view = new EnterDescriptionView();
+        // this.views.push(view);
+        // view = new FlagInappropriateContent();
+        // this.views.push(view);
+        // view = new OutroView();
+        // this.views.push(view);
+
+        //testing.
+        view = new ViewDrawingsView();
         this.views.push(view);
-        view = new FlagInappropriateContent();
-        this.views.push(view);
-        view = new OutroView();
-        this.views.push(view);
+
         this.lengthOfViews = this.views.length
         // reset the state variables of the app.
             // a method side effect, but best place to do this.
@@ -113,8 +120,7 @@ export default class Sketch {
         const REACT_APP = this.REACT_APP;
         p.preload = () => {
             this.font = p.loadFont('fonts/PrintClearly.otf');
-            // this.font = p.loadFont('fonts/PrintBold.otf');
-         }
+        }
         p.setup = () => {
             w = p.windowWidth - (p.windowWidth/10)
             h = p.windowHeight - (p.windowHeight/10)
@@ -165,16 +171,12 @@ export default class Sketch {
                 let windowResized = false
                 _ui  = this.views[this.desiredViewIndex].setUI(p,w,h,REACT_APP,windowResized,previousView,this.changeView)
                 this.currentViewIndex = this.desiredViewIndex
-
-                // for mobile
-                // when the view changes on mobile, reset the mouse Location
+                // when the view changes, reset the mouse location
                     // to be at the top left corner, so button mouseOver isn't
                     // triggered by previous touch event.
-                // (NOT TESTED.)
-                if (this.REACT_APP.state.isMobile){
-                    p.mouseX = 0;
-                    p.mouseY = 0;
-                }
+                // DOES NOT move the user's cursor.
+                p.mouseX = 0;
+                p.mouseY = 0;
             }
             for (let i = 0; i < _ui.length; i++){
                 _ui[i].draw();

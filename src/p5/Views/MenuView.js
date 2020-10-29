@@ -348,7 +348,7 @@ export default class MenuView {
                     _ui.push(this.justWatchDrawingsButton);
                 }
                 else if (i === 4) {
-                   // 3: I want to see what other people drew!
+                   // 4: I just want to judge other people.
                    if (previousUI){
                        if (previousUI.justWannaJudgePplButton){
                            x = previousUI.justWannaJudgePplButton.x;

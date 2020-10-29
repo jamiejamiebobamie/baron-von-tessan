@@ -14,24 +14,21 @@ export default class FlagInappropriateContentView {
         let notPresent = true;
         for (let i = 0; i < this.flaggedIndices.length;i++){
             if (this.flaggedIndices[i] === drawingReference.index){
-                drawingReference.setStroke(false)
-                drawingReference.color = "lightgrey"
+                drawingReference.setColor("lightgrey")
                 this.flaggedIndices.splice(i,1)
                 notPresent = false
             }
         }
         if (notPresent){
             this.flaggedIndices.push(drawingReference.index)
-            drawingReference.setStroke(true)
-            drawingReference.color = p.color(100,40,40)
+            drawingReference.setColor(p.color(100,40,40))
         }
     }
     getUI(previousUI){return this}
     setUI(p,w,h,REACT_APP,windowResized,previousUI,changeView){
-        let wireFrameElements = []
-        let _ui = []
         /// ---- ******** BEGIN WIREFRAME OBJECTS
             // wireframe objects are not drawn to screen.
+        let wireFrameElements = []
         for (let i = 0; i < 3; i++){
             let color = i%2 ?"pink" :"orange"
             let wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
@@ -85,8 +82,6 @@ export default class FlagInappropriateContentView {
                             windowWidth: w,
                            windowHeight: h*2/3,
                            offsetY:h*1/3,
-                           // offsetX:w*1/3,
-                           // row:w>h,
                            color:"green",
                            wildcard:wildcard,
                          }
@@ -142,10 +137,18 @@ export default class FlagInappropriateContentView {
             let wireFrame = new Wireframe(parameters)
             bottomRight.push(wireFrame)
         }
+        /// ---- ******** END WIREFRAME OBJECTS
+
+        /// ---- ******** BEGIN _UI OBJECTS
+            // _ui objects are drawn to screen and mirror a wireframe object
+        let _ui = [];
         let x,y,width,height;
 
         if (previousUI){
             if (previousUI.submitButton){
+                // object placement properties
+                    // without these the _ui object jitters
+                    // with window resizing.
                 x = previousUI.submitButton.x;
                 y = previousUI.submitButton.y;
                 width = previousUI.submitButton.width;
@@ -169,6 +172,9 @@ export default class FlagInappropriateContentView {
         // display question
         if (previousUI){
             if (previousUI.instructions){
+                // object placement properties
+                    // without these the _ui object jitters
+                    // with window resizing.
                 x = previousUI.instructions.x;
                 y = previousUI.instructions.y;
                 width = previousUI.instructions.width;
@@ -185,7 +191,7 @@ export default class FlagInappropriateContentView {
 
 
         // commented-out code below has to do with
-            // the redrawStrokes() method being too intensive
+            // the redrawStrokes() method being too intensive.
 
         // let drawingHasBeenDrawn = false
         // let strokeIndex = 0;
