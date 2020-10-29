@@ -339,7 +339,7 @@ export default class MenuView {
                     this.justWatchDrawingsButton.setStroke(true);
                     this.justWatchDrawingsButton.setFill(true);
                     this.justWatchDrawingsButton.setColor("white");
-                    this.justWatchDrawingsButton.mouseClickfunc = () => {setTimeout(()=>{changeView(2,3)},250)};
+                    this.justWatchDrawingsButton.mouseClickfunc = () => {setTimeout(()=>{changeView(8,9)},250)};
                     this.justWatchDrawingsButton.setString("I want to see what other people drew!");
                     if(REACT_APP.state.isMobile){
                         let fontSize = w>h?objectToMirror.height/2.5:objectToMirror.height/4;

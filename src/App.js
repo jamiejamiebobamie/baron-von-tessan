@@ -25,9 +25,7 @@ class App extends Component {
             // binding 'this' isn't necessary for callbacks.
         this.SketchWrapper = new Sketch(this)
         this.Sketch = this.SketchWrapper.sketch;
-        console.log(response.data)
     }
-
     handleSubmitDrawing(drawingData) {this.setState({drawingData:drawingData});console.log(drawingData)}
     handleSubmitDescription(drawingDescription){
         this.setState({drawingDescription:drawingDescription})

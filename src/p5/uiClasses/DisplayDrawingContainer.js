@@ -36,7 +36,7 @@ export default class DisplayDrawingContainer extends Mirror{
     setNewToLocation(){
         this.toLocation = []
         for (let i = 0; i < this.submittedStrokes.length; i++){
-            this.toLocation.push({x:(Math.random()*2-1)*this.lengthOfDrawingSquare/1000,y:(Math.random()*2-1)*this.lengthOfDrawingSquare/1000})
+            this.toLocation.push({x:(Math.random()*2-1)*this.lengthOfDrawingSquare/1500,y:(Math.random()*2-1)*this.lengthOfDrawingSquare/1500})
         }
         this.fromLocation = this.toLocation
         clearTimeout(this.timeOut1)
@@ -44,7 +44,12 @@ export default class DisplayDrawingContainer extends Mirror{
     }
     setLengthOfDrawingSquare(length){ this.lengthOfDrawingSquare = length }
     setSubmittedStrokeIndex(index){ this.submittedStrokeIndex = index }
-    setSubmittedStrokes(submittedStrokes){ this.submittedStrokes = submittedStrokes }
+    setSubmittedStrokes(submittedStrokes){
+        this.submittedStrokes = submittedStrokes;
+        // ensure that the toLocation array is correct by resetting it when the
+            // drawing object recieves new strokes to draw.
+        this.setNewToLocation()
+    }
     setLoopToTrueToLoopFinishedDrawing(){ this.loop = true; }
     drawSubmittedStrokes(){
         let driftX = 0
@@ -52,11 +57,8 @@ export default class DisplayDrawingContainer extends Mirror{
         if (this.drawingHasBeenDrawn){
             for (let i = 0; i < this.submittedStrokes.length; i++){
                 if (this.toLocation.length){
-                    // experimenting with this...
-                    // driftX = this.p.lerp(this.fromLocation[i].x,this.toLocation[i].x,.2)
-                    // driftY = this.p.lerp(this.fromLocation[i].y,this.toLocation[i].y,.2)
-                    driftX = this.toLocation[i].x//(this.toLocation[i].x - this.fromLocation[i].x)*.2
-                    driftY = this.toLocation[i].y//(this.toLocation[i].y - this.fromLocation[i].y)*.2
+                    driftX = this.toLocation[i].x;
+                    driftY = this.toLocation[i].y;
                 }
                 this.p.ellipse(this.submittedStrokes[i].x*this.lengthOfDrawingSquare+driftX+this.x, this.submittedStrokes[i].y*this.lengthOfDrawingSquare+driftY+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
             }

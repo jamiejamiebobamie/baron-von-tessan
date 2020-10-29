@@ -21,7 +21,7 @@ export default class FlagInappropriateContentView {
         }
         if (notPresent){
             this.flaggedIndices.push(drawingReference.index)
-            drawingReference.setColor(p.color(100,40,40))
+            drawingReference.setColor(p.color(244,129,130))
         }
     }
     getUI(previousUI){return this}
