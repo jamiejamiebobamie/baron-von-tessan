@@ -20,6 +20,9 @@ export default class Container extends UIElement{
             this.mouseOverWidthSize = this.width + (this.width*this.scaleAmount)
             this.mouseOverHeightSize = this.height + (this.height*this.scaleAmount)
         },500);
+        this.mouseOverColor = undefined;
+        this.clickedColor = undefined
+        this.storeColor = this.color
     }
     testForClick(){
         if (this.p._renderer._rectMode === "center"){
@@ -57,7 +60,9 @@ export default class Container extends UIElement{
         this.hasFill = bool
     }
     setColor(color){
-        this.color= color;
+        this.color = color;
+        this.storeColor = color;
+
     }
     setClick(bool){
         this.clicked = bool;
@@ -90,20 +95,30 @@ export default class Container extends UIElement{
         }
     }
     draw() {
+        this.hasStroke ? this.p.stroke(45) : this.p.noStroke();
+        this.hasFill ? this.p.fill(45) : this.p.noFill();
+        this.color ? this.p.fill(this.color) : this.p.noFill();
         if(this.testForClick()){
             if (this.clicked){
                 this.performClickFunctionality();
                 this.shrinkButton(.5)
+                if (this.clickedColor) {
+                    this.color = this.clickedColor
+                }
             } else {
                 this.enlargeButton()
+                if (this.mouseOverColor) {
+                    this.color = this.mouseOverColor
+                } else {
+                    this.color = this.storeColor
+                }
             }
+        } else {
+            this.color = this.storeColor
         }
         if (this.screenHasSettled){
             this.shrinkButton(.1)
         }
-        this.hasStroke ? this.p.stroke(45) : this.p.noStroke();
-        this.hasFill ? this.p.fill(45) : this.p.noFill();
-        this.color ? this.p.fill(this.color) : this.p.noFill();
         this.p.rect(this.x,this.y,this.width,this.height)
         for (let i = 0; i < this._ui.length; i++){
             if (this._ui[i].draw){

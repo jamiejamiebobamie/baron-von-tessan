@@ -44,7 +44,6 @@ export default class DrawingView {
             // }
             this.allCharsAdded = true;
             clearTimeout(this.timeOutVarForCharacters)
-            console.log('lolololo',this.allCharsAdded)
             return
         }
     }
@@ -86,39 +85,58 @@ export default class DrawingView {
                     // _ui.push(layoutBlock)
                     wireframeElements.push(layoutBlock)
                 }
-                // buttons
-                for (let i = 0; i < 6; i++){
+                // top buttons
+                for (let i = 0; i < 3; i++){
                     color = "red"
-                    wildcard = {shouldBeSquare:false,shrinkAmountWidth:.9,shrinkAmountHeight:.6}
+                    wildcard = {shouldBeSquare:false,shrinkAmountWidth:.9,shrinkAmountHeight:.4}
                     params = {
                                 p:p,
                                 windowWidth: w,
                                 windowHeight: h,
                                 color: color,
-                                row:false,//w<h,
-                                len:6,
+                                row:false,
+                                len:3,
                                 index:i,
                                 wildcard:wildcard,
-                                parent:wireframeElements[wireframeElements.length-1],
-                                offsetY:wireframeElements[wireframeElements.length-1].height/8
+                                parent:wireframeElements[0],
+                                offsetY:-wireframeElements[0].height/4,
                              }
                     layoutBlock = new Wireframe(params)
-
+                    // _ui.push(layoutBlock)
                     if (i===0) {
                         autoPlayButton = layoutBlock;
                     } else if (i===1){
                         loopButton = layoutBlock;
                     } else if (i===2){
                         predrawDrawingButton = layoutBlock;
-                    } else if (i===3){
+                    }
+                }
+                // bottom buttons
+                for (let i = 0; i < 3; i++){
+                    color = "red"
+                    wildcard = {shouldBeSquare:false,shrinkAmountWidth:.9,shrinkAmountHeight:.4}
+                    params = {
+                                p:p,
+                                windowWidth: w,
+                                windowHeight: h,
+                                color: color,
+                                row:false,
+                                len:3,
+                                index:i,
+                                wildcard:wildcard,
+                                parent:wireframeElements[4],
+                                offsetY:wireframeElements[4].height/4,
+                             }
+                    layoutBlock = new Wireframe(params)
+                    // _ui.push(layoutBlock)
+
+                    if (i===0){
                         backToMenuButton = layoutBlock;
-                    } else if (i===4){
+                    } else if (i===1){
                         previousDrawingButton = layoutBlock;
-                    } else if (i===5){
+                    } else if (i===2){
                         nextDrawingButton = layoutBlock;
                     }
-
-                    // _ui.push(layoutBlock)
                 }
                 // drawing
                 wildcard = {shouldBeSquare:false,shrinkAmountWidth:.9,shrinkAmountHeight:.9}
@@ -130,7 +148,9 @@ export default class DrawingView {
                             row:true,
                             wildcard:wildcard,
                             width: h*4/5,
-                            height: h*4/5
+                            height: h*4/5,
+                            offsetX: w/40,
+                            offsetY: h/10,
                          }
                 drawing = new Wireframe(params)
                 // _ui.push(layoutBlock)
@@ -147,6 +167,8 @@ export default class DrawingView {
                             width: w/2,
                             height: h*4/5,
                             offsetX: w/2,
+                            offsetY: h/10,
+
                          }
                 description = new Wireframe(params)
                 // _ui.push(layoutBlock)
@@ -233,7 +255,7 @@ export default class DrawingView {
                             row:true,
                             wildcard:wildcard,
                             width: w-drawing.width-drawing.width/16,
-                            offsetX: drawing.width+drawing.width/16,
+                            offsetX: drawing.width+drawing.width/10,
                             offsetY:(h-h*.9)/4,
                          }
                 description = new Wireframe(params)
@@ -501,48 +523,31 @@ export default class DrawingView {
                 this.drawing.setSubmittedStrokeIndex(0)
             }
             this.charIndex = 0
-            // this.addCharacterToDialogString(REACT_APP)
             let redrawStrokes = () => {
                 if (this.drawing.drawingHasBeenDrawn){
                     if (this.drawing.loop){
                         this.drawing.drawingHasBeenDrawn = false;
                         this.drawing.setSubmittedStrokeIndex(0)
-                    } else {
-                    // hardcoding five drawings to be show.
-                        // 6 or more will be grabbed from backend
-                        // for just want to judge other people option
-                            // (no user drawing can be shown so showing 6 drawings)
-                        // as well as for the menu background drawings.
-                    if (this.responseIndex < REACT_APP.state.response.length-1 && this.autoplay){
-                        this.drawing.drawingHasBeenDrawn = false;
-                        this.allCharsAdded = false;
-                        this.charIndex = 0
-                        this.responseIndex++
-                        this.dialog.setString("")
+                    } else if (this.autoplay) {
+                        if (this.responseIndex < REACT_APP.state.response.length-1){
+                            this.responseIndex++
+                        } else {
+                            this.responseIndex = 0;
+                        }
                         this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
+
                         if (this.predraw){
                             this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response[this.responseIndex].drawingData.length-2)
                         } else {
                             this.drawing.setSubmittedStrokeIndex(0)
                         }
-                    } else {
                         this.drawing.drawingHasBeenDrawn = false;
                         this.allCharsAdded = false;
                         this.charIndex = 0
-                        this.responseIndex = 0;
                         this.dialog.setString("")
-                        this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
-                        if (this.predraw){
-                            this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response[this.responseIndex].drawingData.length-2)
-                        } else {
-                            this.drawing.setSubmittedStrokeIndex(0)
-                        }
-                        // this.isPlayingFunc = undefined
-                        this.isPlayingFunc = beginRedrawingStrokesAndAddingCharsFunc()
-                        // changeView();
+                        this.isPlayingFunc = setTimeout(beginRedrawingStrokesAndAddingCharsFunc,500);
                         return;
                     }
-                }
                 }
                 if (this.drawing.submittedStrokeIndex < this.drawing.submittedStrokes.length) {
                     this.drawing.submittedStrokeIndex++
@@ -583,7 +588,6 @@ export default class DrawingView {
         this.dialog.setFill(true)
         // this.dialog.setStroke(true)
 
-
         if (this.charIndex>=REACT_APP.state.response[this.responseIndex].descriptionData.length){
             let allOfDialog = REACT_APP.state.response[this.responseIndex].descriptionData
             this.dialog.setString(allOfDialog)
@@ -614,7 +618,6 @@ export default class DrawingView {
                 buttonMirror = autoPlayButton;
                 buttonString = "AUTOPLAY"
                 color = this.autoplay ? p.color(244,129,130):"white"
-                console.log(color,this.autoplay)
             } else if (i===1){
                 buttonMirror = loopButton;
                 buttonString = "LOOP"
@@ -638,11 +641,12 @@ export default class DrawingView {
             this.buttons[i].setInteractivity(true);
             this.buttons[i].setStroke(true)
             this.buttons[i].setFill(true)
-            this.buttons[i].color = color;
+            this.buttons[i].setColor(color);
             this.buttons[i].setTextColor("black")
             performClickOnce = true;
             this.buttons[i].setClickType(performClickOnce)
             this.buttons[i].setString(buttonString);
+            this.buttons[i].clickedColor = p.color(244,129,130);
             _ui.push(this.buttons[i])
         }
         // AUTOPLAY
@@ -650,54 +654,47 @@ export default class DrawingView {
         this.buttons[0].mouseClickfunc = () => {
             this.autoplay=!this.autoplay;
             if (this.autoplay){
-                this.buttons[0].color = p.color(244,129,130)
+                this.buttons[0].setColor(p.color(244,129,130))
+                if (this.isPlayingFunc===undefined && this.drawing.drawingHasBeenDrawn){
+                     this.isPlayingFunc = beginRedrawingStrokesAndAddingCharsFunc();
+                }
             } else {
-                this.buttons[0].color = p.color(255)
+                this.buttons[0].setColor(p.color(255))
             }
             this.drawing.loop= false;
-            this.buttons[1].color = p.color(255)
-            console.log("autoplay",this.autoplay);
-            if (this.isPlayingFunc===undefined){
-                 this.isPlayingFunc = beginRedrawingStrokesAndAddingCharsFunc();
-            }
+            this.buttons[1].setColor(p.color(255))
         };
         // LOOP
         this.buttons[1].mouseClickfunc = () => {
             this.drawing.loop=!this.drawing.loop;
             if (this.drawing.loop){
-                this.buttons[1].color = p.color(244,129,130)
+                this.buttons[1].setColor(p.color(244,129,130))
                 this.autoplay= false;
-                this.buttons[0].color = p.color(255)
+                this.buttons[0].setColor(p.color(255))
                 this.predraw= false;
-                this.buttons[2].color = p.color(255)
+                this.buttons[2].setColor(p.color(255))
             } else {
-                this.buttons[1].color = p.color(255)
+                this.buttons[1].setColor(p.color(255))
             }
-            if (this.isPlayingFunc===undefined){
+            if (this.isPlayingFunc===undefined && this.drawing.drawingHasBeenDrawn){
                  this.isPlayingFunc = beginRedrawingStrokesAndAddingCharsFunc();
             }
-            console.log("loop",this.drawing.loop)
         };
         // PREDRAW
         // this is still in progress.
         this.buttons[2].mouseClickfunc = () => {
             this.predraw=!this.predraw;
             if (this.predraw){
-                this.buttons[2].color = p.color(244,129,130)
+                this.buttons[2].setColor(p.color(244,129,130))
                 this.drawing.loop = false;
-                this.buttons[1].color = p.color(255)
+                this.buttons[1].setColor(p.color(255))
                 this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response[this.responseIndex].drawingData.length-2)
             } else {
-                this.buttons[2].color = p.color(255)
+                this.buttons[2].setColor(p.color(255))
             }
-            console.log("predraw",this.predraw)
         };
         // BACK TO MENU
         this.buttons[3].mouseClickfunc = () => {
-            this.buttons[3].color = p.color(244,129,130)
-            setTimeout( () => {
-                    this.buttons[3].color = p.color(255)
-                }, 250)
             setTimeout(()=>{changeView(0)},250)
         };
         // PREV
@@ -708,16 +705,18 @@ export default class DrawingView {
             } else {
                 this.responseIndex = REACT_APP.state.response.length-1;
             }
-            // this.responseIndex--;
-            this.buttons[4].color = p.color(244,129,130)
-            setTimeout( () => {
-                    this.buttons[4].color = p.color(255)
-                }, 250)
             this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
             if (this.predraw){
                 this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response[this.responseIndex].drawingData.length-2)
             } else {
                 this.drawing.setSubmittedStrokeIndex(0)
+            }
+            this.drawing.drawingHasBeenDrawn = false;
+            this.allCharsAdded = false;
+            this.charIndex = 0
+            this.dialog.setString("")
+            if (this.predraw){
+                this.addCharacterToDialogString(REACT_APP)
             }
         };
         // NEXT
@@ -728,15 +727,18 @@ export default class DrawingView {
             } else {
                 this.responseIndex = 0;
             }
-            this.buttons[5].color = p.color(244,129,130)
-            setTimeout( () => {
-                    this.buttons[5].color = p.color(255)
-                }, 250)
             this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
             if (this.predraw){
                 this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response[this.responseIndex].drawingData.length-2)
             } else {
                 this.drawing.setSubmittedStrokeIndex(0)
+            }
+            this.drawing.drawingHasBeenDrawn = false;
+            this.allCharsAdded = false;
+            this.charIndex = 0
+            this.dialog.setString("")
+            if (this.predraw){
+                this.addCharacterToDialogString(REACT_APP)
             }
         };;
 
