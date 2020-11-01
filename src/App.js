@@ -5,7 +5,6 @@ import './App.css';
 import response from './p5/simulatedResponse2'
 import baronData from './p5/baronDrawingDataReduced'
 
-
 const p5 = require("p5")
 
 class App extends Component {

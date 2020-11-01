@@ -35,7 +35,6 @@ export default class Sketch {
             copiedResponse[i] = storedValue;
 
         }
-        console.log(copiedResponse)
         this.REACT_APP.setState({response:copiedResponse})
     }
     setViews(){

@@ -88,7 +88,7 @@ export default class MenuView {
         let menuSections = [];
         let section;
         for (let i = 0; i < 5; i++){
-            wildcard = {shrinkAmountWidth:.9,shrinkAmountHeight:.6};
+            wildcard = {shrinkAmountWidth:.8,shrinkAmountHeight:.6};
             parameters = { p:p,
                                windowWidth:w,
                                windowHeight:h,
@@ -243,6 +243,7 @@ export default class MenuView {
                 }
         }
         let text = "";
+        let fontSize;
         for (let i = 0; i < menuSections.length; i++){
             if (i===0){
                 // TITLE
@@ -286,7 +287,7 @@ export default class MenuView {
                     this.enterSiteButton.mouseClickfunc = ()=>{setTimeout(()=>{changeView()},250)};
                     this.enterSiteButton.setString("ENTER SITE");
                     if(REACT_APP.state.isMobile){
-                        let fontSize = w>h?objectToMirror.height/2:objectToMirror.height/3;
+                        fontSize = w>h?objectToMirror.height/2:objectToMirror.height/3;
                         this.enterSiteButton.setFontSize(fontSize);
                     }
                     _ui.push(this.enterSiteButton);
@@ -312,11 +313,13 @@ export default class MenuView {
                     this.justDrawButton.setFill(true);
                     this.justDrawButton.setColor("white");
                     this.justDrawButton.mouseClickfunc = () => {setTimeout(()=>{changeView(4,6)},250)};
-                    this.justDrawButton.setString("I just want to draw!");
-                    if(REACT_APP.state.isMobile){
-                        let fontSize = w>h?objectToMirror.height/2.5:objectToMirror.height/4;
-                        this.justDrawButton.setFontSize(fontSize);
-                    }
+                    this.justDrawButton.setString("DRAW");
+                    this.justDrawButton.setFontSize(fontSize);
+
+                    // if(REACT_APP.state.isMobile){
+                    //     let fontSize = w>h?objectToMirror.height/2.5:objectToMirror.height/4;
+                    //     this.justDrawButton.setFontSize(fontSize);
+                    // }
                     _ui.push(this.justDrawButton);
                 } else if (i === 3) {
                     // 3: I want to see what other people drew!
@@ -340,11 +343,12 @@ export default class MenuView {
                     this.justWatchDrawingsButton.setFill(true);
                     this.justWatchDrawingsButton.setColor("white");
                     this.justWatchDrawingsButton.mouseClickfunc = () => {setTimeout(()=>{changeView(8,9)},250)};
-                    this.justWatchDrawingsButton.setString("I want to see what other people drew!");
-                    if(REACT_APP.state.isMobile){
-                        let fontSize = w>h?objectToMirror.height/2.5:objectToMirror.height/4;
-                        this.justWatchDrawingsButton.setFontSize(fontSize);
-                    }
+                    this.justWatchDrawingsButton.setString("VIEW");
+                    this.justWatchDrawingsButton.setFontSize(fontSize);
+
+                    // if(REACT_APP.state.isMobile){
+                    //     let fontSize = w>h?objectToMirror.height/2.5:objectToMirror.height/4;
+                    // }
                     _ui.push(this.justWatchDrawingsButton);
                 }
                 else if (i === 4) {
@@ -369,11 +373,12 @@ export default class MenuView {
                    this.justWannaJudgePplButton.setFill(true);
                    this.justWannaJudgePplButton.setColor("white");
                    this.justWannaJudgePplButton.mouseClickfunc = () => {setTimeout(()=>{changeView(6,7)},250)};
-                   this.justWannaJudgePplButton.setString("I just want to judge other people.");
-                   if(REACT_APP.state.isMobile){
-                       let fontSize = w>h?objectToMirror.height/2.5:objectToMirror.height/4;
-                       this.justWannaJudgePplButton.setFontSize(fontSize);
-                   }
+                   this.justWannaJudgePplButton.setString("RANK");
+                   this.justWannaJudgePplButton.setFontSize(fontSize);
+
+                   // if(REACT_APP.state.isMobile){
+                   //     let fontSize = w>h?objectToMirror.height/2.5:objectToMirror.height/4;
+                   // }
                    _ui.push(this.justWannaJudgePplButton);
                }
             }
