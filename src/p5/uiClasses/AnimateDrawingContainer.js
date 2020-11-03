@@ -80,6 +80,7 @@ export default class AnimateDrawingContainer extends DrawingContainer{
         this.totalVerticesCount = 0;
     }
     setSubmittedStrokes(submittedStrokes){ this.submittedStrokes = submittedStrokes }
+    // VERSION1
     setDrawnVerticesStartingPostions(){
         let vertice;
         this.totalVerticesCount = 0;
@@ -89,33 +90,33 @@ export default class AnimateDrawingContainer extends DrawingContainer{
             // iterate through all of the startPositions
                 // find the overall minimum distance from one startVertex to one endVertex
                     // swap these values in their respective arrays with the j index
-            // for (let j = 0; j < this.animationGroups[i].startPositions.length; j++){
-            //     let minDist = Number.MAX_VALUE
-            //     let testMin;
-            //     let storeIndices = {start:0,end:0}
-            //     // in the future, the endPositions.length
-            //         // may be larger or smaller than the startPositions.length
-            //         // will add vertices to starting position
-            //     for (let k = j; k < this.animationGroups[i].endPositions.length; k++){
-            //         testMin = Math.sqrt(
-            //         (this.animationGroups[i].endPositions[k].x - this.animationGroups[i].startPositions[j].x)*(this.animationGroups[i].endPositions[k].x - this.animationGroups[i].startPositions[j].x)
-            //               + (this.animationGroups[i].endPositions[k].y - this.animationGroups[i].startPositions[j].y)*(this.animationGroups[i].endPositions[k].y - this.animationGroups[i].startPositions[j].y)
-            //         )
-            //         minDist = Math.min(testMin,minDist)
-            //         if (testMin === minDist){
-            //             console.log("hi")
-            //             storeIndices.start = j;
-            //             storeIndices.end = k;
-            //         }
-            //     }
-            //     // swap the found min pairs with the front of each array
-            //     let storeStartValueToSwap = this.animationGroups[i].startPositions[j]
-            //     this.animationGroups[i].startPositions[j] = this.animationGroups[i].startPositions[storeIndices.start]
-            //     this.animationGroups[i].startPositions[storeIndices.start] = storeStartValueToSwap
-            //     let storeEndValueToSwap = this.animationGroups[i].endPositions[j]
-            //     this.animationGroups[i].endPositions[j] = this.animationGroups[i].endPositions[storeIndices.end]
-            //     this.animationGroups[i].endPositions[storeIndices.end] = storeEndValueToSwap
-            // }
+            for (let j = 0; j < this.animationGroups[i].startPositions.length; j++){
+                let minDist = Number.MAX_VALUE
+                let testMin;
+                let storeIndices = {start:0,end:0}
+                // in the future, the endPositions.length
+                    // may be larger or smaller than the startPositions.length
+                    // will add vertices to starting position
+                for (let k = j; k < this.animationGroups[i].endPositions.length; k++){
+                    testMin = Math.sqrt(
+                    (this.animationGroups[i].endPositions[k].x - this.animationGroups[i].startPositions[j].x)*(this.animationGroups[i].endPositions[k].x - this.animationGroups[i].startPositions[j].x)
+                          + (this.animationGroups[i].endPositions[k].y - this.animationGroups[i].startPositions[j].y)*(this.animationGroups[i].endPositions[k].y - this.animationGroups[i].startPositions[j].y)
+                    )
+                    minDist = Math.min(testMin,minDist)
+                    if (testMin === minDist){
+                        console.log("hi")
+                        storeIndices.start = j;
+                        storeIndices.end = k;
+                    }
+                }
+                // swap the found min pairs with the front of each array
+                let storeStartValueToSwap = this.animationGroups[i].startPositions[j]
+                this.animationGroups[i].startPositions[j] = this.animationGroups[i].startPositions[storeIndices.start]
+                this.animationGroups[i].startPositions[storeIndices.start] = storeStartValueToSwap
+                let storeEndValueToSwap = this.animationGroups[i].endPositions[j]
+                this.animationGroups[i].endPositions[j] = this.animationGroups[i].endPositions[storeIndices.end]
+                this.animationGroups[i].endPositions[storeIndices.end] = storeEndValueToSwap
+            }
             // console.log(this.animationGroups[0].startPositions[0],this.animationGroups[0].endPositions[0])
 
             // set the drawnVertices positions to startPositions
@@ -127,6 +128,170 @@ export default class AnimateDrawingContainer extends DrawingContainer{
             }
         }
     }
+    // VERSION2
+    // setDrawnVerticesStartingPostions(){
+    //     function perm(xs) {
+    //       let ret = [];
+    //       for (let i = 0; i < xs.length; i = i + 1) {
+    //         let rest = perm(xs.slice(0, i).concat(xs.slice(i + 1)));
+    //         if(!rest.length) {
+    //           ret.push([xs[i]])
+    //         } else {
+    //           for(let j = 0; j < rest.length; j = j + 1) {
+    //             ret.push([xs[i]].concat(rest[j]))
+    //           }
+    //         }
+    //       }
+    //       return ret;
+    //     }
+    //     this.totalVerticesCount = 0;
+    //     for (let i = 0; i < this.animationGroups.length; i++){
+    //         // find all permutations of the start and end positions arrays
+    //         let allPermsOfStartPositions = perm(this.animationGroups[i].startPositions)
+    //         let allPermsOEndPositions = perm(this.animationGroups[i].endPositions)
+    //         // iterate through these jumbled positions
+    //             // find the lowest overall sum minimum distance
+    //             // store the j and k indices of the two arrays that represent the minimum
+    //             // the values in these arrays should be swapped to create the animation
+    //         let min_j = 0;
+    //         let minDist = Number.MAX_VALUE;
+    //         for (let j = 0; j < allPermsOfStartPositions.length; j++){
+    //             for (let k = 0; k < allPermsOEndPositions.length; k++){
+    //                 // get the total sum distance between all vertex pairs
+    //                 let testMin;
+    //                 for (let l = 0; l < allPermsOfStartPositions[j].length; l++){
+    //                     for (let m = 0; m < allPermsOEndPositions[k].length; m++){
+    //                         testMin += Math.sqrt(
+    //                         (allPermsOEndPositions[k].x - allPermsOfStartPositions[j].x)*(allPermsOEndPositions[k].x - allPermsOfStartPositions[j].x)
+    //                               + (allPermsOEndPositions[k].y - allPermsOfStartPositions[j].y)*(allPermsOEndPositions[k].y - allPermsOfStartPositions[j].y)
+    //                         )
+    //                     }
+    //                 }
+    //                 minDist = Math.min(testMin,minDist)
+    //                 if (testMin === minDist){
+    //                     min_j = j;
+    //                 }
+    //             }
+    //         }
+    //         // iterate through the allPermsOfStartPositions[min_j] array and
+    //             // swap the indices of animationGroups[i].startPositions
+    //             // to match allPermsOfStartPositions[min_j]
+    //         for (let j = 0; j < allPermsOfStartPositions[min_j].length; j++){
+    //             let vertex1 = allPermsOfStartPositions[min_j][j]
+    //             let vertex1String = vertex1.x.toString() + vertex1.y.toString()
+    //             for (let k = 0; k < this.animationGroups[i].startPositions.length; k++){
+    //                 let vertex2 = this.animationGroups[i].startPositions[k]
+    //                 let vertex2String = vertex2.x.toString() + vertex2.y.toString()
+    //                 if (vertex1String === vertex2String){
+    //                     allPermsOfStartPositions[min_j][j] = vertex2
+    //                     this.animationGroups[i].startPositions[k] = vertex1;
+    //                 }
+    //             }
+    //         }
+    //         let vertice;
+    //         // set the drawnVertices positions to startPositions
+    //             // and tally-up the running total of vertices
+    //             // (used to synchronize animations)
+    //         this.animationGroups[i].drawnVertices = [];
+    //         for (let j = 0; j < this.animationGroups[i].startPositions.length; j++){
+    //             vertice = {x:this.animationGroups[i].startPositions[j].x,y:this.animationGroups[i].startPositions[j].y,finished:false}
+    //             this.animationGroups[i].drawnVertices.push(vertice)
+    //             this.totalVerticesCount++;
+    //         }
+    //     }
+    // }
+
+    // VERSION3
+    // calculate the total distance from a single start vertex to all of the end
+        // vertices.
+    // the start vertex with the maximum sum has the least ideal options
+        // i.e. the fewest close neighbors.
+    // match up these vertices and move to vertices with many options
+        // i.e. many close neighbors.
+    // focusing on the least ideal vertices and pairing them up with
+        // their most ideal match might work.
+    // (work = matching start vertices with
+        // the closest end vertices to make the animation.)
+    // setDrawnVerticesStartingPostions(){
+    //     let vertice;
+    //     this.totalVerticesCount = 0;
+    //
+    //     for (let i = 0; i < this.animationGroups.length; i++){
+    //         // store the sums of all of the distances from a start vertex
+    //             // to all of the end vertices.
+    //         let totalDistancesArray = []
+    //         for (let j = 0; j < this.animationGroups[i].startPositions.length; j++){
+    //             let sumDistance = 0;
+    //             for (let k = j; k < this.animationGroups[i].endPositions.length; k++){
+    //                 sumDistance += Math.sqrt(
+    //                 (this.animationGroups[i].endPositions[k].x - this.animationGroups[i].startPositions[j].x)*(this.animationGroups[i].endPositions[k].x - this.animationGroups[i].startPositions[j].x)
+    //                       + (this.animationGroups[i].endPositions[k].y - this.animationGroups[i].startPositions[j].y)*(this.animationGroups[i].endPositions[k].y - this.animationGroups[i].startPositions[j].y)
+    //                 )
+    //             }
+    //             totalDistancesArray.push(sumDistance)
+    //         }
+    //         // find the order of start vertices to solve for.
+    //             // the most troublesome vertices to pair are at the front.
+    //         let distanceArrayEntiresAmount = totalDistancesArray.length;
+    //         let startVertexIndexSolveOrder = []
+    //         while ( distanceArrayEntiresAmount !== 0 ){
+    //             let currentMax = Math.MIN_VALUE;
+    //             let storeJ = 0;
+    //             // iterate through the totalDistancesArray and find the max
+    //             for (let j = 0; j < totalDistancesArray.length; j++){
+    //                 currentMax = Math.max(currentMax,totalDistancesArray[j])
+    //                 if (currentMax === totalDistancesArray[j]){
+    //                     storeJ = j
+    //                 }
+    //             }
+    //             totalDistancesArray[storeJ] = 0;
+    //             startVertexIndexSolveOrder.push(storeJ)
+    //             distanceArrayEntiresAmount--;
+    //         }
+    //
+    //         // using the startVertexOrder swap the indices of the
+    //         // I STOPPED THINKING HERE.
+    //         for (let m = 0; m < startVertexIndexSolveOrder.length; m++){
+    //             let j = startVertexIndexSolveOrder[m];
+    //             // iterate through all of the startPositions
+    //                 // find the overall minimum distance from one startVertex to one endVertex
+    //                 // swap these values in their respective arrays with the j index
+    //             let minDist = Number.MAX_VALUE
+    //             let testMin;
+    //             let storeIndices = {start:0,end:0}
+    //             // in the future, the endPositions.length
+    //                 // may be larger or smaller than the startPositions.length
+    //                 // will add vertices to starting position
+    //             for (let k = j; k < this.animationGroups[i].endPositions.length; k++){
+    //                 testMin = Math.sqrt(
+    //                 (this.animationGroups[i].endPositions[k].x - this.animationGroups[i].startPositions[j].x)*(this.animationGroups[i].endPositions[k].x - this.animationGroups[i].startPositions[j].x)
+    //                       + (this.animationGroups[i].endPositions[k].y - this.animationGroups[i].startPositions[j].y)*(this.animationGroups[i].endPositions[k].y - this.animationGroups[i].startPositions[j].y)
+    //                 )
+    //                 minDist = Math.min(testMin,minDist)
+    //                 if (testMin === minDist){
+    //                     console.log("hi")
+    //                     storeIndices.start = j;
+    //                     storeIndices.end = k;
+    //                 }
+    //             }
+    //             // swap the found min pairs with the front of each array
+    //             let storeStartValueToSwap = this.animationGroups[i].startPositions[j]
+    //             this.animationGroups[i].startPositions[j] = this.animationGroups[i].startPositions[storeIndices.start]
+    //             this.animationGroups[i].startPositions[storeIndices.start] = storeStartValueToSwap
+    //             let storeEndValueToSwap = this.animationGroups[i].endPositions[j]
+    //             this.animationGroups[i].endPositions[j] = this.animationGroups[i].endPositions[storeIndices.end]
+    //             this.animationGroups[i].endPositions[storeIndices.end] = storeEndValueToSwap
+    //         }
+    //
+    //         // set the drawnVertices positions to startPositions
+    //         this.animationGroups[i].drawnVertices = [];
+    //         for (let j = 0; j < this.animationGroups[i].startPositions.length; j++){
+    //             vertice = {x:this.animationGroups[i].startPositions[j].x,y:this.animationGroups[i].startPositions[j].y,finished:false}
+    //             this.animationGroups[i].drawnVertices.push(vertice)
+    //             this.totalVerticesCount++;
+    //         }
+    //     }
+    // }
     incrementDrawingGroupIndex(){
         this.animationGroups.push(
             {   drawnVertices:[],

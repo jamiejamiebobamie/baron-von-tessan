@@ -6,7 +6,7 @@ import EnterDescriptionView from './Views/EnterDescriptionView';
 import FlagInappropriateContent from './Views/FlagInappropriateContentView';
 import OutroView from './Views/OutroView';
 import AndView from './Views/AndView';
-// import AnimateDrawingView from './Views/AnimateDrawingView';
+import AnimateDrawingView from './Views/AnimateDrawingView';
 import ViewDrawingsView from './Views/ViewDrawingsView';
 
 
@@ -51,9 +51,7 @@ export default class Sketch {
         view = new DrawingView();
         this.views.push(view);
 
-        // testing.
-        // view = new AnimateDrawingView();
-        // this.views.push(view);
+
 
         view = new EnterDescriptionView();
         this.views.push(view);
@@ -64,6 +62,12 @@ export default class Sketch {
 
         //testing.
         view = new ViewDrawingsView();
+        this.views.push(view);
+
+        // testing.
+        view = new DrawingView();
+        this.views.push(view);
+        view = new AnimateDrawingView();
         this.views.push(view);
 
         this.lengthOfViews = this.views.length
