@@ -14,8 +14,6 @@ export default class AnimateDrawingView {
         this.undoLastStroke = this.undoLastStroke.bind(this)
         this.clearStrokes = this.clearStrokes.bind(this)
         this.removeStroke = this.removeStroke.bind(this)
-        let vertice = {x:0,y:0}
-        this.lastDrawnVertexString = vertice.x.toString() + vertice.y.toString();
     }
     toggleTool(buttonObject){
         if (!this.drawing.userIsDrawingOrErasing){
@@ -23,6 +21,7 @@ export default class AnimateDrawingView {
                 let buttonString = this.drawing.penMode ? "SELECT SECTION" : "DRAW NEXT POSITION";
                 buttonObject.setString(buttonString);
                 this.drawing.mouseClickfunc = this.drawing.penMode ? this.buildStroke : this.removeStroke;
+                this.drawing.ink = this.drawing.animationGroups[this.drawing.currentAnimationGroupIndex].startPositions.length - this.drawing.animationGroups[this.drawing.currentAnimationGroupIndex].endPositions.length
             }
     }
     toggleMode(buttonObject){
@@ -32,7 +31,7 @@ export default class AnimateDrawingView {
             buttonObject.setString(buttonString);
             if (!this.drawing.buildAnimationModeIsToggled){
                 this.drawing.setDrawnVerticesStartingPostions()
-            } else if (this.drawing.animationGroups[this.drawing.currentAnimationGroupIndex].startPositions.length) {
+            } else {
                 this.drawing.incrementDrawingGroupIndex()
             }
             console.log(this.drawing.animationGroups,this.drawing.currentAnimationGroupIndex)
@@ -54,11 +53,10 @@ export default class AnimateDrawingView {
     }
     buildStroke(){
         if (this.drawing !== undefined){
-            let vertice = {x:(this.drawing.p.mouseX-this.drawing.x)/this.drawing.lengthOfDrawingSquare,y:(this.drawing.p.mouseY-this.drawing.y)/this.drawing.lengthOfDrawingSquare}
-            let testVertexString = vertice.x.toString() + vertice.y.toString();
-            if (this.lastDrawnVertexString !== testVertexString){
+            if (this.drawing.ink){
+                let vertice = {x:(this.drawing.p.mouseX-this.drawing.x)/this.drawing.lengthOfDrawingSquare,y:(this.drawing.p.mouseY-this.drawing.y)/this.drawing.lengthOfDrawingSquare,finished:false}
                 this.drawing.animationGroups[this.drawing.currentAnimationGroupIndex].endPositions.push(vertice)
-                this.lastDrawnVertexString = testVertexString
+                this.drawing.ink--;
             }
         }
     }

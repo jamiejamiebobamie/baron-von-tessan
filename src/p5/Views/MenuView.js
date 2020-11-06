@@ -7,7 +7,7 @@ export default class MenuView {
         // title ui object
         this.title = undefined;
 
-        this.titleText = "Sketch Queen";
+        this.titleText = "myDrawingApp";
         this.titleTextIndex = 0;
 
         // timeoutVariables
@@ -413,7 +413,6 @@ export default class MenuView {
             // (only an issue if the user resizes the window after
             // 'addCharacterToTitle' has finished.)
         if (this.titleTextIndex>=this.titleText.length){
-            console.log("heheheheheheh")
             let allOfDialog = this.titleText;
             this.title.setString(allOfDialog);
         }
