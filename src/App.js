@@ -29,7 +29,7 @@ class App extends Component {
     }
     fetchDrawings(number){
         console.log("fetching more drawings")
-        fetch("http://127.0.0.1:5000/api/v1/random-drawings/"+number)
+        fetch("https://baron-von-tessan-backend.herokuapp.com/api/v1/random-drawings/"+number)
             .then(response => response.json())
             .then(data => {
                 console.log(data.drawing_data);
@@ -57,7 +57,7 @@ class App extends Component {
             drawingDescription:drawingDescription,
             drawingData:this.state.drawingData
         }
-        fetch("http://127.0.0.1:5000/api/v1/add-drawing-to-db", {
+        fetch("https://baron-von-tessan-backend.herokuapp.com/api/v1/add-drawing-to-db", {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ class App extends Component {
             _ids.push(id)
         }
         const data = { _ids: _ids }
-        fetch("http://127.0.0.1:5000/api/v1/increment-likes", {
+        fetch("https://baron-von-tessan-backend.herokuapp.com/api/v1/increment-likes", {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
