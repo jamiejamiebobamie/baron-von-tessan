@@ -40,7 +40,7 @@ export default class OutroView {
             this.timeOutVar2 = setTimeout(()=>{this.shrinkDrawing(changeView)},30)
         } else {
             clearTimeout(this.timeOutVar2)
-            setTimeout(()=>{changeView()},4000)
+            setTimeout(()=>{changeView(0)},4000)
         }
     }
     raiseDialog(){

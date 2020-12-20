@@ -3,7 +3,7 @@ import IntroView from './Views/IntroView';
 import SlideshowView from './Views/SlideshowView';
 import DrawingView from './Views/DrawingView';
 import EnterDescriptionView from './Views/EnterDescriptionView';
-import FlagInappropriateContent from './Views/FlagInappropriateContentView';
+import PickBestDrawingView from './Views/PickBestDrawingView';
 import OutroView from './Views/OutroView';
 import AndView from './Views/AndView';
 // import AnimateDrawingView from './Views/AnimateDrawingView';
@@ -50,21 +50,20 @@ export default class Sketch {
         this.views.push(view);
         view = new DrawingView();
         this.views.push(view);
-
-        // testing.
-        // view = new AnimateDrawingView();
-        // this.views.push(view);
-
         view = new EnterDescriptionView();
-        this.views.push(view);
-        view = new FlagInappropriateContent();
         this.views.push(view);
         view = new OutroView();
         this.views.push(view);
 
+        view = new PickBestDrawingView();
+        this.views.push(view);
         //testing.
         view = new ViewDrawingsView();
         this.views.push(view);
+
+        // testing.
+        // view = new AnimateDrawingView();
+        // this.views.push(view);
 
         this.lengthOfViews = this.views.length
         // reset the state variables of the app.

@@ -186,6 +186,8 @@ export default class DrawingView {
             this.buttons[i].setInteractivity(true);
             this.buttons[i].setStroke(true)
             this.buttons[i].setFill(true)
+            this.buttons[i].setColor("white");
+            this.buttons[i].clickedColor = p.color(244,129,130);
             this.buttons[i].setTextColor("black")
             performClickOnce = true;
             this.buttons[i].setClickType(performClickOnce)
@@ -208,37 +210,39 @@ export default class DrawingView {
         this.buttons[2].mouseClickfunc = this.clearStrokes;
         // SUBMIT
         let submitFunc = () => {
-            // flattens the 2d array of strokes
-                // into a 1d array of vertices
+            setTimeout(()=>{
+                // flattens the 2d array of strokes
+                    // into a 1d array of vertices
 
-            // removes repeated vertices.
-            // (leaving in repeated strokes does add the element of time to
-                // each drawing as slower-drawn strokes
-                // have more repeated vertices.)
-            // this really should be done inside the DrawingContainer object
-                // as the user is drawing.
-            if (this.drawing){
-                if (this.drawing.strokes && !this.drawing.userIsDrawingOrErasing){
-                    let drawingData = [];
-                    let vertexX = undefined;
-                    let vertexY = undefined;
-                    let vertexString = undefined
-                    let mySet = new Set()
-                    for (let i = 0; i<this.drawing.strokes.length; i++) {
-                        for (let j = 0; j<this.drawing.strokes[i].length; j++) {
-                            vertexX = this.drawing.strokes[i][j].x.toString()
-                            vertexY = this.drawing.strokes[i][j].y.toString()
-                            vertexString = vertexX + vertexY
-                            if (!mySet.has(vertexString)){
-                                mySet.add(vertexString)
-                                drawingData.push(this.drawing.strokes[i][j])
+                // removes repeated vertices.
+                // (leaving in repeated strokes does add the element of time to
+                    // each drawing as slower-drawn strokes
+                    // have more repeated vertices.)
+                // this really should be done inside the DrawingContainer object
+                    // as the user is drawing.
+                if (this.drawing){
+                    if (this.drawing.strokes && !this.drawing.userIsDrawingOrErasing){
+                        let drawingData = [];
+                        let vertexX = undefined;
+                        let vertexY = undefined;
+                        let vertexString = undefined
+                        let mySet = new Set()
+                        for (let i = 0; i<this.drawing.strokes.length; i++) {
+                            for (let j = 0; j<this.drawing.strokes[i].length; j++) {
+                                vertexX = this.drawing.strokes[i][j].x.toString()
+                                vertexY = this.drawing.strokes[i][j].y.toString()
+                                vertexString = vertexX + vertexY
+                                if (!mySet.has(vertexString)){
+                                    mySet.add(vertexString)
+                                    drawingData.push(this.drawing.strokes[i][j])
+                                }
                             }
                         }
+                        REACT_APP.handleSubmitDrawing(drawingData)
+                        changeView()
                     }
-                    REACT_APP.handleSubmitDrawing(drawingData)
-                    changeView()
                 }
-            }
+            },200)
         }
         this.buttons[3].mouseClickfunc = submitFunc;
 

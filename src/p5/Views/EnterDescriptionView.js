@@ -271,7 +271,7 @@ export default class EnterDescriptionView {
             }
         }
         let returnToPreviousView = () => {
-            changeView(-1)
+                setTimeout(()=>{changeView(-1);},200)
         }
         wildcard = {fontSize:backButton.width/10,numberOfLines:.8}
         parameters = {p:p,objectToMirror:backButton,x:x,y:y,width:width,height:height,mouseClickfunc:returnToPreviousView,wildcard:wildcard}
@@ -280,6 +280,10 @@ export default class EnterDescriptionView {
         this.backButton.setStroke(true)
         this.backButton.setFill(true)
         this.backButton.setTextColor("black")
+        this.backButton.setColor("white");
+        this.backButton.clickedColor = p.color(244,129,130);
+        let performClickOnce = true;
+        this.backButton.setClickType(performClickOnce)
         this.backButton.setString("<< BACK");
         _ui.push(this.backButton)
 
@@ -292,9 +296,9 @@ export default class EnterDescriptionView {
             }
         }
         let submitDescription = () => {
-            let drawingDescription = this.input.text;
+            setTimeout(()=>{let drawingDescription = this.input.text;
             REACT_APP.handleSubmitDescription(drawingDescription)
-            changeView();
+            changeView();},200)
         }
         parameters = {p:p,objectToMirror:submitButton,x:x,y:y,width:width,height:height,mouseClickfunc:submitDescription,wildcard:wildcard}
         this.submitButton = new TextBox(parameters)
@@ -302,6 +306,10 @@ export default class EnterDescriptionView {
         this.submitButton.setStroke(true)
         this.submitButton.setFill(true)
         this.submitButton.setTextColor("black")
+        this.submitButton.setColor("white");
+        this.submitButton.clickedColor = p.color(244,129,130);
+        performClickOnce = true;
+        this.submitButton.setClickType(performClickOnce)
         this.submitButton.setString("SUBMIT");
         _ui.push(this.submitButton)
 
