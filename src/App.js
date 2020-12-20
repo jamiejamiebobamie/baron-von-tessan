@@ -13,7 +13,8 @@ class App extends Component {
         this.state = {
             drawingDescription: "",
             drawingData: [],
-            response:[],
+            response1:[],
+            response2:[],
             isMobile: isMobile,
             flaggedIndices:[],
             // backgroundDrawingData:[],
@@ -26,9 +27,13 @@ class App extends Component {
         this.SketchWrapper = new Sketch(this)
         this.Sketch = this.SketchWrapper.sketch;
         this.fetchDrawings(8)
+        setTimeout(()=>{
+            this.fetchDrawings(8)
+        },1000)
     }
     fetchDrawings(number){
         console.log("fetching more drawings")
+        this.setState({response1:this.state.response2})
         fetch("https://baron-von-tessan-backend.herokuapp.com/api/v1/random-drawings/"+number)
             .then(response => response.json())
             .then(data => {
@@ -40,12 +45,11 @@ class App extends Component {
               //         backgroundDrawings.push(drawing)
               //     this.setState({backgroundDrawingData:backgroundDrawings})
               // }
-              console.log();
-              this.setState({response:data.drawing_data})
+              this.setState({response2:data.drawing_data})
             })
             .catch((error) => {
               console.error('Error:', error);
-              this.setState({response:simulatedResponse.data})
+              this.setState({response2:simulatedResponse.data})
             });
     }
     handleSubmitDrawing(drawingData) {this.setState({drawingData:drawingData});console.log(drawingData)}

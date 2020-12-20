@@ -243,7 +243,7 @@ export default class FlagInappropriateContentView {
             this.drawings[i].setInteractivity(true);
             let clickOnce = true;
             this.drawings[i].setClickType(clickOnce)
-            this.drawings[i].setSubmittedStrokes(REACT_APP.state.response[i].vertices)
+            this.drawings[i].setSubmittedStrokes(REACT_APP.state.response1[i].vertices)
             // this.backgroundDrawing4.setSubmittedStrokes(REACT_APP.state.response[i].vertices)
 
             this.drawings[i].timeOut2 = timeOutVar

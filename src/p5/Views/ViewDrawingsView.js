@@ -27,8 +27,8 @@ export default class DrawingView {
         this.predrawn = false;
     }
     addCharacterToDialogString(REACT_APP){
-        if (this.charIndex<REACT_APP.state.response[this.responseIndex].description.length){
-            let allOfDialog = REACT_APP.state.response[this.responseIndex].description
+        if (this.charIndex<REACT_APP.state.response1[this.responseIndex].description.length){
+            let allOfDialog = REACT_APP.state.response1[this.responseIndex].description
             let dialogString = allOfDialog.slice(0,this.charIndex)
             this.dialog.setString(dialogString)
             clearTimeout(this.timeOutVarForCharacters)
@@ -509,7 +509,7 @@ export default class DrawingView {
         this.drawing = new DisplayDrawingContainer(params)
         this.drawing.setLengthOfDrawingSquare(drawing.width+drawing.width*.11)
         this.drawing.setFill(true)
-        this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].vertices)
+        this.drawing.setSubmittedStrokes(REACT_APP.state.response1[this.responseIndex].vertices)
         this.drawing.submittedStrokeIndex = strokeIndex;
         this.drawing.loop = loop
         // this.drawing.redrawStrokes();
@@ -518,7 +518,7 @@ export default class DrawingView {
             clearTimeout(this.timeOutVarForStrokes)
             clearTimeout(this.timeOutVarForCharacters)
             if (this.predraw){
-                this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response[this.responseIndex].vertices.length-2)
+                this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response1[this.responseIndex].vertices.length-2)
             } else {
                 this.drawing.setSubmittedStrokeIndex(0)
             }
@@ -529,17 +529,17 @@ export default class DrawingView {
                         this.drawing.drawingHasBeenDrawn = false;
                         this.drawing.setSubmittedStrokeIndex(0)
                     } else if (this.autoplay) {
-                        if (this.responseIndex < REACT_APP.state.response.length-1){
+                        if (this.responseIndex < REACT_APP.state.response1.length-1){
                             this.responseIndex++
                         } else {
                             this.responseIndex = 0;
                             // get more drawings!
                             REACT_APP.fetchDrawings(8)
                         }
-                        this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].vertices)
+                        this.drawing.setSubmittedStrokes(REACT_APP.state.response1[this.responseIndex].vertices)
 
                         if (this.predraw){
-                            this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response[this.responseIndex].vertices.length-2)
+                            this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response1[this.responseIndex].vertices.length-2)
                         } else {
                             this.drawing.setSubmittedStrokeIndex(0)
                         }
@@ -590,8 +590,8 @@ export default class DrawingView {
         this.dialog.setFill(true)
         // this.dialog.setStroke(true)
 
-        if (this.charIndex>=REACT_APP.state.response[this.responseIndex].description.length){
-            let allOfDialog = REACT_APP.state.response[this.responseIndex].description
+        if (this.charIndex>=REACT_APP.state.response1[this.responseIndex].description.length){
+            let allOfDialog = REACT_APP.state.response1[this.responseIndex].description
             this.dialog.setString(allOfDialog)
         }
 
@@ -690,7 +690,7 @@ export default class DrawingView {
                 this.buttons[2].setColor(p.color(244,129,130))
                 this.drawing.loop = false;
                 this.buttons[1].setColor(p.color(255))
-                this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response[this.responseIndex].vertices.length-2)
+                this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response1[this.responseIndex].vertices.length-2)
             } else {
                 this.buttons[2].setColor(p.color(255))
             }
@@ -705,11 +705,11 @@ export default class DrawingView {
             if (this.responseIndex>=1){
                 this.responseIndex--;
             } else {
-                this.responseIndex = REACT_APP.state.response.length-1;
+                this.responseIndex = REACT_APP.state.response1.length-1;
             }
-            this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].vertices)
+            this.drawing.setSubmittedStrokes(REACT_APP.state.response1[this.responseIndex].vertices)
             if (this.predraw){
-                this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response[this.responseIndex].vertices.length-2)
+                this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response1[this.responseIndex].vertices.length-2)
             } else {
                 this.drawing.setSubmittedStrokeIndex(0)
             }
@@ -724,16 +724,17 @@ export default class DrawingView {
         // NEXT
         // this is still in progress.
         this.buttons[5].mouseClickfunc = () => {
-            if (this.responseIndex<REACT_APP.state.response.length-1){
+            if (this.responseIndex<REACT_APP.state.response1.length-1){
                 this.responseIndex++;
             } else {
                 this.responseIndex = 0;
                 // get more drawings!
                 REACT_APP.fetchDrawings(8)
+                
             }
-            this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].vertices)
+            this.drawing.setSubmittedStrokes(REACT_APP.state.response1[this.responseIndex].vertices)
             if (this.predraw){
-                this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response[this.responseIndex].vertices.length-2)
+                this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response1[this.responseIndex].vertices.length-2)
             } else {
                 this.drawing.setSubmittedStrokeIndex(0)
             }

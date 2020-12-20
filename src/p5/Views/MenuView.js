@@ -144,7 +144,7 @@ export default class MenuView {
         /// ---- ******** BEGIN _UI OBJECTS
         // _ui objects are drawn to screen and mirror a wireframe object
         const instantiateBackgroundDrawings = ()=>{
-            if (REACT_APP.state.response.length){
+            if (REACT_APP.state.response1.length){
             // const lengthOfResponse = REACT_APP.state.response.length
             for (let i = 0; i < objectsTotest.length; i++){
                 let drawingHasBeenDrawn = false
@@ -175,7 +175,7 @@ export default class MenuView {
                         //         backgroundDrawings.push(drawing)
                         //     this.setState({backgroundDrawingData:backgroundDrawings})
 
-                        this.backgroundDrawing1.setSubmittedStrokes(REACT_APP.state.response[i].vertices)
+                        this.backgroundDrawing1.setSubmittedStrokes(REACT_APP.state.response1[i].vertices)
 
                         this.backgroundDrawing1.submittedStrokeIndex = strokeIndex;
                         this.backgroundDrawing1.redrawStrokes();
@@ -199,7 +199,7 @@ export default class MenuView {
                         this.backgroundDrawing2 = new DisplayDrawingContainer(parameters)
                         this.backgroundDrawing2.setLengthOfDrawingSquare(objectsTotest[i].width)
                         this.backgroundDrawing2.setFill(true)
-                        this.backgroundDrawing2.setSubmittedStrokes(REACT_APP.state.response[i].vertices)
+                        this.backgroundDrawing2.setSubmittedStrokes(REACT_APP.state.response1[i].vertices)
                         this.backgroundDrawing2.submittedStrokeIndex = strokeIndex;
                         this.backgroundDrawing2.redrawStrokes();
 
@@ -222,7 +222,7 @@ export default class MenuView {
                         this.backgroundDrawing3 = new DisplayDrawingContainer(parameters)
                         this.backgroundDrawing3.setLengthOfDrawingSquare(objectsTotest[i].width)
                         this.backgroundDrawing3.setFill(true)
-                        this.backgroundDrawing3.setSubmittedStrokes(REACT_APP.state.response[i].vertices)
+                        this.backgroundDrawing3.setSubmittedStrokes(REACT_APP.state.response1[i].vertices)
                         this.backgroundDrawing3.submittedStrokeIndex = strokeIndex;
                         this.backgroundDrawing3.redrawStrokes();
 
@@ -244,7 +244,7 @@ export default class MenuView {
                         this.backgroundDrawing4 = new DisplayDrawingContainer(parameters)
                         this.backgroundDrawing4.setLengthOfDrawingSquare(objectsTotest[i].width)
                         this.backgroundDrawing4.setFill(true)
-                        this.backgroundDrawing4.setSubmittedStrokes(REACT_APP.state.response[i].vertices)
+                        this.backgroundDrawing4.setSubmittedStrokes(REACT_APP.state.response1[i].vertices)
                         this.backgroundDrawing4.submittedStrokeIndex = strokeIndex;
                         this.backgroundDrawing4.redrawStrokes();
 

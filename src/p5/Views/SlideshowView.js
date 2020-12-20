@@ -12,8 +12,8 @@ export default class SlideshowView {
         this.allCharsAdded = false;
     }
     addCharacterToDialogString(REACT_APP){
-        if (this.charIndex<REACT_APP.state.response[this.responseIndex].description.length){
-            let allOfDialog = REACT_APP.state.response[this.responseIndex].description
+        if (this.charIndex<REACT_APP.state.response1[this.responseIndex].description.length){
+            let allOfDialog = REACT_APP.state.response1[this.responseIndex].description
             let dialogString = allOfDialog.slice(0,this.charIndex)
             this.dialog.setString(dialogString)
             clearTimeout(this.timeOutVar)
@@ -90,7 +90,7 @@ export default class SlideshowView {
         this.drawing = new DisplayDrawingContainer(parameters)
         this.drawing.setLengthOfDrawingSquare(drawing.width+drawing.width*.11)
         this.drawing.setFill(true)
-        this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].vertices)
+        this.drawing.setSubmittedStrokes(REACT_APP.state.response1[this.responseIndex].vertices)
         this.drawing.submittedStrokeIndex = strokeIndex;
         // this.drawing.redrawStrokes();
 
@@ -112,7 +112,7 @@ export default class SlideshowView {
                         this.charIndex = 0
                         this.responseIndex++
                         this.dialog.setString("")
-                        this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].vertices)
+                        this.drawing.setSubmittedStrokes(REACT_APP.state.response1[this.responseIndex].vertices)
                     } else {
                         changeView();
                         return;
@@ -173,8 +173,8 @@ export default class SlideshowView {
         // let fontSize = 40
         // this.dialog.setFontSize(fontSize)
 
-        if (this.charIndex>=REACT_APP.state.response[this.responseIndex].vertices.length){
-            let allOfDialog = REACT_APP.state.response[this.responseIndex].vertices
+        if (this.charIndex>=REACT_APP.state.response1[this.responseIndex].vertices.length){
+            let allOfDialog = REACT_APP.state.response1[this.responseIndex].vertices
             this.dialog.setString(allOfDialog)
         }
 
