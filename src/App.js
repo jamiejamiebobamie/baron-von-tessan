@@ -77,13 +77,12 @@ class App extends Component {
             });
     }
     handleSubmitFlaggedIndices(flaggedIndices){
-        this.setState({flaggedIndices:flaggedIndices})
+        // this.setState({flaggedIndices:flaggedIndices})
         // send flaggedIndices to backend
         console.log("Sending to backend.")
         let _ids = []
-        for (let i = 0; i < this.state.flaggedIndices.length; i++ ){
-            const index = this.state.flaggedIndices[i]
-            console.log(this.state.response[index]._id)
+        for (let i = 0; i < this.flaggedIndices.length; i++ ){
+            const index = this.flaggedIndices[i]
             // it's poor practice to expose this information...
             const id = this.state.response[index]._id
             _ids.push(id)
