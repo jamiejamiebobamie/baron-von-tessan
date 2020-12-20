@@ -518,7 +518,7 @@ export default class DrawingView {
             clearTimeout(this.timeOutVarForStrokes)
             clearTimeout(this.timeOutVarForCharacters)
             if (this.predraw){
-                this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response[this.responseIndex].drawingData.length-2)
+                this.drawing.setSubmittedStrokeIndex(REACT_APP.state.response[this.responseIndex].vertices.length-2)
             } else {
                 this.drawing.setSubmittedStrokeIndex(0)
             }
