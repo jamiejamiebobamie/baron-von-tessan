@@ -1645,7 +1645,7 @@ const drawingData = [
 {x: 0.34414694496523135, y: 0.43627012522361347}
 ]
 
-const introDescriptionData = "I am Baron von Tessan\nRossen Blatt the 4th, your Queen-Regent,\npresiding over the affairs of... "
+const introDescriptionData = "I am Baron von Tessan\nRossen Blatt the 4th, your Queen-Regent,\npresiding over the affairs of . . . "
 const outroDescriptionData = "Well, thanks for visiting.\nPlease return soon!"
 
 export default {drawingData,introDescriptionData,outroDescriptionData};

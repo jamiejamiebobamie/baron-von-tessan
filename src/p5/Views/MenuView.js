@@ -20,7 +20,6 @@ export default class MenuView {
         this.justWatchDrawingsButton = undefined;
         this.justWannaJudgePplButton = undefined;
 
-
         // background drawing ui objects
         this.backgroundDrawing1 = undefined;
         this.backgroundDrawing2 = undefined;
@@ -104,7 +103,7 @@ export default class MenuView {
             menuSections.push(section);
         }
         if (w>1100){
-            for (let i = 0; i < 4; i++){
+            for (let i = 0; i < REACT_APP.state.response.length; i++){
                 let testWidth = w<h?w/6:h/6;//w<h? Math.random()*(w/4-w/5+1)+w/4:Math.random()*(h/4-h/5+1)+h/5
                 // Math.random() * (max - min + 1) + min
 
@@ -144,103 +143,123 @@ export default class MenuView {
 
         /// ---- ******** BEGIN _UI OBJECTS
         // _ui objects are drawn to screen and mirror a wireframe object
+        const instantiateBackgroundDrawings = ()=>{
+            if (REACT_APP.state.response.length){
+            // const lengthOfResponse = REACT_APP.state.response.length
+            for (let i = 0; i < objectsTotest.length; i++){
+                let drawingHasBeenDrawn = false
+                let strokeIndex = 0
+                // parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard,lerpSpeed:.01}//,color:"lightgrey"}
+                    if (i===0){
+                        if (previousUI){
+                            if (previousUI.backgroundDrawing1){
+                                x = previousUI.backgroundDrawing1.x;
+                                y = previousUI.backgroundDrawing1.y;
+                                width = previousUI.backgroundDrawing1.width;
+                                height = previousUI.backgroundDrawing1.height;
+                                drawingHasBeenDrawn = previousUI.backgroundDrawing1.drawingHasBeenDrawn
+                                strokeIndex = previousUI.backgroundDrawing1.submittedStrokeIndex
+                                clearTimeout(previousUI.backgroundDrawing1.timeOut1)
+                                clearTimeout(previousUI.backgroundDrawing1.timeOut2)
+                            }
+                        }
+                        wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}//,strokeColor:objectsTotest[i].color}
+                        parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard,lerpSpeed:.01}//,color:"lightgrey"}
+                        this.backgroundDrawing1 = new DisplayDrawingContainer(parameters)
+                        this.backgroundDrawing1.setLengthOfDrawingSquare(objectsTotest[i].width)
+                        this.backgroundDrawing1.setFill(true)
+
+                        // this.setState({response:data.drawing_data})
+
+                        //         const drawing = data.drawing_data[i].vertices
+                        //         backgroundDrawings.push(drawing)
+                        //     this.setState({backgroundDrawingData:backgroundDrawings})
+
+                        this.backgroundDrawing1.setSubmittedStrokes(REACT_APP.state.response[i].vertices)
+
+                        this.backgroundDrawing1.submittedStrokeIndex = strokeIndex;
+                        this.backgroundDrawing1.redrawStrokes();
+
+                        _ui.push(this.backgroundDrawing1)
+                    } else if (i===1){
+                        if (previousUI){
+                            if (previousUI.backgroundDrawing2){
+                                x = previousUI.backgroundDrawing2.x;
+                                y = previousUI.backgroundDrawing2.y;
+                                width = previousUI.backgroundDrawing2.width;
+                                height = previousUI.backgroundDrawing2.height;
+                                drawingHasBeenDrawn = previousUI.backgroundDrawing2.drawingHasBeenDrawn
+                                strokeIndex = previousUI.backgroundDrawing2.submittedStrokeIndex
+                                clearTimeout(previousUI.backgroundDrawing2.timeOut1)
+                                clearTimeout(previousUI.backgroundDrawing2.timeOut2)
+                            }
+                        }
+                        wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}//,strokeColor:objectsTotest[i].color}
+                        parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard,lerpSpeed:.01}//,color:"lightgrey"}
+                        this.backgroundDrawing2 = new DisplayDrawingContainer(parameters)
+                        this.backgroundDrawing2.setLengthOfDrawingSquare(objectsTotest[i].width)
+                        this.backgroundDrawing2.setFill(true)
+                        this.backgroundDrawing2.setSubmittedStrokes(REACT_APP.state.response[i].vertices)
+                        this.backgroundDrawing2.submittedStrokeIndex = strokeIndex;
+                        this.backgroundDrawing2.redrawStrokes();
+
+                        _ui.push(this.backgroundDrawing2)
+                    } else if (i===2){
+                        if (previousUI){
+                            if (previousUI.backgroundDrawing3){
+                                x = previousUI.backgroundDrawing3.x;
+                                y = previousUI.backgroundDrawing3.y;
+                                width = previousUI.backgroundDrawing3.width;
+                                height = previousUI.backgroundDrawing3.height;
+                                drawingHasBeenDrawn = previousUI.backgroundDrawing3.drawingHasBeenDrawn
+                                strokeIndex = previousUI.backgroundDrawing3.submittedStrokeIndex
+                                clearTimeout(previousUI.backgroundDrawing3.timeOut1)
+                                clearTimeout(previousUI.backgroundDrawing3.timeOut2)
+                            }
+                        }
+                        wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}//,strokeColor:objectsTotest[i].color}
+                        parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard,lerpSpeed:.01}//,color:"lightgrey"}
+                        this.backgroundDrawing3 = new DisplayDrawingContainer(parameters)
+                        this.backgroundDrawing3.setLengthOfDrawingSquare(objectsTotest[i].width)
+                        this.backgroundDrawing3.setFill(true)
+                        this.backgroundDrawing3.setSubmittedStrokes(REACT_APP.state.response[i].vertices)
+                        this.backgroundDrawing3.submittedStrokeIndex = strokeIndex;
+                        this.backgroundDrawing3.redrawStrokes();
+
+                        _ui.push(this.backgroundDrawing3)
+                    }  else if (i===3){
+                        if (previousUI){
+                            if (previousUI.backgroundDrawing4){
+                                x = previousUI.backgroundDrawing4.x;
+                                y = previousUI.backgroundDrawing4.y;
+                                width = previousUI.backgroundDrawing4.width;
+                                height = previousUI.backgroundDrawing4.height;
+                                drawingHasBeenDrawn = previousUI.backgroundDrawing4.drawingHasBeenDrawn
+                                strokeIndex = previousUI.backgroundDrawing4.submittedStrokeIndex
+                                clearTimeout(previousUI.backgroundDrawing4.timeOut1)
+                                clearTimeout(previousUI.backgroundDrawing4.timeOut2)
+                            }
+                        }
+                        wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
+                        this.backgroundDrawing4 = new DisplayDrawingContainer(parameters)
+                        this.backgroundDrawing4.setLengthOfDrawingSquare(objectsTotest[i].width)
+                        this.backgroundDrawing4.setFill(true)
+                        this.backgroundDrawing4.setSubmittedStrokes(REACT_APP.state.response[i].vertices)
+                        this.backgroundDrawing4.submittedStrokeIndex = strokeIndex;
+                        this.backgroundDrawing4.redrawStrokes();
+
+                        _ui.push(this.backgroundDrawing4)
+                    }
+            }
+        }
+    }
         let x,y,width,height,objectToMirror;
-        for (let i = 0; i < objectsTotest.length; i++){
-            let drawingHasBeenDrawn = false
-            let strokeIndex = 0
-            // parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard,lerpSpeed:.01}//,color:"lightgrey"}
-                if (i===0){
-                    if (previousUI){
-                        if (previousUI.backgroundDrawing1){
-                            x = previousUI.backgroundDrawing1.x;
-                            y = previousUI.backgroundDrawing1.y;
-                            width = previousUI.backgroundDrawing1.width;
-                            height = previousUI.backgroundDrawing1.height;
-                            drawingHasBeenDrawn = previousUI.backgroundDrawing1.drawingHasBeenDrawn
-                            strokeIndex = previousUI.backgroundDrawing1.submittedStrokeIndex
-                            clearTimeout(previousUI.backgroundDrawing1.timeOut1)
-                            clearTimeout(previousUI.backgroundDrawing1.timeOut2)
-                        }
-                    }
-                    wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}//,strokeColor:objectsTotest[i].color}
-                    parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard,lerpSpeed:.01}//,color:"lightgrey"}
-                    this.backgroundDrawing1 = new DisplayDrawingContainer(parameters)
-                    this.backgroundDrawing1.setLengthOfDrawingSquare(objectsTotest[i].width)
-                    this.backgroundDrawing1.setFill(true)
-                    this.backgroundDrawing1.setSubmittedStrokes(REACT_APP.state.backgroundDrawingData[i])
-                    this.backgroundDrawing1.submittedStrokeIndex = strokeIndex;
-                    this.backgroundDrawing1.redrawStrokes();
-
-                    _ui.push(this.backgroundDrawing1)
-                } else if (i===1){
-                    if (previousUI){
-                        if (previousUI.backgroundDrawing2){
-                            x = previousUI.backgroundDrawing2.x;
-                            y = previousUI.backgroundDrawing2.y;
-                            width = previousUI.backgroundDrawing2.width;
-                            height = previousUI.backgroundDrawing2.height;
-                            drawingHasBeenDrawn = previousUI.backgroundDrawing2.drawingHasBeenDrawn
-                            strokeIndex = previousUI.backgroundDrawing2.submittedStrokeIndex
-                            clearTimeout(previousUI.backgroundDrawing2.timeOut1)
-                            clearTimeout(previousUI.backgroundDrawing2.timeOut2)
-                        }
-                    }
-                    wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}//,strokeColor:objectsTotest[i].color}
-                    parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard,lerpSpeed:.01}//,color:"lightgrey"}
-                    this.backgroundDrawing2 = new DisplayDrawingContainer(parameters)
-                    this.backgroundDrawing2.setLengthOfDrawingSquare(objectsTotest[i].width)
-                    this.backgroundDrawing2.setFill(true)
-                    this.backgroundDrawing2.setSubmittedStrokes(REACT_APP.state.backgroundDrawingData[i])
-                    this.backgroundDrawing2.submittedStrokeIndex = strokeIndex;
-                    this.backgroundDrawing2.redrawStrokes();
-
-                    _ui.push(this.backgroundDrawing2)
-                } else if (i===2){
-                    if (previousUI){
-                        if (previousUI.backgroundDrawing3){
-                            x = previousUI.backgroundDrawing3.x;
-                            y = previousUI.backgroundDrawing3.y;
-                            width = previousUI.backgroundDrawing3.width;
-                            height = previousUI.backgroundDrawing3.height;
-                            drawingHasBeenDrawn = previousUI.backgroundDrawing3.drawingHasBeenDrawn
-                            strokeIndex = previousUI.backgroundDrawing3.submittedStrokeIndex
-                            clearTimeout(previousUI.backgroundDrawing3.timeOut1)
-                            clearTimeout(previousUI.backgroundDrawing3.timeOut2)
-                        }
-                    }
-                    wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}//,strokeColor:objectsTotest[i].color}
-                    parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard,lerpSpeed:.01}//,color:"lightgrey"}
-                    this.backgroundDrawing3 = new DisplayDrawingContainer(parameters)
-                    this.backgroundDrawing3.setLengthOfDrawingSquare(objectsTotest[i].width)
-                    this.backgroundDrawing3.setFill(true)
-                    this.backgroundDrawing3.setSubmittedStrokes(REACT_APP.state.backgroundDrawingData[i])
-                    this.backgroundDrawing3.submittedStrokeIndex = strokeIndex;
-                    this.backgroundDrawing3.redrawStrokes();
-
-                    _ui.push(this.backgroundDrawing3)
-                }  else if (i===3){
-                    if (previousUI){
-                        if (previousUI.backgroundDrawing4){
-                            x = previousUI.backgroundDrawing4.x;
-                            y = previousUI.backgroundDrawing4.y;
-                            width = previousUI.backgroundDrawing4.width;
-                            height = previousUI.backgroundDrawing4.height;
-                            drawingHasBeenDrawn = previousUI.backgroundDrawing4.drawingHasBeenDrawn
-                            strokeIndex = previousUI.backgroundDrawing4.submittedStrokeIndex
-                            clearTimeout(previousUI.backgroundDrawing4.timeOut1)
-                            clearTimeout(previousUI.backgroundDrawing4.timeOut2)
-                        }
-                    }
-                    wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-                    this.backgroundDrawing4 = new DisplayDrawingContainer(parameters)
-                    this.backgroundDrawing4.setLengthOfDrawingSquare(objectsTotest[i].width)
-                    this.backgroundDrawing4.setFill(true)
-                    this.backgroundDrawing4.setSubmittedStrokes(REACT_APP.state.backgroundDrawingData[i])
-                    this.backgroundDrawing4.submittedStrokeIndex = strokeIndex;
-                    this.backgroundDrawing4.redrawStrokes();
-
-                    _ui.push(this.backgroundDrawing4)
-                }
+        if (!windowResized){
+            setTimeout(()=>{
+                instantiateBackgroundDrawings();
+            },200)
+        } else {
+            instantiateBackgroundDrawings();
         }
         let text = "";
         let fontSize;
@@ -288,10 +307,6 @@ export default class MenuView {
                     this.enterSiteButton.clickedColor = p.color(244,129,130);
                     this.enterSiteButton.mouseClickfunc = ()=>{setTimeout(()=>{changeView()},250)};
                     this.enterSiteButton.setString("ENTER SITE");
-
-
-
-
 
                     if(REACT_APP.state.isMobile){
                         fontSize = w>h?objectToMirror.height/2:objectToMirror.height/3;

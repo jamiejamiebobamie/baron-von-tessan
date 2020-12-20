@@ -35,12 +35,14 @@ export default class DisplayDrawingContainer extends Mirror{
     }
     setNewToLocation(){
         this.toLocation = []
-        for (let i = 0; i < this.submittedStrokes.length; i++){
-            this.toLocation.push({x:(Math.random()*2-1)*this.lengthOfDrawingSquare/1500,y:(Math.random()*2-1)*this.lengthOfDrawingSquare/1500})
+        if (this.submittedStrokes){
+            for (let i = 0; i < this.submittedStrokes.length; i++){
+                this.toLocation.push({x:(Math.random()*2-1)*this.lengthOfDrawingSquare/1500,y:(Math.random()*2-1)*this.lengthOfDrawingSquare/1500})
+            }
+            this.fromLocation = this.toLocation
+            clearTimeout(this.timeOut1)
+            this.timeOut1 = setTimeout(()=>{this.setNewToLocation()},100)
         }
-        this.fromLocation = this.toLocation
-        clearTimeout(this.timeOut1)
-        this.timeOut1 = setTimeout(()=>{this.setNewToLocation()},100)
     }
     setLengthOfDrawingSquare(length){ this.lengthOfDrawingSquare = length }
     setSubmittedStrokeIndex(index){ this.submittedStrokeIndex = index }
@@ -54,25 +56,29 @@ export default class DisplayDrawingContainer extends Mirror{
     drawSubmittedStrokes(){
         let driftX = 0
         let driftY = 0
+        if (this.submittedStrokes){
+
         if (this.drawingHasBeenDrawn){
-            for (let i = 0; i < this.submittedStrokes.length; i++){
-                if (this.toLocation.length){
-                    driftX = this.toLocation[i].x;
-                    driftY = this.toLocation[i].y;
+                for (let i = 0; i < this.submittedStrokes.length; i++){
+                    if (this.toLocation.length){
+                        driftX = this.toLocation[i].x;
+                        driftY = this.toLocation[i].y;
+                    }
+                    this.p.ellipse(this.submittedStrokes[i].x*this.lengthOfDrawingSquare+driftX+this.x, this.submittedStrokes[i].y*this.lengthOfDrawingSquare+driftY+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
                 }
-                this.p.ellipse(this.submittedStrokes[i].x*this.lengthOfDrawingSquare+driftX+this.x, this.submittedStrokes[i].y*this.lengthOfDrawingSquare+driftY+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
-            }
-        } else {
-            for (let i = 0; i < this.submittedStrokeIndex; i++){
-                if (this.toLocation.length){
-                    driftX = this.p.lerp(this.fromLocation[i].x,this.toLocation[i].x,.2)
-                    driftY = this.p.lerp(this.fromLocation[i].y,this.toLocation[i].y,.2)
+            } else {
+                for (let i = 0; i < this.submittedStrokeIndex; i++){
+                    if (this.toLocation.length){
+                        driftX = this.p.lerp(this.fromLocation[i].x,this.toLocation[i].x,.2)
+                        driftY = this.p.lerp(this.fromLocation[i].y,this.toLocation[i].y,.2)
+                    }
+                    this.p.ellipse(this.submittedStrokes[i].x*this.lengthOfDrawingSquare+driftX+this.x, this.submittedStrokes[i].y*this.lengthOfDrawingSquare+driftY+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
                 }
-                this.p.ellipse(this.submittedStrokes[i].x*this.lengthOfDrawingSquare+driftX+this.x, this.submittedStrokes[i].y*this.lengthOfDrawingSquare+driftY+this.y, this.lengthOfDrawingSquare*.025,this.lengthOfDrawingSquare*.025)
             }
         }
     }
     redrawStrokes(redrawSpeed){
+        // if (this.submittedStrokes){
         if (redrawSpeed===undefined){
             redrawSpeed = 1;
         }
@@ -86,18 +92,20 @@ export default class DisplayDrawingContainer extends Mirror{
                 return;
             }
         }
-        if (this.submittedStrokeIndex < this.submittedStrokes.length) {
-            this.submittedStrokeIndex++
-            this.timeOut2 = setTimeout(()=>{this.redrawStrokes(redrawSpeed);}, redrawSpeed);
-        } else {
-            this.drawingHasBeenDrawn = true;
-            // pause three seconds to display drawing.
-                // then loop if this.displayDrawingSpace.loop
-                // is set to true otherwise return.
-            this.timeOut2 = setTimeout(()=>{this.redrawStrokes(redrawSpeed);}, 3000);
-        }
+
+            if (this.submittedStrokeIndex < this.submittedStrokes.length) {
+                this.submittedStrokeIndex++
+                this.timeOut2 = setTimeout(()=>{this.redrawStrokes(redrawSpeed);}, redrawSpeed);
+            } else {
+                this.drawingHasBeenDrawn = true;
+                // pause three seconds to display drawing.
+                    // then loop if this.displayDrawingSpace.loop
+                    // is set to true otherwise return.
+                this.timeOut2 = setTimeout(()=>{this.redrawStrokes(redrawSpeed);}, 3000);
+            }
+        // }
         // good for testing:
-        console.log("hey")
+        // console.log("hey")
     }
     undrawStrokes(){
         if (this.submittedStrokeIndex>=0) {

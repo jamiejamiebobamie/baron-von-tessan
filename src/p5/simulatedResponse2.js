@@ -1,7 +1,7 @@
 const response = {
     data:
     [
-        { drawingData: [
+        { vertices: [
 {x: -0.24114690061475408, y: -0.1463319591011845},
 {x: -0.24114690061475408, y: -0.14735593082461285},
 {x: -0.24114690061475408, y: -0.15452373288861138},
@@ -1575,9 +1575,9 @@ const response = {
 {x: -0.08028624487704913, y: -0.1657874218463234},
 {x: -0.08028624487704913, y: -0.16681139356975175},
 ],
-descriptionData:"bird "
+description:"bird "
 },
-{ drawingData:
+{ vertices:
   [
 {x: -0.1313022597312348, y: -0.29422397172236503},
 {x: -0.0168240733823176, y: -0.008876928020565573},
@@ -2705,9 +2705,9 @@ descriptionData:"bird "
 {x: 0.28010745131800807, y: -0.1864511464425536},
 {x: 0.28267999483146694, y: -0.1864511464425536},
 ],
-descriptionData:"check out my nails "
+description:"check out my nails "
 },
-{ drawingData:
+{ vertices:
   [
 {x: -0.18789821702732873, y: -0.1605478791773779},
 {x: -0.17117668418984647, y: -0.19653759640102827},
@@ -5486,9 +5486,9 @@ descriptionData:"check out my nails "
 {x: 0.4346573132297042, y: -0.4253293701799486},
 {x: 0.4398024002566218, y: -0.4343267994858612},
 ],
-descriptionData:"a nudey lady "
+description:"a nudey lady "
 },
-{ drawingData:
+{ vertices:
   [
 {x: 0.07532911325769372, y: -0.1924915635545557},
 {x: 0.04496261740536786, y: -0.20486501687289088},
@@ -6522,9 +6522,9 @@ descriptionData:"a nudey lady "
 {x: -0.1664781685293452, y: -0.16324521934758154},
 {x: -0.17097690865561566, y: -0.15649606299212596},
 ],
-descriptionData:"radioactive man "
+description:"radioactive man "
 },
-{ drawingData:
+{ vertices:
   [
 {x: -0.2047174596026443, y: -0.09687851518560177},
 {x: -0.2047174596026443, y: -0.09912823397075368},
@@ -7646,9 +7646,9 @@ descriptionData:"radioactive man "
 {x: 0.14618427024645397, y: 0.4408042744656918},
 {x: 0.14618427024645397, y: 0.44642857142857145},
 ],
-descriptionData:"tie guy "
+description:"tie guy "
 },
-{ drawingData:
+{ vertices:
   [
 {x: -0.23058521532869966, y: -0.09012935883014624},
 {x: -0.23058521532869966, y: -0.09125421822272213},
@@ -8807,9 +8807,9 @@ descriptionData:"tie guy "
 {x: 0.2698996237188925, y: 0.13371766029246346},
 {x: 0.27327367881359527, y: 0.12809336332958382},
 ],
-descriptionData:"idk "
+description:"idk "
 },
-{ drawingData:
+{ vertices:
   [
 {x: -0.04865284949625045, y: -0.2006323629451011},
 {x: 0.007581402082130716, y: -0.2118809568708604},
@@ -9604,9 +9604,9 @@ descriptionData:"idk "
 {x: -0.13744965329502992, y: -0.011871382404029476},
 {x: -0.13443830150319033, y: -0.0043412619221017655},
 ],
-descriptionData:"eyeballs "
+description:"eyeballs "
 },
-{ drawingData:
+{ vertices:
   [
 {x: -0.1945952943185357, y: -0.057508436445444296},
 {x: -0.1945952943185357, y: -0.06875703037120358},
@@ -12625,9 +12625,9 @@ descriptionData:"eyeballs "
 {x: 0.05016408186063931, y: 0.16617570622078476},
 {x: 0.05016408186063931, y: 0.16513491010848708},
 ],
-descriptionData:"a beat poet "
+description:"a beat poet "
 },
-{ drawingData:
+{ vertices:
     [
 {x: -0.012155839665471522, y: -0.0691915760869565},
 {x: -0.028466583715941626, y: -0.056148097826086915},
@@ -13493,7 +13493,7 @@ descriptionData:"a beat poet "
 {x: 0.25390928217010744, y: 0.18596610901984925},
 {x: 0.26398588518712485, y: 0.19028265578243922}
 ],
-descriptionData:
+description:
 "another ol' eyeball "// add a space after description to get correct output
 }
 ]

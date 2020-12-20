@@ -192,7 +192,7 @@ export default class FlagInappropriateContentView {
         this.instructions = new TextBox(parameters)
         this.instructions.setFill(true)
         this.instructions.setTextColor("black")
-        this.instructions.setString("Pick your favorite drawings.");
+        this.instructions.setString("Pick your favorite drawings.\nThey will appear more often on the site.");
         setTimeout(()=>{this.instructions.setFontSizeWithRegardToContainerHeight(questionArea.width/15);},5);
         _ui.push(this.instructions)
 
@@ -207,7 +207,7 @@ export default class FlagInappropriateContentView {
         let color = "lightgrey"
         let drawingOutline = false;
 
-        for (let i = 0; i < 5; i++){
+        for (let i = 0; i < 6; i++){
             if (previousUI){
                 if (previousUI.drawings){
                     if (previousUI.drawings[i]){
@@ -243,7 +243,9 @@ export default class FlagInappropriateContentView {
             this.drawings[i].setInteractivity(true);
             let clickOnce = true;
             this.drawings[i].setClickType(clickOnce)
-            this.drawings[i].setSubmittedStrokes(REACT_APP.state.response[i].drawingData)
+            this.drawings[i].setSubmittedStrokes(REACT_APP.state.response[i].vertices)
+            // this.backgroundDrawing4.setSubmittedStrokes(REACT_APP.state.response[i].vertices)
+
             this.drawings[i].timeOut2 = timeOutVar
             let mouseClickfunc = () => {
                 this.toggleDrawingPresentInFlaggedIndices(this.drawings[i],p)
@@ -255,50 +257,50 @@ export default class FlagInappropriateContentView {
             _ui.push(this.drawings[i])
         }
 
-        if (previousUI){
-                if (previousUI.drawing){
-                    // object placement properties
-                        // without these the _ui object jitters
-                        // with window resizing.
-                    x = previousUI.drawing.x;
-                    y = previousUI.drawing.y;
-                    width = previousUI.drawing.width;
-                    height = previousUI.drawing.height;
-
-                    // redrawStrokes properties
-                    // drawingHasBeenDrawn = windowResized && !previousUI.drawing.loop ? previousUI.drawing.drawingHasBeenDrawn : false;
-                    // strokeIndex = previousUI.drawing.submittedStrokeIndex
-                    clearTimeout(previousUI.drawing.timeOut1)
-                    clearTimeout(previousUI.drawing.timeOut2)
-
-                    // picture selected properties
-                    color = previousUI.drawing.color
-                    drawingOutline = previousUI.drawing.hasStroke
-                }
-        }
-        wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-        parameters = {p:p,objectToMirror:bottomRight[2],x:x,y:y,width:width,height:height,color:color,wildcard:wildcard,lerpSpeed:windowResized?.3:.1}
-        this.drawing = new DisplayDrawingContainer(parameters)
-        this.drawing.setLengthOfDrawingSquare(topLeft[0].width+topLeft[0].width*.07)
-        this.drawing.index = 5
-        this.drawing.setFill(true)
-        this.drawing.setStroke(drawingOutline)
-        this.drawing.setInteractivity(true);
-        let clickOnce = true;
-        this.drawing.setClickType(clickOnce)
-        // the last drawing on the view is either a user drawing or a drawing
-            // from the response depending on which option the user chose in the
-            // menuView
-        REACT_APP.state.drawingData.length?this.drawing.setSubmittedStrokes(REACT_APP.state.drawingData):this.drawing.setSubmittedStrokes(REACT_APP.state.response[5].drawingData);
-        this.drawing.timeOut2 = timeOutVar
-        let mouseClickfunc = () => {
-            this.toggleDrawingPresentInFlaggedIndices(this.drawing,p)
-        }
-        this.drawing.mouseClickfunc = mouseClickfunc
-        // this.drawing.redrawStrokes();
-        // this.drawing.setLoopToTrueToLoopFinishedDrawing()
-
-        _ui.push(this.drawing)
+        // if (previousUI){
+        //         if (previousUI.drawing){
+        //             // object placement properties
+        //                 // without these the _ui object jitters
+        //                 // with window resizing.
+        //             x = previousUI.drawing.x;
+        //             y = previousUI.drawing.y;
+        //             width = previousUI.drawing.width;
+        //             height = previousUI.drawing.height;
+        //
+        //             // redrawStrokes properties
+        //             // drawingHasBeenDrawn = windowResized && !previousUI.drawing.loop ? previousUI.drawing.drawingHasBeenDrawn : false;
+        //             // strokeIndex = previousUI.drawing.submittedStrokeIndex
+        //             clearTimeout(previousUI.drawing.timeOut1)
+        //             clearTimeout(previousUI.drawing.timeOut2)
+        //
+        //             // picture selected properties
+        //             color = previousUI.drawing.color
+        //             drawingOutline = previousUI.drawing.hasStroke
+        //         }
+        // }
+        // wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
+        // parameters = {p:p,objectToMirror:bottomRight[2],x:x,y:y,width:width,height:height,color:color,wildcard:wildcard,lerpSpeed:windowResized?.3:.1}
+        // this.drawing = new DisplayDrawingContainer(parameters)
+        // this.drawing.setLengthOfDrawingSquare(topLeft[0].width+topLeft[0].width*.07)
+        // this.drawing.index = 5
+        // this.drawing.setFill(true)
+        // this.drawing.setStroke(drawingOutline)
+        // this.drawing.setInteractivity(true);
+        // let clickOnce = true;
+        // this.drawing.setClickType(clickOnce)
+        // // the last drawing on the view is either a user drawing or a drawing
+        //     // from the response depending on which option the user chose in the
+        //     // menuView
+        // REACT_APP.state.drawingData.length?this.drawing.setSubmittedStrokes(REACT_APP.state.drawingData):this.drawing.setSubmittedStrokes(REACT_APP.state.response[5].drawingData);
+        // this.drawing.timeOut2 = timeOutVar
+        // let mouseClickfunc = () => {
+        //     this.toggleDrawingPresentInFlaggedIndices(this.drawing,p)
+        // }
+        // this.drawing.mouseClickfunc = mouseClickfunc
+        // // this.drawing.redrawStrokes();
+        // // this.drawing.setLoopToTrueToLoopFinishedDrawing()
+        //
+        // _ui.push(this.drawing)
 
         return _ui;
     }
