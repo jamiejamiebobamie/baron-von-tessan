@@ -284,8 +284,15 @@ export default class MenuView {
                     this.enterSiteButton.setStroke(true);
                     this.enterSiteButton.setFill(true);
                     this.enterSiteButton.setColor("white");
+                    this.enterSiteButton.setTextColor("black")
+                    this.enterSiteButton.clickedColor = p.color(244,129,130);
                     this.enterSiteButton.mouseClickfunc = ()=>{setTimeout(()=>{changeView()},250)};
                     this.enterSiteButton.setString("ENTER SITE");
+
+
+
+
+
                     if(REACT_APP.state.isMobile){
                         fontSize = w>h?objectToMirror.height/2:objectToMirror.height/3;
                         this.enterSiteButton.setFontSize(fontSize);
@@ -312,6 +319,8 @@ export default class MenuView {
                     this.justDrawButton.setStroke(true);
                     this.justDrawButton.setFill(true);
                     this.justDrawButton.setColor("white");
+                    this.justDrawButton.setTextColor("black")
+                    this.justDrawButton.clickedColor = p.color(244,129,130);
                     this.justDrawButton.mouseClickfunc = () => {setTimeout(()=>{changeView(4,6)},250)};
                     this.justDrawButton.setString("DRAW");
                     this.justDrawButton.setFontSize(fontSize);
@@ -342,6 +351,8 @@ export default class MenuView {
                     this.justWatchDrawingsButton.setStroke(true);
                     this.justWatchDrawingsButton.setFill(true);
                     this.justWatchDrawingsButton.setColor("white");
+                    this.justWatchDrawingsButton.setTextColor("black")
+                    this.justWatchDrawingsButton.clickedColor = p.color(244,129,130);
                     this.justWatchDrawingsButton.mouseClickfunc = () => {setTimeout(()=>{changeView(8,9)},250)};
                     this.justWatchDrawingsButton.setString("VIEW DRAWINGS");
                     this.justWatchDrawingsButton.setFontSize(fontSize);
@@ -372,6 +383,8 @@ export default class MenuView {
                    this.justWannaJudgePplButton.setStroke(true);
                    this.justWannaJudgePplButton.setFill(true);
                    this.justWannaJudgePplButton.setColor("white");
+                   this.justWannaJudgePplButton.setTextColor("black")
+                   this.justWannaJudgePplButton.clickedColor = p.color(244,129,130);
                    this.justWannaJudgePplButton.mouseClickfunc = () => {setTimeout(()=>{changeView(7,8)},250)};
                    this.justWannaJudgePplButton.setString("LIKE DRAWINGS");
                    this.justWannaJudgePplButton.setFontSize(fontSize);
