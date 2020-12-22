@@ -1,8 +1,8 @@
 ![Heroku](https://pyheroku-badge.herokuapp.com/?app=baron-von-tessan)
 
-[Baron von Tessan](https://baron-von-tessan.herokuapp.com)
-
 ![Inspiration](https://github.com/jamiejamiebobamie/baron-von-tessan/blob/master/public/favicon.ico?raw=true.)
+
+[Baron von Tessan](https://baron-von-tessan.herokuapp.com)
 
 This is a drawing app, originally started during a software engineering internship sponsored by CodeLabs.
 
@@ -19,5 +19,3 @@ I experimented with an animate drawings feature that allows users to draw a draw
 https://baron-von-tessan.herokuapp.com
 
 Note: The site may be down due to too much traffic. (It is hosted on Heroku using the free-tier, which only allows so much traffic across my apps per month.)
-
-![Inspiration](https://github.com/jamiejamiebobamie/baron-von-tessan/blob/master/public/images/inspiration.jpg?raw=true.)
