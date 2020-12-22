@@ -2,6 +2,8 @@
 
 [Baron von Tessan](https://baron-von-tessan.herokuapp.com)
 
+![Inspiration](https://github.com/jamiejamiebobamie/baron-von-tessan/blob/master/public/favicon.ico?raw=true.)
+
 This is a drawing app, originally started during a software engineering internship sponsored by CodeLabs.
 
 Users add to Baron von Tessan's kingdom by drawing whatever they wish and then adding a short description of what they drew.
