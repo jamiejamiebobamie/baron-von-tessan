@@ -2,8 +2,6 @@
 
 [Baron von Tessan](https://baron-von-tessan.herokuapp.com)
 
-![Inspiration](https://github.com/jamiejamiebobamie/baron-von-tessan/blob/master/public/images/inspiration.jpg?raw=true.)
-
 This is a drawing app, originally started during a software engineering internship sponsored by CodeLabs.
 
 Users add to Baron von Tessan's kingdom by drawing whatever they wish and then adding a short description of what they drew.
@@ -19,3 +17,5 @@ I experimented with an animate drawings feature that allows users to draw a draw
 https://baron-von-tessan.herokuapp.com
 
 Note: The site may be down due to too much traffic. (It is hosted on Heroku using the free-tier, which only allows so much traffic across my apps per month.)
+
+![Inspiration](https://github.com/jamiejamiebobamie/baron-von-tessan/blob/master/public/images/inspiration.jpg?raw=true.)
