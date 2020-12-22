@@ -2,6 +2,7 @@
 
 [Baron von Tessan](https://baron-von-tessan.herokuapp.com)
 
+![Inspiration](https://github.com/jamiejamiebobamie/baron-von-tessan/blob/master/public/images/inspiration.jpg?raw=true.)
 
 This is a drawing app, originally started during a software engineering internship sponsored by CodeLabs.
 
