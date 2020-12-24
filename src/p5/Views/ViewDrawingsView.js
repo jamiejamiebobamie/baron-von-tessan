@@ -730,7 +730,6 @@ export default class DrawingView {
                 this.responseIndex = 0;
                 // get more drawings!
                 REACT_APP.fetchDrawings(8)
-                
             }
             this.drawing.setSubmittedStrokes(REACT_APP.state.response1[this.responseIndex].vertices)
             if (this.predraw){
