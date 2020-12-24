@@ -192,7 +192,7 @@ export default class FlagInappropriateContentView {
         this.instructions = new TextBox(parameters)
         this.instructions.setFill(true)
         this.instructions.setTextColor("black")
-        this.instructions.setString("Pick your favorite drawings.\nThey will appear more often on the site.");
+        this.instructions.setString("Pick your favorite drawings.\n(They will appear more often.)");
         setTimeout(()=>{this.instructions.setFontSizeWithRegardToContainerHeight(questionArea.width/15);},5);
         _ui.push(this.instructions)
 
