@@ -534,7 +534,7 @@ export default class DrawingView {
                         } else {
                             this.responseIndex = 0;
                             // get more drawings!
-                            REACT_APP.fetchDrawings(8)
+                            REACT_APP.fetchDrawings(8, true)
                         }
                         this.drawing.setSubmittedStrokes(REACT_APP.state.response1[this.responseIndex].vertices)
 
@@ -729,7 +729,7 @@ export default class DrawingView {
             } else {
                 this.responseIndex = 0;
                 // get more drawings!
-                REACT_APP.fetchDrawings(8)
+                REACT_APP.fetchDrawings(8, true)
             }
             this.drawing.setSubmittedStrokes(REACT_APP.state.response1[this.responseIndex].vertices)
             if (this.predraw){

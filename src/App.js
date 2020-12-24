@@ -31,26 +31,48 @@ class App extends Component {
             this.fetchDrawings(8)
         },1000)
     }
-    fetchDrawings(number){
-        console.log("fetching more drawings")
-        this.setState({response1:this.state.response2})
-        fetch("https://baron-von-tessan-backend.herokuapp.com/api/v1/random-drawings/"+number)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.drawing_data);
-              // console.log('Success:', data.success);
-              // let backgroundDrawings = []
-              //     for (let i = 0; i < data.drawing_data.length; i++){
-              //         const drawing = data.drawing_data[i].vertices
-              //         backgroundDrawings.push(drawing)
-              //     this.setState({backgroundDrawingData:backgroundDrawings})
-              // }
-              this.setState({response2:data.drawing_data})
-            })
-            .catch((error) => {
-              console.error('Error:', error);
-              this.setState({response2:simulatedResponse.data})
-            });
+    fetchDrawings(number, shouldFetchLikedDrawings){
+        if (shouldFetchLikedDrawings){
+            console.log("fetching more drawings")
+            this.setState({response1:this.state.response2})
+            fetch("https://baron-von-tessan-backend.herokuapp.com/api/v1/liked-drawings/"+number)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.drawing_data);
+                  // console.log('Success:', data.success);
+                  // let backgroundDrawings = []
+                  //     for (let i = 0; i < data.drawing_data.length; i++){
+                  //         const drawing = data.drawing_data[i].vertices
+                  //         backgroundDrawings.push(drawing)
+                  //     this.setState({backgroundDrawingData:backgroundDrawings})
+                  // }
+                  this.setState({response2:data.drawing_data})
+                })
+                .catch((error) => {
+                  console.error('Error:', error);
+                  this.setState({response2:simulatedResponse.data})
+                });
+        } else {
+            console.log("fetching more drawings")
+            this.setState({response1:this.state.response2})
+            fetch("https://baron-von-tessan-backend.herokuapp.com/api/v1/random-drawings/"+number)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.drawing_data);
+                  // console.log('Success:', data.success);
+                  // let backgroundDrawings = []
+                  //     for (let i = 0; i < data.drawing_data.length; i++){
+                  //         const drawing = data.drawing_data[i].vertices
+                  //         backgroundDrawings.push(drawing)
+                  //     this.setState({backgroundDrawingData:backgroundDrawings})
+                  // }
+                  this.setState({response2:data.drawing_data})
+                })
+                .catch((error) => {
+                  console.error('Error:', error);
+                  this.setState({response2:simulatedResponse.data})
+                });
+        }
     }
     handleSubmitDrawing(drawingData) {this.setState({drawingData:drawingData});console.log(drawingData)}
     handleSubmitDescription(drawingDescription){
