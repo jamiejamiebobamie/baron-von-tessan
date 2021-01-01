@@ -78,7 +78,7 @@ class App extends Component {
     handleSubmitDescription(drawingDescription){
         if (drawingDescription){
             if (drawingDescription.length && drawingDescription !== "I drew a..."
-                && this.state.drawingData){
+                && this.state.drawingData.length){
                 this.setState({drawingDescription:drawingDescription})
                 // send drawing and description to backend
 
