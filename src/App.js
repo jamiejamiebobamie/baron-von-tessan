@@ -26,6 +26,11 @@ class App extends Component {
             // binding 'this' isn't necessary for callbacks.
         this.SketchWrapper = new Sketch(this)
         this.Sketch = this.SketchWrapper.sketch;
+        // backend often requires time to wake up in order to return response.
+            // sometimes this takes as long as 30 seconds.
+        // initialize drawing data with simulated data while user waits for response.
+        this.setState({response1:simulatedResponse.data})
+        this.setState({response2:simulatedResponse.data})
         this.fetchDrawings(8)
         setTimeout(()=>{
             this.fetchDrawings(8)
