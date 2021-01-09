@@ -21,12 +21,6 @@ export default class SlideshowView {
             this.timeOutVar = setTimeout(()=>{this.addCharacterToDialogString(REACT_APP)},45)
         }
         else {
-            // this.compositeBoolean.allCharsAdded = true;
-            // if (this.compositeBoolean.allCharsAdded && this.compositeBoolean.allStrokesAdded){
-            //     // set both to false to stop other method from running logic
-            //     this.compositeBoolean = {allCharsAdded:false, allStrokesAdded:false}
-            //
-            // }
             this.allCharsAdded = true;
             clearTimeout(this.timeOutVar)
             console.log('lolololo',this.allCharsAdded)
@@ -92,12 +86,10 @@ export default class SlideshowView {
         this.drawing.setFill(true)
         this.drawing.setSubmittedStrokes(REACT_APP.state.response1[this.responseIndex].vertices)
         this.drawing.submittedStrokeIndex = strokeIndex;
-        // this.drawing.redrawStrokes();
 
         let beginRedrawingStrokesAndAddingCharsFunc = () => {
             this.drawing.setSubmittedStrokeIndex(0)
             this.charIndex = 0
-            // this.addCharacterToDialogString(REACT_APP)
             let redrawStrokes = (timeOutVar) => {
                 if (this.drawing.drawingHasBeenDrawn){
                     // hardcoding five drawings to be show.
@@ -132,17 +124,7 @@ export default class SlideshowView {
                         // then loop if this.displayDrawingSpace.loop
                         // is set to true otherwise return.
                     let lengthOfTimeForReading;
-                    // if (REACT_APP.state.response){
-                    //     if (this.responseIndex<REACT_APP.state.response.length){
-                    //         lengthOfTimeForReading = REACT_APP.state.response[this.responseIndex].descriptionData.length*75
-                    //         // max five seconds to read.
-                    //         lengthOfTimeForReading = lengthOfTimeForReading < 1500?lengthOfTimeForReading: 1500;
-                    //         // min seconds to read.
-                    //         lengthOfTimeForReading = lengthOfTimeForReading < 850?850:lengthOfTimeForReading;
-                    //     }
-                    // }
                     lengthOfTimeForReading = 1500
-                    // console.log(lengthOfTimeForReading,REACT_APP.state.response[this.responseIndex].description,REACT_APP.state.response[this.responseIndex].descriptionData.length)
                     timeOutVar = setTimeout(redrawStrokes, lengthOfTimeForReading,timeOutVar);
                 } else {
                     console.log('yayayay')
@@ -170,8 +152,6 @@ export default class SlideshowView {
         parameters = {p:p,objectToMirror:dialog,x:x,y:y,width:width,height:height,wildcard:{text:text,fontSize:fontSize}}
         this.dialog = new TextBox(parameters)
         this.dialog.setFill(true)
-        // let fontSize = 40
-        // this.dialog.setFontSize(fontSize)
 
         if (this.charIndex>=REACT_APP.state.response1[this.responseIndex].vertices.length){
             let allOfDialog = REACT_APP.state.response1[this.responseIndex].vertices

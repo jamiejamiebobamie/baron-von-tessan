@@ -14,8 +14,8 @@ Users can draw new drawings as well as view and like previously submitted drawin
 
 The backend was built using Flask and MongoDB.
 
-I experimented with an animate drawings feature that allows users to draw a drawing and then select portions of their drawing to "redraw". The user can watch the selected portion interpolate from [the orginal position to the new one](https://www.youtube.com/watch?v=WJQoUw7dcF4) .
+I experimented with an animate drawings feature that allows users to draw a drawing and then select portions of their drawing to "redraw". The user can watch the selected portion interpolate from [the orginal position to the new one](https://www.youtube.com/watch?v=WJQoUw7dcF4).
 
 https://baron-von-tessan.herokuapp.com
 
-Note: The site may be down due to too much traffic. (It is hosted on Heroku using the free-tier, which only allows so much traffic across my apps per month.)
+Note: If it's towards the end of the month and the site is down, please check back next month. (It is hosted on Heroku using the free-tier, which only allows so much traffic across all of my apps per month...)

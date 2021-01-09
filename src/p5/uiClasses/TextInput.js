@@ -1,6 +1,5 @@
 import TextBox from '../uiClasses/TextBox'
 import Container from '../uiClasses/Container'
-import Mirror from '../uiClasses/Mirror'
 
 export default class TextInput extends TextBox{
     constructor(parameterObject){
@@ -47,7 +46,7 @@ export default class TextInput extends TextBox{
         const ENTER = keyCode === 13
         const SPACE = keyCode === 32
         this.clearFillerText()
-        
+
         if (this.isMobile){
             this.color = this.p.color(244,129,130)
             setTimeout(()=>{

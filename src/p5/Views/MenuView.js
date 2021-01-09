@@ -104,9 +104,7 @@ export default class MenuView {
         }
         if (w>1100){
             for (let i = 0; i < 2; i++){
-                let testWidth = w<h?w/6:h/6;//w<h? Math.random()*(w/4-w/5+1)+w/4:Math.random()*(h/4-h/5+1)+h/5
-                // Math.random() * (max - min + 1) + min
-
+                let testWidth = w<h?w/6:h/6;
                 let vertices = [
                     {offsetX:w-testWidth-testWidth,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
                     {offsetX:Math.random()*w/10,offsetY:Math.random()*(h-testWidth-h/4+1)+h/4},
@@ -149,7 +147,6 @@ export default class MenuView {
             for (let i = 0; i < objectsTotest.length; i++){
                 let drawingHasBeenDrawn = false
                 let strokeIndex = 0
-                // parameters = {p:p,w:w,h:h,objectToMirror:objectsTotest[i],x:x,y:y,width:width,height:height,wildcard:wildcard,lerpSpeed:.01}//,color:"lightgrey"}
                     if (i===0){
                         if (previousUI){
                             if (previousUI.backgroundDrawing1){
@@ -168,12 +165,6 @@ export default class MenuView {
                         this.backgroundDrawing1 = new DisplayDrawingContainer(parameters)
                         this.backgroundDrawing1.setLengthOfDrawingSquare(objectsTotest[i].width)
                         this.backgroundDrawing1.setFill(true)
-
-                        // this.setState({response:data.drawing_data})
-
-                        //         const drawing = data.drawing_data[i].vertices
-                        //         backgroundDrawings.push(drawing)
-                        //     this.setState({backgroundDrawingData:backgroundDrawings})
 
                         this.backgroundDrawing1.setSubmittedStrokes(REACT_APP.state.response1[i].vertices)
 
@@ -339,11 +330,6 @@ export default class MenuView {
                     this.justDrawButton.mouseClickfunc = () => {setTimeout(()=>{changeView(4,6)},250)};
                     this.justDrawButton.setString("DRAW");
                     this.justDrawButton.setFontSize(fontSize);
-
-                    // if(REACT_APP.state.isMobile){
-                    //     let fontSize = w>h?objectToMirror.height/2.5:objectToMirror.height/4;
-                    //     this.justDrawButton.setFontSize(fontSize);
-                    // }
                     _ui.push(this.justDrawButton);
                 } else if (i === 3) {
                     // 3: I want to see what other people drew!
@@ -371,10 +357,6 @@ export default class MenuView {
                     this.justWatchDrawingsButton.mouseClickfunc = () => {setTimeout(()=>{changeView(8,9)},250)};
                     this.justWatchDrawingsButton.setString("VIEW DRAWINGS");
                     this.justWatchDrawingsButton.setFontSize(fontSize);
-
-                    // if(REACT_APP.state.isMobile){
-                    //     let fontSize = w>h?objectToMirror.height/2.5:objectToMirror.height/4;
-                    // }
                     _ui.push(this.justWatchDrawingsButton);
                 }
                 else if (i === 4) {
@@ -403,10 +385,6 @@ export default class MenuView {
                    this.justWannaJudgePplButton.mouseClickfunc = () => {setTimeout(()=>{changeView(7,8)},250)};
                    this.justWannaJudgePplButton.setString("LIKE DRAWINGS");
                    this.justWannaJudgePplButton.setFontSize(fontSize);
-
-                   // if(REACT_APP.state.isMobile){
-                   //     let fontSize = w>h?objectToMirror.height/2.5:objectToMirror.height/4;
-                   // }
                    _ui.push(this.justWannaJudgePplButton);
                }
             }
@@ -422,7 +400,6 @@ export default class MenuView {
             // (only an issue if the user resizes the window after
             // 'addCharacterToTitle' has finished.)
         if (this.titleTextIndex>=this.titleText.length){
-            console.log("heheheheheheh")
             let allOfDialog = this.titleText;
             this.title.setString(allOfDialog);
         }

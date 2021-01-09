@@ -75,8 +75,8 @@ export default class UIElement{
         // depending on the UIElement this offset is applied to the top-left
             // corner (containers, sliders, icons, views) or to the middle of the
             // UIElement (buttons).
-        offsetX = offsetX != undefined ? offsetX : 0;
-        offsetY = offsetY != undefined ? offsetY : 0;
+        offsetX = offsetX !== undefined ? offsetX : 0;
+        offsetY = offsetY !== undefined ? offsetY : 0;
         // the orientation of the UIElement.
             // true for row orientation
             // false for column orientation.
@@ -84,7 +84,7 @@ export default class UIElement{
             // it is true if the screen's width is less than it's height
             // (portrait mode) and false if the screen's width is greater than its
             // height (landscape mode).
-        this.row = row != undefined ? row : this.windowWidth < this.windowHeight;
+        this.row = row !== undefined ? row : this.windowWidth < this.windowHeight;
         // given the relevant fields, positions the UIElement on the canvas.
             // depends on: the orientation, the parent's bounds and placement,
             // and the number of siblings and index of the UIElement.

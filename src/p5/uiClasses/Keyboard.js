@@ -1,9 +1,5 @@
-// import TextBox from './TextBoxContainer'
-import Container from './Container'
 import KeyboardKey from './KeyboardKey'
 import Mirror from './Mirror'
-import Wireframe from './Wireframe'
-
 
 export default class Keyboard extends Mirror{
     constructor(parameterObject){
@@ -22,7 +18,6 @@ export default class Keyboard extends Mirror{
                 }
             }
         }
-
         let count = 0
         let parameters;
         let keyboardButton;
@@ -30,23 +25,6 @@ export default class Keyboard extends Mirror{
         {
             for (let i = 0; i < this.keyLetters.length; i++){
                 for (let j = 0; j < this.keyLetters[i].length; j++){
-
-                    // parameters = {
-                    //                    p:this.p,
-                    //                    windowWidth:this.windowWidth,
-                    //                    windowHeight:this.windowHeight,
-                    //                    parent:this.rowsOfKeys[i],
-                    //                    len:this.keyLetters[i].length,
-                    //                    index:j,
-                    //                    row:false,
-                    //                    // color:"white"
-                    //               }
-                    // let wildcard = {fontSize:submitButton.width/5, REACT_APP:REACT_APP,text:textInput}
-
-                    // 012 0
-                    // 345 1
-                    // 678 2
-                    // 3*3
                     if (parameterObject.previousUI){
                         if (parameterObject.previousUI.keyBoard){
                             if (parameterObject.previousUI.keyBoard.rowsOfKeys){
@@ -59,7 +37,7 @@ export default class Keyboard extends Mirror{
                             }
                         }
                     }
-                    parameters = {p:this.p,objectToMirror:this.keys[count++],x:x,y:y,width:width,height:height}//,x:x,y:y,width:width,height:height,wildcard:wildcard}
+                    parameters = {p:this.p,objectToMirror:this.keys[count++],x:x,y:y,width:width,height:height}
                     keyboardButton = new KeyboardKey(parameters)
                     keyboardButton.setClickType(doOnce)
                     keyboardButton.letter = this.keyLetters[i][j]
@@ -70,19 +48,9 @@ export default class Keyboard extends Mirror{
                     this.rowsOfKeys.push(keyboardButton)
                 }
             }
-            // let controlButtons = ["SUBMIT","SPACE","BACKSPACE"]
             let controlButtons = ["SPACE","BACKSPACE"]
 
             for (let i = 0; i < controlButtons.length; i++){
-                // parameters = {
-                //                p:this.p,
-                //                windowWidth:this.windowWidth,
-                //                windowHeight:this.windowHeight,
-                //                parent:this.rowsOfKeys[3],
-                //                len:controlButtons.length,
-                //                index:i,
-                //                row:false,
-                //              }        if (previousUI){
                 if (parameterObject.previousUI){
                     if (parameterObject.previousUI.keyBoard){
                         if (parameterObject.previousUI.keyBoard.rowsOfKeys){
@@ -95,12 +63,10 @@ export default class Keyboard extends Mirror{
                         }
                     }
                 }
-                parameters = {p:this.p,objectToMirror:this.keys[count++],x:x,y:y,width:width,height:height}//,x:x,y:y,width:width,height:height,wildcard:wildcard}
+                parameters = {p:this.p,objectToMirror:this.keys[count++],x:x,y:y,width:width,height:height}
                 keyboardButton = new KeyboardKey(parameters)
-                // parameters = {p:this.p,objectToMirror:this.keys[count++]}//,x:x,y:y,width:width,height:height,wildcard:wildcard}
                 keyboardButton = new KeyboardKey(parameters)
                 keyboardButton.setClickType(doOnce)
-
                 keyboardButton.letter = controlButtons[i]
                 keyboardButton.setKeyLetterToDisplay(keyboardButton.letter)
                 keyboardButton.setFontSize(this.object.width/30)
@@ -115,8 +81,6 @@ export default class Keyboard extends Mirror{
     }
     searchClickedKey(){
         let newChar = undefined
-        // first 4 items of this.rowsOfKeys are the row containers.
-            // skip.
         for (let i = 0; i < this.rowsOfKeys.length; i++){
             if(this.rowsOfKeys[i].testForClick()){
                 newChar = this.rowsOfKeys[i].pressKey();
@@ -141,10 +105,6 @@ export default class Keyboard extends Mirror{
             }
         }
     }
-    // performClickFunctionality(){
-    //     super.performClickFunctionality()
-    //
-    // }
     draw(){
         super.draw()
         for (let i = 0; i < this.rowsOfKeys.length; i++){

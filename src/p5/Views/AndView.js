@@ -65,16 +65,12 @@ export default class SlideshowView {
 
         let x,y,width,height;
         let drawingHasBeenDrawn = false
-        let strokeIndex = 0;
         if (previousUI){
             if (previousUI.drawing){
                 x = previousUI.drawing.x;
                 y = previousUI.drawing.y;
                 width = previousUI.drawing.width;
                 height = previousUI.drawing.height;
-                // drawingHasBeenDrawn = windowResized ? previousUI.drawing.drawingHasBeenDrawn : false;
-                // clearTimeout(previousUI.drawing.timeOut)
-                // strokeIndex = previousUI.drawing.submittedStrokeIndex
             }
         }
         wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
@@ -82,48 +78,6 @@ export default class SlideshowView {
         this.drawing = new DisplayDrawingContainer(parameters)
         this.drawing.setLengthOfDrawingSquare(drawing.width)
         this.drawing.setFill(true)
-        // this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
-        // this.drawing.submittedStrokeIndex = strokeIndex;
-        // this.drawing.redrawStrokes();
-
-
-        // let beginRedrawingStrokesAndAddingCharsFunc = () => {
-        //     this.drawing.setSubmittedStrokeIndex(0)
-        //     this.charIndex = 0
-        //     this.addCharacterToDialogString(REACT_APP)
-        //     let redrawStrokes = (timeOutVar) => {
-        //         if (this.drawing.drawingHasBeenDrawn){
-        //             if (this.drawing.loop){
-        //                 this.drawing.drawingHasBeenDrawn = false;
-        //                 this.drawing.submittedStrokeIndex = 0;
-        //                 clearTimeout(timeOutVar)
-        //             } else {
-        //                 if (this.responseIndex < REACT_APP.state.response.length-1){
-        //                     this.drawing.drawingHasBeenDrawn = false;
-        //                     this.drawing.submittedStrokeIndex = 0;
-        //                     this.charIndex = 0
-        //                     this.addCharacterToDialogString(REACT_APP)
-        //                     this.responseIndex += 1
-        //                     this.drawing.setSubmittedStrokes(REACT_APP.state.response[this.responseIndex].drawingData)
-        //                 } else {
-        //                     changeView();
-        //                     return;
-        //                 }
-        //             }
-        //         }
-        //         if (this.drawing.submittedStrokeIndex < this.drawing.submittedStrokes.length) {
-        //             this.drawing.submittedStrokeIndex += 1
-        //             timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
-        //         } else {
-        //             this.drawing.drawingHasBeenDrawn = true;
-        //             // pause three seconds to display drawing.
-        //                 // then loop if this.displayDrawingSpace.loop
-        //                 // is set to true otherwise return.
-        //             timeOutVar = setTimeout(redrawStrokes, 3000,timeOutVar);
-        //         }
-        //     }
-        //     redrawStrokes();
-        // }
         _ui.push(this.drawing)
 
         let text = "";
@@ -153,9 +107,7 @@ export default class SlideshowView {
         }
 
         _ui.push(this.dialog)
-
-
-
+        
         return _ui;
     }
 }

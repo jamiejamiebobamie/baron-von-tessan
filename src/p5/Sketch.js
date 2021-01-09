@@ -1,14 +1,12 @@
 import Menu from './Views/MenuView';
 import IntroView from './Views/IntroView';
 import SlideshowView from './Views/SlideshowView';
+import AndView from './Views/AndView';
 import DrawingView from './Views/DrawingView';
 import EnterDescriptionView from './Views/EnterDescriptionView';
 import PickBestDrawingView from './Views/PickBestDrawingView';
 import OutroView from './Views/OutroView';
-import AndView from './Views/AndView';
-// import AnimateDrawingView from './Views/AnimateDrawingView';
 import ViewDrawingsView from './Views/ViewDrawingsView';
-
 
 export default class Sketch {
     constructor(app){
@@ -27,18 +25,18 @@ export default class Sketch {
     }
     shuffleSimulatedData(){
         let randomIndex, storedValue;
-        let copiedResponse = this.REACT_APP.state.response
+        let copiedResponse = this.REACT_APP.state.response1
         for (let i = copiedResponse.length-1; i >= 0; i--){
             randomIndex = Math.floor(Math.random() * copiedResponse.length)
             storedValue = copiedResponse[randomIndex];
             copiedResponse[randomIndex] = copiedResponse[i]
             copiedResponse[i] = storedValue;
-
         }
         this.REACT_APP.setState({response:copiedResponse})
     }
     setViews(){
         this.views = [];
+
         let view;
         view = new Menu();
         this.views.push(view);
@@ -54,28 +52,22 @@ export default class Sketch {
         this.views.push(view);
         view = new OutroView();
         this.views.push(view);
-
         view = new PickBestDrawingView();
         this.views.push(view);
-        //testing.
         view = new ViewDrawingsView();
         this.views.push(view);
 
-        // testing.
-        // view = new AnimateDrawingView();
-        // this.views.push(view);
-
         this.lengthOfViews = this.views.length
-        // reset the state variables of the app.
-            // a method side effect, but best place to do this.
         this.REACT_APP.resetStateVariables()
+
         // shuffle simulatedData.
         if (this.REACT_APP.state.isUsingSimulatedData){
             this.shuffleSimulatedData()
         }
     }
-    // lengthOfViews parameter allows early exit from site if user chooses
-        // one of the options on the menu view other than 'ENTER SITE'
+    // lengthOfViews parameter allows early exit from view-flow if user chooses
+        // one of the options on the menu view other than 'ENTER SITE'.
+        // othewise views proceed in sequence.
     changeView(desiredViewIndex,lengthOfViews){
         if (lengthOfViews !== undefined){
             this.lengthOfViews = lengthOfViews;
@@ -173,7 +165,7 @@ export default class Sketch {
                 // when the view changes, reset the mouse location
                     // to be at the top left corner, so button mouseOver isn't
                     // triggered by previous touch event.
-                // DOES NOT move the user's cursor.
+                // DOES NOT move the user's cursor on desktop
                 p.mouseX = 0;
                 p.mouseY = 0;
             }

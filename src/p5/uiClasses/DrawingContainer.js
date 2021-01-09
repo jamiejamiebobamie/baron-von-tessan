@@ -1,4 +1,3 @@
-import Container from './Container'
 import Mirror from './Mirror'
 
 export default class DrawingContainer extends Mirror{

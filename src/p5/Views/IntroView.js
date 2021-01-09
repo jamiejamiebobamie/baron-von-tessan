@@ -1,7 +1,7 @@
 import Wireframe from '../uiClasses/Wireframe';
 import DisplayDrawingContainer from '../uiClasses/DisplayDrawingContainer';
 import TextBox from '../uiClasses/TextBox'
-import baronData from '../baronDrawingDataReduced'
+import baronData from '../simulatedData/baronDrawingDataReduced'
 
 export default class IntroView {
     constructor(){
@@ -57,7 +57,6 @@ export default class IntroView {
                            wildcard:wildcard,
                          }
         let topTwoThirdsOfView = new Wireframe(parameters)
-        // _ui.push(topTwoThirdsOfView)
 
         wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
         parameters = { p:p,
@@ -70,9 +69,6 @@ export default class IntroView {
                            index:0,
                            parent:topTwoThirdsOfView,
                          }
-        // let topTwoThirdsOfViewSplitInTwoFirstHalf = new Wireframe(parameters)
-        // _ui.push(topTwoThirdsOfViewSplitInTwoFirstHalf)
-
         wildcard = {shrinkAmountWidth:1,shrinkAmountHeight:1}
         parameters = { p:p,
                             windowWidth: w,
@@ -84,12 +80,6 @@ export default class IntroView {
                            index:1,
                            parent:topTwoThirdsOfView,
                          }
-        // let topTwoThirdsOfViewSplitInTwoSecondHalf = new Wireframe(parameters)
-        // _ui.push(topTwoThirdsOfViewSplitInTwoSecondHalf)
-
-        //
-        // let topThirdOfView = wireFrameElements[0]
-        // let middleThirdOfScreen =  wireFrameElements[1];
         let bottomThirdOfScreen = wireFrameElements[2];
 
         let drawingParent = topTwoThirdsOfView;
@@ -103,7 +93,6 @@ export default class IntroView {
                            parent:drawingParent,
                          }
         let drawing = new Wireframe(parameters)
-        // _ui.push(drawing)
 
         wildcard = {shrinkAmountWidth:.9,shrinkAmountHeight:.9}
         parameters = { p:p,
@@ -115,7 +104,6 @@ export default class IntroView {
                            parent:bottomThirdOfScreen,
                          }
         let dialog = new Wireframe(parameters)
-        // _ui.push(dialog)
 
         /// ---- ******** END WIREFRAME OBJECTS
 

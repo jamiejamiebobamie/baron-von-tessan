@@ -6,19 +6,12 @@ export default class Mirror extends Container{
 
         if (parameterObject){
             this.object = parameterObject.objectToMirror !== undefined ? parameterObject.objectToMirror : undefined;
-            // this.x = parameterObject.x === undefined ? parameterObject.objectToMirror.x : parameterObject.x;
-            // this.y = parameterObject.y === undefined ? parameterObject.objectToMirror.y : parameterObject.y ;
-            // this.width = parameterObject.width === undefined ? parameterObject.objectToMirror.width : this.width;
-            // this.height = parameterObject.height === undefined ? parameterObject.objectToMirror.height : this.height;
-            // this.delta = parameterObject.delta ? parameterObject.delta : 1;
-            // if (this.object !== this){
-                this.x = parameterObject.x === undefined ? parameterObject.objectToMirror.x : parameterObject.x;
-                this.y = parameterObject.y === undefined ? parameterObject.objectToMirror.y : parameterObject.y ;
-                this.width = parameterObject.width === undefined ? parameterObject.objectToMirror.width : this.width;
-                this.height = parameterObject.height === undefined ? parameterObject.objectToMirror.height : this.height;
-            // }
-                this.delta = parameterObject.delta ? parameterObject.delta : 1;
-                this.lerpSpeed = parameterObject.lerpSpeed ? parameterObject.lerpSpeed : .3;
+            this.x = parameterObject.x === undefined ? parameterObject.objectToMirror.x : parameterObject.x;
+            this.y = parameterObject.y === undefined ? parameterObject.objectToMirror.y : parameterObject.y ;
+            this.width = parameterObject.width === undefined ? parameterObject.objectToMirror.width : this.width;
+            this.height = parameterObject.height === undefined ? parameterObject.objectToMirror.height : this.height;
+            this.delta = parameterObject.delta ? parameterObject.delta : 1;
+            this.lerpSpeed = parameterObject.lerpSpeed ? parameterObject.lerpSpeed : .3;
         }
     }
     lerpX(){
@@ -45,14 +38,10 @@ export default class Mirror extends Container{
         this.object = object
     }
     draw(){
-        // this.p.fill("pink")
-        // this.p.rect(this.x, this.y, this.width, this.height)
         super.draw()
-        // if (this.screenHasSettled){
-            this.lerpX()
-            this.lerpY()
-            this.lerpWidth()
-            this.lerpHeight()
-        // }
+        this.lerpX()
+        this.lerpY()
+        this.lerpWidth()
+        this.lerpHeight()
     }
 }

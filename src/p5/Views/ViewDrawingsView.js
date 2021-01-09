@@ -1,7 +1,4 @@
 import Wireframe from '../uiClasses/Wireframe';
-// import DrawingContainer from '../uiClasses/DrawingContainer';
-// import DisplayDrawingContainer from '../uiClasses/DisplayDrawingContainer';
-// import TextBox from '../uiClasses/TextBox'
 import DisplayDrawingContainer from '../uiClasses/DisplayDrawingContainer';
 import TextBox from '../uiClasses/TextBox'
 
@@ -36,12 +33,6 @@ export default class DrawingView {
             this.timeOutVarForCharacters = setTimeout(()=>{this.addCharacterToDialogString(REACT_APP)},45)
         }
         else {
-            // this.compositeBoolean.allCharsAdded = true;
-            // if (this.compositeBoolean.allCharsAdded && this.compositeBoolean.allStrokesAdded){
-            //     // set both to false to stop other method from running logic
-            //     this.compositeBoolean = {allCharsAdded:false, allStrokesAdded:false}
-            //
-            // }
             this.allCharsAdded = true;
             clearTimeout(this.timeOutVarForCharacters)
             return
@@ -76,13 +67,12 @@ export default class DrawingView {
                                 windowWidth: w,
                                 windowHeight: h,
                                 color: color,
-                                row:true,//w<h,
+                                row:true,
                                 len:5,
                                 index:i,
                                 wildcard:wildcard,
                              }
                     layoutBlock = new Wireframe(params)
-                    // _ui.push(layoutBlock)
                     wireframeElements.push(layoutBlock)
                 }
                 // top buttons
@@ -102,7 +92,6 @@ export default class DrawingView {
                                 offsetY:-wireframeElements[0].height/4,
                              }
                     layoutBlock = new Wireframe(params)
-                    // _ui.push(layoutBlock)
                     if (i===0) {
                         autoPlayButton = layoutBlock;
                     } else if (i===1){
@@ -128,7 +117,6 @@ export default class DrawingView {
                                 offsetY:wireframeElements[4].height/4,
                              }
                     layoutBlock = new Wireframe(params)
-                    // _ui.push(layoutBlock)
 
                     if (i===0){
                         backToMenuButton = layoutBlock;
@@ -153,8 +141,6 @@ export default class DrawingView {
                             offsetY: h/10,
                          }
                 drawing = new Wireframe(params)
-                // _ui.push(layoutBlock)
-                // wireframeElements.push(drawing)
                 // description
                 wildcard = {shouldBeSquare:false,shrinkAmountWidth:.9,shrinkAmountHeight:.9}
                 params = {
@@ -171,8 +157,6 @@ export default class DrawingView {
 
                          }
                 description = new Wireframe(params)
-                // _ui.push(layoutBlock)
-                // wireframeElements.push(description)
             // else if desktop / laptop
             } else {
                 for (let i = 0; i < 16; i++){
@@ -189,7 +173,6 @@ export default class DrawingView {
                                 wildcard:wildcard,
                              }
                     layoutBlock = new Wireframe(params)
-                    // _ui.push(layoutBlock)
                     wireframeElements.push(layoutBlock)
                 }
                 // buttons
@@ -208,7 +191,6 @@ export default class DrawingView {
                                 parent:wireframeElements[0]
                              }
                     layoutBlock = new Wireframe(params)
-                    // _ui.push(layoutBlock)
                     if (i===0) {
                         autoPlayButton = layoutBlock;
                     } else if (i===1){
@@ -243,8 +225,6 @@ export default class DrawingView {
                                    wildcard:wildcard,
                                  }
                 drawing = new Wireframe(params)
-                // _ui.push(layoutBlock)
-                // wireframeElements.push(layoutBlock)
                 // description
                 wildcard = {shouldBeSquare:false,shrinkAmountWidth:.9,shrinkAmountHeight:.9}
                 params = {
@@ -259,9 +239,6 @@ export default class DrawingView {
                             offsetY:(h-h*.9)/4,
                          }
                 description = new Wireframe(params)
-                // _ui.push(layoutBlock)
-                // wireframeElements.push(layoutBlock)
-
             }
         // if portrait
         } else {
@@ -281,7 +258,6 @@ export default class DrawingView {
                                 wildcard:wildcard,
                              }
                     layoutBlock = new Wireframe(params)
-                    // _ui.push(layoutBlock)
                     wireframeElements.push(layoutBlock)
                 }
                 // top buttons
@@ -301,7 +277,6 @@ export default class DrawingView {
                                 offsetY:-wireframeElements[0].height/8,
                              }
                     layoutBlock = new Wireframe(params)
-                    // _ui.push(layoutBlock)
                     if (i===0) {
                         autoPlayButton = layoutBlock;
                     } else if (i===1){
@@ -327,8 +302,6 @@ export default class DrawingView {
                                 offsetY:wireframeElements[7].height/8,
                              }
                     layoutBlock = new Wireframe(params)
-                    // _ui.push(layoutBlock)
-
                     if (i===0){
                         backToMenuButton = layoutBlock;
                     } else if (i===1){
@@ -350,8 +323,6 @@ export default class DrawingView {
                             offsetY: h/6,
                          }
                 drawing = new Wireframe(params)
-                // _ui.push(layoutBlock)
-                // wireframeElements.push(layoutBlock)
                 // description
                 wildcard = {shouldBeSquare:false,shrinkAmountWidth:.9,shrinkAmountHeight:.9}
                 params = {
@@ -359,15 +330,13 @@ export default class DrawingView {
                             windowWidth: w,
                             windowHeight: h,
                             color: "red",
-                            row:true,//w<h,
+                            row:true,
                             wildcard:wildcard,
                             parent:wireframeElements[5],
-                            // width: w/2,
                             height: h/4,
                             offsetY: h/10,
                          }
                 description = new Wireframe(params)
-                // _ui.push(layoutBlock)
                 wireframeElements.push(description)
             // else if desktop / laptop
             } else {
@@ -385,7 +354,6 @@ export default class DrawingView {
                                 wildcard:wildcard,
                              }
                     layoutBlock = new Wireframe(params)
-                    // _ui.push(layoutBlock)
                     wireframeElements.push(layoutBlock)
                 }
                 // top buttons
@@ -404,7 +372,6 @@ export default class DrawingView {
                                 parent:wireframeElements[0]
                              }
                     layoutBlock = new Wireframe(params)
-                    // _ui.push(layoutBlock)
                     if (i===0){
                         backToMenuButton = layoutBlock;
                     } else if (i===1){
@@ -429,8 +396,6 @@ export default class DrawingView {
                                 parent:wireframeElements[1]
                              }
                     layoutBlock = new Wireframe(params)
-                    // _ui.push(layoutBlock)
-
                     if (i===0) {
                         autoPlayButton = layoutBlock;
                     } else if (i===1){
@@ -452,7 +417,6 @@ export default class DrawingView {
                             offsetY: h/5,
                          }
                 drawing = new Wireframe(params)
-                // _ui.push(layoutBlock)
                 wireframeElements.push(drawing)
                 // description
                 wildcard = {shouldBeSquare:false,shrinkAmountWidth:.9,shrinkAmountHeight:.9}
@@ -461,16 +425,13 @@ export default class DrawingView {
                             windowWidth: w,
                             windowHeight: h,
                             color: "red",
-                            row:true,//w<h,
+                            row:true,
                             wildcard:wildcard,
                             parent:wireframeElements[5],
-                            // width: w/2,
                             height: h/3,
                             offsetY: h/2,
                          }
                 description = new Wireframe(params)
-                // _ui.push(layoutBlock)
-                // wireframeElements.push(layoutBlock)
             }
         }
         //// ---- - - - - - - - -
@@ -512,7 +473,6 @@ export default class DrawingView {
         this.drawing.setSubmittedStrokes(REACT_APP.state.response1[this.responseIndex].vertices)
         this.drawing.submittedStrokeIndex = strokeIndex;
         this.drawing.loop = loop
-        // this.drawing.redrawStrokes();
 
         let beginRedrawingStrokesAndAddingCharsFunc = () => {
             clearTimeout(this.timeOutVarForStrokes)
@@ -583,7 +543,7 @@ export default class DrawingView {
             }
             this.charIndex = previousUI.charIndex;
         }
-        let fontSize = drawing.width/10>description.width/10?description.width/10:drawing.width/10//w>h ? description.width/10 : description.width/10 ;
+        let fontSize = drawing.width/10>description.width/10?description.width/10:drawing.width/10;
         wildcard = {text:text,fontSize:fontSize}//,numberOfLines:4}
         params = {p:p,objectToMirror:description,x:x,y:y,width:width,height:height,wildcard:{text:text,fontSize:fontSize}}
         this.dialog = new TextBox(params)
@@ -652,7 +612,6 @@ export default class DrawingView {
             _ui.push(this.buttons[i])
         }
         // AUTOPLAY
-        // this is still in progress.
         this.buttons[0].mouseClickfunc = () => {
             this.autoplay=!this.autoplay;
             if (this.autoplay){
@@ -683,7 +642,6 @@ export default class DrawingView {
             }
         };
         // PREDRAW
-        // this is still in progress.
         this.buttons[2].mouseClickfunc = () => {
             this.predraw=!this.predraw;
             if (this.predraw){
@@ -700,7 +658,6 @@ export default class DrawingView {
             setTimeout(()=>{changeView(0)},250)
         };
         // PREV
-        // this is still in progress.
         this.buttons[4].mouseClickfunc = () => {
             if (this.responseIndex>=1){
                 this.responseIndex--;
@@ -722,7 +679,6 @@ export default class DrawingView {
             }
         };
         // NEXT
-        // this is still in progress.
         this.buttons[5].mouseClickfunc = () => {
             if (this.responseIndex<REACT_APP.state.response1.length-1){
                 this.responseIndex++;
@@ -744,7 +700,7 @@ export default class DrawingView {
             if (this.predraw){
                 this.addCharacterToDialogString(REACT_APP)
             }
-        };;
+        };
 
         return _ui;
     }
