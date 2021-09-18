@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { isMobile } from "react-device-detect";
 import Sketch from "./p5/Sketch.js";
 import "./App.css";
@@ -6,30 +6,35 @@ import simulatedResponse from "./p5/simulatedData/simulatedResponse2";
 
 const p5 = require("p5");
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      drawingDescription: "",
-      drawingData: [],
-      response1: simulatedResponse.data,
-      isMobile: isMobile,
-      flaggedIndices: [],
-      isUsingSimulatedData: true,
-      shouldFetchData: false,
-      isFetchingData: false
-    };
-    this.myRef = React.createRef();
-    // passing in a reference to the app's scope.
-    // binding 'this' isn't necessary for callbacks.
-    this.SketchWrapper = new Sketch(this);
-    this.Sketch = this.SketchWrapper.sketch;
-    // this.fetchDrawings(6);
-  }
-  fetchDrawings(number) {
-    this.setState({ shouldFetchData: false });
+export const App = () => {
+  const [state, setState] = useState({
+    drawingDescription: "",
+    drawingData: [],
+    response1: simulatedResponse.data,
+    isMobile: isMobile,
+    flaggedIndices: [],
+    isUsingSimulatedData: true,
+    // SketchWrapper: new Sketch(this),
+    Sketch: undefined,
+    shouldFetchDrawings: false,
+  });
+  console.log(this)
+  const myRef = useRef();
 
-    this.setState({ isFetchingData: true });
+  useEffect(() => {
+    // const _Sketch = this.SketchWrapper.sketch;
+    // setState({ ...state, Sketch:_Sketch });
+    // const myP5 = new p5(_Sketch, myRef.current);
+    // console.log(_Sketch)//,myP5)
+    fetchDrawings(6);
+  }, []);
+  useEffect(() => {
+    if (state.shouldFetchDrawings) {
+      fetchDrawings(6);
+      setState({ ...state, shouldFetchDrawings: false });
+    }
+  }, [state.shouldFetchDrawings]);
+  const fetchDrawings = (number) => {
     const url =
       "https://baron-von-tessan-backend.herokuapp.com/api/v1/random-drawings/" +
       number;
@@ -37,33 +42,31 @@ class App extends Component {
     fetch(url)
       .then(response => response.json())
       .then(data => {
-        this.setState({ response1: data.drawing_data });
-        this.setState({ isUsingSimulatedData: false });
-        this.setState({ isFetchingData: false });
+        setState({ ...state, response1: data.drawing_data });
+        setState({ ...state, isUsingSimulatedData: false });
       })
       .catch(error => {
         console.error("Error:", error);
-        this.setState({ response1: simulatedResponse.data });
-        this.setState({ isUsingSimulatedData: true });
-        this.setState({ isFetchingData: false });
+        setState({ ...state, response1: simulatedResponse.data });
+        setState({ ...state, isUsingSimulatedData: true });
       });
   }
-  handleSubmitDrawing(drawingData) {
-    this.setState({ drawingData: drawingData });
+  const handleSubmitDrawing = drawingData => {
+    setState({ ...state, drawingData: drawingData });
     console.log(drawingData);
-  }
-  handleSubmitDescription(drawingDescription) {
+  };
+  const handleSubmitDescription = drawingDescription => {
     if (drawingDescription) {
       if (
         drawingDescription.length &&
         drawingDescription !== "I drew a..." &&
-        this.state.drawingData.length
+        state.drawingData.length
       ) {
-        this.setState({ drawingDescription: drawingDescription });
+        setState({ ...state, drawingDescription: drawingDescription });
         // send drawing and description to backend
         const data = {
           drawingDescription: drawingDescription,
-          drawingData: this.state.drawingData
+          drawingData: state.drawingData
         };
         console.log("Sending to backend.");
         fetch(
@@ -85,8 +88,8 @@ class App extends Component {
           });
       }
     }
-  }
-  handleSubmitFlaggedIndices(flaggedIndices) {
+  };
+  const handleSubmitFlaggedIndices = flaggedIndices => {
     // send flaggedIndices to backend
     if (flaggedIndices) {
       if (flaggedIndices.length) {
@@ -117,41 +120,25 @@ class App extends Component {
           });
       }
     }
-  }
-  resetStateVariables() {
-    if (this.state) {
-      this.setState({
+  };
+  const resetStateVariables = () => {
+    if (state) {
+      setState({
+        ...state,
         drawingData: [],
         drawingDescription: "",
         flaggedIndices: []
       });
     }
     // Query backend for new data.
-    this.setShouldFetchDataToTrue();
-  }
-  componentDidMount() {
-    // https://p5js.org/reference/#/p5/p5
-    // p5 instance mode: allows React and p5 to interact.
-    this.myP5 = new p5(this.Sketch, this.myRef.current);
-    this.setShouldFetchDataToTrue();
-  }
-  setShouldFetchDataToTrue() {
-    this.setState({ shouldFetchData: true });
-  }
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.shouldFetchData !== this.state.shouldFetchData) {
-      if (this.state.shouldFetchData && !this.state.isFetchingData) {
-        this.fetchDrawings(6);
-      }
-    }
-  }
-  render() {
+    console.log("Queried backend for new data.");
+    fetchDrawings(6);
+  };
     return (
       <div className="App">
-        <div className="sketch-holder" ref={this.myRef}></div>
+        <div className="sketch-holder" ref={myRef}></div>
       </div>
     );
-  }
-}
+};
 
 export default App;

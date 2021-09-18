@@ -1,9 +1,11 @@
 import TextBox from "../uiClasses/TextBox";
+import DrawingContainer from "../uiClasses/DrawingContainer";
 import Wireframe from "../uiClasses/Wireframe";
 import DisplayDrawingContainer from "../uiClasses/DisplayDrawingContainer";
 
 export default class MenuView {
   constructor() {
+    this.drawing = undefined;
     // title ui object
     this.title = undefined;
 
@@ -26,6 +28,30 @@ export default class MenuView {
     this.backgroundDrawing3 = undefined;
     this.backgroundDrawing4 = undefined;
     this.screenHasSettled = false;
+
+    this.buildStroke = this.buildStroke.bind(this);
+    this.clearStrokes = this.clearStrokes.bind(this);
+  }
+  clearStrokes() {
+    if (this.drawing) {
+      if (this.drawing.strokes && !this.drawing.userIsDrawingOrErasing) {
+        this.drawing.strokes = [];
+      }
+    }
+  }
+  buildStroke() {
+    if (this.drawing !== undefined) {
+      if (this.drawing.strokes) {
+        this.drawing.currentStroke.push({
+          x:
+            (this.drawing.p.mouseX - this.drawing.x) /
+            this.drawing.lengthOfDrawingSquare,
+          y:
+            (this.drawing.p.mouseY - this.drawing.y) /
+            this.drawing.lengthOfDrawingSquare
+        });
+      }
+    }
   }
   addCharacterToTitle() {
     if (this.titleTextIndex < this.titleText.length + 1) {
@@ -82,6 +108,18 @@ export default class MenuView {
     let parameters;
     /// ---- ******** BEGIN WIREFRAME OBJECTS
     // wireframe objects are not drawn to screen.
+    wildcard = { shrinkAmountWidth: 1, shrinkAmountHeight: 1 };
+    parameters = {
+      p: p,
+      windowWidth: w,
+      windowHeight: h,
+      // width: w > 800 ? 800 : w
+      width: w > h ? w : h,
+      offsetX: 0, //w > 800 ? (w - 800) / 2 : 0,
+      row: true,
+      wildcard: wildcard
+    };
+    let backgroundDrawingContainter = new Wireframe(parameters);
     wildcard = { shrinkAmountWidth: 1, shrinkAmountHeight: 0.9 };
     parameters = {
       p: p,
@@ -216,11 +254,9 @@ export default class MenuView {
               objectsTotest[i].width
             );
             this.backgroundDrawing1.setFill(true);
-
             this.backgroundDrawing1.setSubmittedStrokes(
               REACT_APP.state.response1[i].vertices
             );
-
             this.backgroundDrawing1.submittedStrokeIndex = strokeIndex;
             this.backgroundDrawing1.redrawStrokes();
 
@@ -346,7 +382,57 @@ export default class MenuView {
         }
       }
     };
-    let x, y, width, height, objectToMirror;
+    let x,
+      y,
+      width,
+      height,
+      objectToMirror,
+      drawingMode,
+      currentStroke,
+      strokes;
+    drawingMode = true;
+    currentStroke = [];
+    strokes = [];
+    if (previousUI !== undefined) {
+      if (previousUI.drawing) {
+        x = previousUI.drawing.x;
+        y = previousUI.drawing.y;
+        width = previousUI.drawing.width;
+        height = previousUI.drawing.height;
+        drawingMode = previousUI.drawing.drawingMode
+          ? previousUI.drawing.drawingMode
+          : true;
+        currentStroke = previousUI.drawing.currentStroke
+          ? previousUI.drawing.currentStroke
+          : [];
+        strokes = previousUI.drawing.strokes ? previousUI.drawing.strokes : [];
+      }
+    }
+    parameters = {
+      p: p,
+      objectToMirror: backgroundDrawingContainter,
+      x: x,
+      y: y,
+      width: width,
+      height: height,
+      w: w,
+      h: h,
+      color: "white",
+      lerpSpeed: windowResized ? 0.3 : 0.1
+    };
+    // BACKGROUND_DRAW
+    this.drawing = new DrawingContainer(parameters);
+    this.drawing.setCurrentStroke(currentStroke);
+    this.drawing.setStrokes(strokes);
+    this.drawing.setFill(true);
+    this.drawing.setLengthOfDrawingSquare(menuContainer.width);
+    let performClickOnce = false;
+    this.drawing.setClickType(performClickOnce);
+    this.drawing.penMode = drawingMode;
+    this.drawing.mouseClickfunc = this.drawing.penMode
+      ? this.buildStroke
+      : this.removeStroke;
+    _ui.push(this.drawing);
     if (!windowResized) {
       setTimeout(() => {
         instantiateBackgroundDrawings();
@@ -424,7 +510,15 @@ export default class MenuView {
           this.enterSiteButton.clickedColor = p.color(244, 129, 130);
           this.enterSiteButton.mouseClickfunc = () => {
             setTimeout(() => {
-              changeView();
+              if (this.drawing) {
+                if (
+                  this.drawing.strokes &&
+                  !this.drawing.userIsDrawingOrErasing
+                ) {
+                  this.clearStrokes();
+                  changeView();
+                }
+              }
             }, 250);
           };
           this.enterSiteButton.setString("ENTER SITE");
@@ -470,7 +564,15 @@ export default class MenuView {
           this.justDrawButton.clickedColor = p.color(244, 129, 130);
           this.justDrawButton.mouseClickfunc = () => {
             setTimeout(() => {
-              changeView(4, 6);
+              if (this.drawing) {
+                if (
+                  this.drawing.strokes &&
+                  !this.drawing.userIsDrawingOrErasing
+                ) {
+                  this.clearStrokes();
+                  changeView(4, 6);
+                }
+              }
             }, 250);
           };
           this.justDrawButton.setString("DRAW");
@@ -511,7 +613,15 @@ export default class MenuView {
           this.justWatchDrawingsButton.clickedColor = p.color(244, 129, 130);
           this.justWatchDrawingsButton.mouseClickfunc = () => {
             setTimeout(() => {
-              changeView(8, 9);
+              if (this.drawing) {
+                if (
+                  this.drawing.strokes &&
+                  !this.drawing.userIsDrawingOrErasing
+                ) {
+                  this.clearStrokes();
+                  changeView(8, 9);
+                }
+              }
             }, 250);
           };
           this.justWatchDrawingsButton.setString("VIEW DRAWINGS");
@@ -552,7 +662,15 @@ export default class MenuView {
           this.justWannaJudgePplButton.clickedColor = p.color(244, 129, 130);
           this.justWannaJudgePplButton.mouseClickfunc = () => {
             setTimeout(() => {
-              changeView(7, 8);
+              if (this.drawing) {
+                if (
+                  this.drawing.strokes &&
+                  !this.drawing.userIsDrawingOrErasing
+                ) {
+                  this.clearStrokes();
+                  changeView(7, 8);
+                }
+              }
             }, 250);
           };
           this.justWannaJudgePplButton.setString("LIKE DRAWINGS");
