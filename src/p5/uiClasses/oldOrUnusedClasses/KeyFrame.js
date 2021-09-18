@@ -1,46 +1,57 @@
-export default class KeyFrame{
-    constructor(startVertices,endVertices){
-        super(startVertices,endVertices)
-        this.startPositions = startVertices;
-        this.endPositions = endVertices;
-        this.vertices = startVertices;
+export default class KeyFrame {
+  constructor(startVertices, endVertices) {
+    super(startVertices, endVertices);
+    this.startPositions = startVertices;
+    this.endPositions = endVertices;
+    this.vertices = startVertices;
 
-        // 1 for max speed
-        this.lerpSpeed = .4;
+    // 1 for max speed
+    this.lerpSpeed = 0.4;
 
-        this.vertexIsCloseEnoughDistance = .0001; //???
-                                                  // I think is relative to the
-                                                  // DrawingContainer size...
+    this.vertexIsCloseEnoughDistance = 0.0001; //???
+    // I think is relative to the
+    // DrawingContainer size...
 
-        this.finishedVerticesCount = 0;
-    }
-    // call lerp inside the draw method of AnimateDrawingContainer
-    lerp(){
-        for ( let i = 0; i < this.vertices.length; i++ ){
-            // each vertex object contains a 'finished' boolean
-            if (!this.vertices[i].finished){
-                // if the vertex has reached its destination
-                    // set its 'finished' boolean to true
-                    // and increment the finishedVerticesCount
-                if (Math.abs(this.endPositions[i].x - this.positions[i].x) <= this.vertexIsCloseEnoughDistance){
-                    this.vertices[i].finished = true;
-                    this.finishedVerticesCount++;
-                }
-            }
-            this.vertices[i].x = this.p.lerp(this.startPositions[i].x,this.endPositions[i].x, this.lerpSpeed)
-            this.vertices[i].y = this.p.lerp(this.startPositions[i].y,this.endPositions[i].y, this.lerpSpeed)
+    this.finishedVerticesCount = 0;
+  }
+  // call lerp inside the draw method of AnimateDrawingContainer
+  lerp() {
+    for (let i = 0; i < this.vertices.length; i++) {
+      // each vertex object contains a 'finished' boolean
+      if (!this.vertices[i].finished) {
+        // if the vertex has reached its destination
+        // set its 'finished' boolean to true
+        // and increment the finishedVerticesCount
+        if (
+          Math.abs(this.endPositions[i].x - this.positions[i].x) <=
+          this.vertexIsCloseEnoughDistance
+        ) {
+          this.vertices[i].finished = true;
+          this.finishedVerticesCount++;
         }
+      }
+      this.vertices[i].x = this.p.lerp(
+        this.startPositions[i].x,
+        this.endPositions[i].x,
+        this.lerpSpeed
+      );
+      this.vertices[i].y = this.p.lerp(
+        this.startPositions[i].y,
+        this.endPositions[i].y,
+        this.lerpSpeed
+      );
     }
-    allKeyFramesAtEndPosition(){
-        if ( this.finishedVerticesCount === this.endPositions.length ){
-            return true;
-        }
+  }
+  allKeyFramesAtEndPosition() {
+    if (this.finishedVerticesCount === this.endPositions.length) {
+      return true;
     }
-    resetFinishedBooleans(){
-        for ( let i = 0; i < this.positions.length; i++ ){
-            this.vertices[i].finished = false;
-        }
+  }
+  resetFinishedBooleans() {
+    for (let i = 0; i < this.positions.length; i++) {
+      this.vertices[i].finished = false;
     }
+  }
 }
 
 // drawSubmittedStrokes(){

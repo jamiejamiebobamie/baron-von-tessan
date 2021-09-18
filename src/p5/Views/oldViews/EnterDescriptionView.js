@@ -1,140 +1,175 @@
-import TextBox from '../../uiClasses/TextBox'
-import Container from '../../uiClasses/Container'
-import DisplayDrawingContainer from '../../uiClasses/DisplayDrawingContainerContainer'
-import TextInput from '../../uiClasses/TextInputContainer'
-import Keyboard from '../../uiClasses/Keyboard'
+import TextBox from "../../uiClasses/TextBox";
+import Container from "../../uiClasses/Container";
+import DisplayDrawingContainer from "../../uiClasses/DisplayDrawingContainerContainer";
+import TextInput from "../../uiClasses/TextInputContainer";
+import Keyboard from "../../uiClasses/Keyboard";
 
 export default class EnterDescriptionView {
-    constructor(){
-        this.displayDrawingSpace = undefined;
-        this.inputTextBox = undefined;
+  constructor() {
+    this.displayDrawingSpace = undefined;
+    this.inputTextBox = undefined;
+  }
+  getUI() {
+    return this;
+  }
+  setUI(p, w, h, REACT_APP, windowResized, previousUI) {
+    let _ui = [];
+
+    let drawingSpaceWidth = w > h ? w * (2 / 3) : w;
+    let drawingSpaceHeight = w > h ? h : h * (2 / 3);
+    let lengthOfDrawingSquare = w > h ? drawingSpaceHeight : drawingSpaceWidth;
+    let longerSideOfScreen = w > h ? w : h;
+    lengthOfDrawingSquare =
+      lengthOfDrawingSquare > longerSideOfScreen * (2 / 3)
+        ? longerSideOfScreen * (2 / 3)
+        : lengthOfDrawingSquare;
+    let drawingHasBeenDrawn = false;
+    if (previousUI) {
+      if (previousUI.displayDrawingSpace) {
+        drawingHasBeenDrawn =
+          previousUI.displayDrawingSpace.drawingHasBeenDrawn;
+        clearTimeout(previousUI.displayDrawingSpace.timeOut);
+      }
     }
-    getUI(){ return this; }
-    setUI(p,w,h,REACT_APP, windowResized, previousUI){
-        let _ui = []
+    let wildcard = {
+      windowResized: windowResized,
+      drawingHasBeenDrawn: drawingHasBeenDrawn
+    };
+    this.displayDrawingSpace = new DisplayDrawingContainer({
+      p: p,
+      w: w,
+      h: h,
+      width: lengthOfDrawingSquare,
+      height: lengthOfDrawingSquare,
+      len: 3,
+      index: 0,
+      color: "lightgrey",
+      wildcard: wildcard
+    }); //len:2,index:0,
+    this.displayDrawingSpace.setFill(true);
+    this.displayDrawingSpace.setLengthOfDrawingSquare(lengthOfDrawingSquare);
+    let submittedStrokes = REACT_APP.state.drawingData;
+    this.displayDrawingSpace.setSubmittedStrokes(submittedStrokes);
 
-        let drawingSpaceWidth = w > h ? w*(2/3) : w;
-        let drawingSpaceHeight = w > h ? h : h*(2/3);
-        let lengthOfDrawingSquare = w > h ? drawingSpaceHeight : drawingSpaceWidth;
-        let longerSideOfScreen = w > h ? w : h;
-        lengthOfDrawingSquare = lengthOfDrawingSquare > longerSideOfScreen*(2/3) ? longerSideOfScreen*(2/3) : lengthOfDrawingSquare;
-        let drawingHasBeenDrawn = false
-        if (previousUI){
-            if (previousUI.displayDrawingSpace){
-                drawingHasBeenDrawn = previousUI.displayDrawingSpace.drawingHasBeenDrawn
-                clearTimeout(previousUI.displayDrawingSpace.timeOut)
-            }
+    ////// ----- ////// TO LOOP.
+    // this.displayDrawingSpace.setLoopToTrueToLoopFinishedDrawing()
+
+    let beginRedrawingStrokesFunc = () => {
+      this.displayDrawingSpace.setSubmittedStrokeIndex(0);
+      let redrawStrokes = timeOutVar => {
+        if (this.displayDrawingSpace.drawingHasBeenDrawn) {
+          if (this.displayDrawingSpace.loop) {
+            this.displayDrawingSpace.drawingHasBeenDrawn = false;
+            this.displayDrawingSpace.submittedStrokeIndex = 0;
+            clearTimeout(timeOutVar);
+          } else {
+            return;
+          }
         }
-        let wildcard = {windowResized:windowResized,drawingHasBeenDrawn:drawingHasBeenDrawn}
-        this.displayDrawingSpace = new DisplayDrawingContainer({p:p,w:w,h:h,width:lengthOfDrawingSquare,height:lengthOfDrawingSquare,len:3,index:0,color:'lightgrey',wildcard:wildcard})//len:2,index:0,
-        this.displayDrawingSpace.setFill(true)
-        this.displayDrawingSpace.setLengthOfDrawingSquare(lengthOfDrawingSquare)
-        let submittedStrokes = REACT_APP.state.drawingData
-        this.displayDrawingSpace.setSubmittedStrokes(submittedStrokes)
-
-        ////// ----- ////// TO LOOP.
-        // this.displayDrawingSpace.setLoopToTrueToLoopFinishedDrawing()
-
-        let beginRedrawingStrokesFunc = () => {
-            this.displayDrawingSpace.setSubmittedStrokeIndex(0)
-            let redrawStrokes = (timeOutVar) => {
-                if (this.displayDrawingSpace.drawingHasBeenDrawn){
-                    if (this.displayDrawingSpace.loop){
-                        this.displayDrawingSpace.drawingHasBeenDrawn = false;
-                        this.displayDrawingSpace.submittedStrokeIndex = 0;
-                        clearTimeout(timeOutVar)
-                    } else {
-                        return;
-                    }
-                }
-                if (this.displayDrawingSpace.submittedStrokeIndex < this.displayDrawingSpace.submittedStrokes.length) {
-                    this.displayDrawingSpace.submittedStrokeIndex += 1
-                    timeOutVar = setTimeout(redrawStrokes, 1,timeOutVar);
-                } else {
-                    this.displayDrawingSpace.drawingHasBeenDrawn = true;
-                    // pause three seconds to display drawing.
-                        // then loop if this.displayDrawingSpace.loop
-                        // is set to true otherwise return.
-                    timeOutVar = setTimeout(redrawStrokes, 3000,timeOutVar);
-                }
-            }
-            redrawStrokes();
-        }
-        if (!windowResized){
-            beginRedrawingStrokesFunc();
-        }
-        _ui.push(this.displayDrawingSpace)
-
-        let width = w>h ? w/3.5 : w*.8 ;
-        let descriptionOffsetX = w>h ? w*(-.05) : w*(.10);
-        let descriptionOffsetY = w>h ? h*(-.1) : h*(-.05);
-        let descriptionContainer = new Container({p:p,w:w,h:h,width:width, offsetX:descriptionOffsetX,offsetY:descriptionOffsetY,len:3,index:2,row:h>w})
-        _ui.push(descriptionContainer)
-
-
-        let previouslySubmittedText = null;
-        let previouslySelected = null;
-
-        if (previousUI){
-            if (previousUI.inputTextBox) {
-                if (previousUI.inputTextBox.text !== undefined) {
-                        previouslySubmittedText = previousUI.inputTextBox.text
-                    }
-                    if (previousUI.inputTextBox.textBoxSelected !== false){
-                        previouslySelected = true
-                    }
-                }
-
-            }
-        let toggleKeyboardForMobile = () => {
-            let previousUI = this.getUI()
-            // true stops the the timeout function from being called again.
-            let windowRedrawn = true;
-            this.setUI(p,w,h,REACT_APP, windowRedrawn, previousUI)
-        }
-        this.inputTextBox = new TextInput({p:p,w:w,h:h,parent:descriptionContainer,row:w>h,color:"white",mouseClickfunc:toggleKeyboardForMobile})//offsetY:descriptionOffsetY,offsetX:descriptionOffsetX,
-        let performClickOnce = true;
-        this.inputTextBox.setClickType(performClickOnce)
-        this.inputTextBox.setInteractivity(false)
-
-        if (previouslySubmittedText){
-            this.inputTextBox.setDisplayText(previouslySubmittedText)
+        if (
+          this.displayDrawingSpace.submittedStrokeIndex <
+          this.displayDrawingSpace.submittedStrokes.length
+        ) {
+          this.displayDrawingSpace.submittedStrokeIndex += 1;
+          timeOutVar = setTimeout(redrawStrokes, 1, timeOutVar);
         } else {
-            this.inputTextBox.setDisplayText("")//I drew a... \n(click to finish the sentence).")
+          this.displayDrawingSpace.drawingHasBeenDrawn = true;
+          // pause three seconds to display drawing.
+          // then loop if this.displayDrawingSpace.loop
+          // is set to true otherwise return.
+          timeOutVar = setTimeout(redrawStrokes, 3000, timeOutVar);
         }
-
-        if (previouslySelected){
-            this.inputTextBox.textBoxSelected = true;
-        }
-        this.inputTextBox.setReferenceToAPP(REACT_APP)
-
-        _ui.push(this.inputTextBox)
-
-        if (REACT_APP.state.isMobile){
-            let mobileKeyboard = new Keyboard(
-                {
-                    p:p,
-                    windowWidth:w,
-                    windowHeight:h,
-                    row:true,
-                    len:3,
-                    index:1,
-                    height:h/2.9,
-                    width:w/1.1,
-                    offsetX:w/25,
-                    offsetY:h/3.3,
-
-
-                    // color:"black"
-                }
-            )
-            mobileKeyboard.setReferenceToInputBox(this.inputTextBox)
-            mobileKeyboard.setInteractivity(true)
-            _ui.push(mobileKeyboard)
-            this.inputTextBox.setMobileKeyboardReference(mobileKeyboard)
-        }
-        return _ui;
+      };
+      redrawStrokes();
+    };
+    if (!windowResized) {
+      beginRedrawingStrokesFunc();
     }
+    _ui.push(this.displayDrawingSpace);
+
+    let width = w > h ? w / 3.5 : w * 0.8;
+    let descriptionOffsetX = w > h ? w * -0.05 : w * 0.1;
+    let descriptionOffsetY = w > h ? h * -0.1 : h * -0.05;
+    let descriptionContainer = new Container({
+      p: p,
+      w: w,
+      h: h,
+      width: width,
+      offsetX: descriptionOffsetX,
+      offsetY: descriptionOffsetY,
+      len: 3,
+      index: 2,
+      row: h > w
+    });
+    _ui.push(descriptionContainer);
+
+    let previouslySubmittedText = null;
+    let previouslySelected = null;
+
+    if (previousUI) {
+      if (previousUI.inputTextBox) {
+        if (previousUI.inputTextBox.text !== undefined) {
+          previouslySubmittedText = previousUI.inputTextBox.text;
+        }
+        if (previousUI.inputTextBox.textBoxSelected !== false) {
+          previouslySelected = true;
+        }
+      }
+    }
+    let toggleKeyboardForMobile = () => {
+      let previousUI = this.getUI();
+      // true stops the the timeout function from being called again.
+      let windowRedrawn = true;
+      this.setUI(p, w, h, REACT_APP, windowRedrawn, previousUI);
+    };
+    this.inputTextBox = new TextInput({
+      p: p,
+      w: w,
+      h: h,
+      parent: descriptionContainer,
+      row: w > h,
+      color: "white",
+      mouseClickfunc: toggleKeyboardForMobile
+    }); //offsetY:descriptionOffsetY,offsetX:descriptionOffsetX,
+    let performClickOnce = true;
+    this.inputTextBox.setClickType(performClickOnce);
+    this.inputTextBox.setInteractivity(false);
+
+    if (previouslySubmittedText) {
+      this.inputTextBox.setDisplayText(previouslySubmittedText);
+    } else {
+      this.inputTextBox.setDisplayText(""); //I drew a... \n(click to finish the sentence).")
+    }
+
+    if (previouslySelected) {
+      this.inputTextBox.textBoxSelected = true;
+    }
+    this.inputTextBox.setReferenceToAPP(REACT_APP);
+
+    _ui.push(this.inputTextBox);
+
+    if (REACT_APP.state.isMobile) {
+      let mobileKeyboard = new Keyboard({
+        p: p,
+        windowWidth: w,
+        windowHeight: h,
+        row: true,
+        len: 3,
+        index: 1,
+        height: h / 2.9,
+        width: w / 1.1,
+        offsetX: w / 25,
+        offsetY: h / 3.3
+
+        // color:"black"
+      });
+      mobileKeyboard.setReferenceToInputBox(this.inputTextBox);
+      mobileKeyboard.setInteractivity(true);
+      _ui.push(mobileKeyboard);
+      this.inputTextBox.setMobileKeyboardReference(mobileKeyboard);
+    }
+    return _ui;
+  }
 }
 
 //

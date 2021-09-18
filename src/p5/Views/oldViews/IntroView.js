@@ -1,30 +1,44 @@
-import TextBox from '../../uiClasses/TextBox'
-import Container from '../../uiClasses/Container'
+import TextBox from "../../uiClasses/TextBox";
+import Container from "../../uiClasses/Container";
 // import ImageContainer from '../uiClasses/ImageContainer'
 
 export default class IntroView {
-    getUI(previousUI){}
-    setUI(p,w,h,REACT_APP,windowResized){
-        let _ui = []
-        let params = {p:p,w:w,h:h, row:true}
-        let textBoxContainer = new Container(params)
-        _ui.push(textBoxContainer)
-        params = {p:p,w:w,h:h, row:true, width:w/2, height:h/2, offsetX:-w/24, offsetY:-h/8, parent:textBoxContainer}
-        let textBox = new TextBox(params)
-        textBox.setString("I am Baron von Tessan\nRosen Blatt the 4th, your Queen-Regent,\npresiding over the affairs of")
-        textBox.setTextColor("black")
-        textBox.setFontSize(20)
-        // textBox.setFontStyle(REACT_APP.state.fontStyle)
-        // console.log(REACT_APP.state.fontStyle)
-        // textBox.setFontStyle('./fonts/PrintClearly.otf')
-        _ui.push(textBox)
+  getUI(previousUI) {}
+  setUI(p, w, h, REACT_APP, windowResized) {
+    let _ui = [];
+    let params = { p: p, w: w, h: h, row: true };
+    let textBoxContainer = new Container(params);
+    _ui.push(textBoxContainer);
+    params = {
+      p: p,
+      w: w,
+      h: h,
+      row: true,
+      width: w / 2,
+      height: h / 2,
+      offsetX: -w / 24,
+      offsetY: -h / 8,
+      parent: textBoxContainer
+    };
+    let textBox = new TextBox(params);
+    textBox.setString(
+      "I am Baron von Tessan\nRosen Blatt the 4th, your Queen-Regent,\npresiding over the affairs of"
+    );
+    textBox.setTextColor("black");
+    textBox.setFontSize(20);
+    // textBox.setFontStyle(REACT_APP.state.fontStyle)
+    // console.log(REACT_APP.state.fontStyle)
+    // textBox.setFontStyle('./fonts/PrintClearly.otf')
+    _ui.push(textBox);
 
-        // stops setTimeout from being called when the window is resized.
-        if (!windowResized){
-            setTimeout(()=>{REACT_APP.testViewSwitch();},2000) // 8000
-        }
-        return _ui;
+    // stops setTimeout from being called when the window is resized.
+    if (!windowResized) {
+      setTimeout(() => {
+        REACT_APP.testViewSwitch();
+      }, 2000); // 8000
     }
+    return _ui;
+  }
 }
 
 //
