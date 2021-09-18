@@ -12,8 +12,7 @@ class App extends Component {
     this.state = {
       drawingDescription: "",
       drawingData: [],
-      response1: [],
-      response2: [],
+      response1: simulatedResponse.data,
       isMobile: isMobile,
       flaggedIndices: [],
       isUsingSimulatedData: true
@@ -23,48 +22,22 @@ class App extends Component {
     // binding 'this' isn't necessary for callbacks.
     this.SketchWrapper = new Sketch(this);
     this.Sketch = this.SketchWrapper.sketch;
-
-    // backend often requires time to wake up in order to return response.
-    // sometimes this takes as long as 30 seconds.
-    // initialize response1 and response2 with simulated data
-    // while user waits for response.
-    this.fetchDrawings(0, false, true);
-    setTimeout(() => {
-      this.fetchDrawings(0, false, true);
-    }, 1000);
-
-    // call fetchDrawings() twice to fill both response1 and response2 with
-    // real data
-    this.fetchDrawings(8);
-    setTimeout(() => {
-      this.fetchDrawings(8);
-    }, 1000);
+    this.fetchDrawings(6);
   }
-  fetchDrawings(number, shouldFetchLikedDrawings, firstCall) {
-    let url;
-    if (shouldFetchLikedDrawings)
-      url =
-        "https://baron-von-tessan-backend.herokuapp.com/api/v1/liked-drawings/" +
-        number;
-    else
-      url =
-        "https://baron-von-tessan-backend.herokuapp.com/api/v1/random-drawings/" +
-        number;
-    if (firstCall) {
-      this.setState({ response2: simulatedResponse.data });
-      this.setState({ isUsingSimulatedData: true });
-    }
+  fetchDrawings(number) {
+    const url =
+      "https://baron-von-tessan-backend.herokuapp.com/api/v1/random-drawings/" +
+      number;
     console.log("fetching more drawings");
-    this.setState({ response1: this.state.response2 });
     fetch(url)
       .then(response => response.json())
       .then(data => {
-        this.setState({ response2: data.drawing_data });
+        this.setState({ response1: data.drawing_data });
         this.setState({ isUsingSimulatedData: false });
       })
       .catch(error => {
         console.error("Error:", error);
-        this.setState({ response2: simulatedResponse.data });
+        this.setState({ response1: simulatedResponse.data });
         this.setState({ isUsingSimulatedData: true });
       });
   }
@@ -148,7 +121,7 @@ class App extends Component {
     }
     // Query backend for new data.
     console.log("Queried backend for new data.");
-    this.fetchDrawings(8);
+    this.fetchDrawings(6);
   }
   componentDidMount() {
     // https://p5js.org/reference/#/p5/p5
