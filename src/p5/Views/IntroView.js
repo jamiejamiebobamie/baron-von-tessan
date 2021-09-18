@@ -10,6 +10,7 @@ export default class IntroView {
     this.baronDialogIndex = 0;
     this.timeOutVar = undefined;
     this.dialogText = baronData.introDescriptionData;
+    this.isDialogFinished = false;
   }
   addCharacterToDialog() {
     if (this.baronDialogIndex < this.dialogText.length) {
@@ -23,6 +24,7 @@ export default class IntroView {
       }, 100);
     } else {
       clearTimeout(this.timeOutVar);
+      this.isDialogFinished = true;
       return;
     }
   }
@@ -212,9 +214,11 @@ export default class IntroView {
             this.drawing.submittedStrokeIndex = 0;
             clearTimeout(timeOutVar);
           } else {
-            clearTimeout(timeOutVar);
-            changeView();
-            return;
+            if (this.isDialogFinished) {
+              clearTimeout(timeOutVar);
+              changeView();
+              return;
+            }
           }
         }
         if (

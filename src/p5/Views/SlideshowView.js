@@ -28,7 +28,6 @@ export default class SlideshowView {
     } else {
       this.allCharsAdded = true;
       clearTimeout(this.timeOutVar);
-      console.log("lolololo", this.allCharsAdded);
       return;
     }
   }
@@ -164,7 +163,6 @@ export default class SlideshowView {
             redrawStrokes();
           }, 500);
         } else if (this.allCharsAdded) {
-          console.log("whawha");
           this.drawing.drawingHasBeenDrawn = true;
           // pause three seconds to display drawing.
           // then loop if this.displayDrawingSpace.loop
@@ -177,7 +175,6 @@ export default class SlideshowView {
             timeOutVar
           );
         } else {
-          console.log("yayayay");
           setTimeout(() => {
             redrawStrokes();
           }, 500);

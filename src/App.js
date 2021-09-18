@@ -33,7 +33,6 @@ class App extends Component {
     const url =
       "https://baron-von-tessan-backend.herokuapp.com/api/v1/random-drawings/" +
       number;
-    console.log("fetching more drawings");
     fetch(url)
       .then(response => response.json())
       .then(data => {
@@ -42,7 +41,7 @@ class App extends Component {
         this.setState({ isFetchingData: false });
       })
       .catch(error => {
-        console.error("Error:", error);
+        // console.error("Error:", error);
         this.setState({ response1: simulatedResponse.data });
         this.setState({ isUsingSimulatedData: true });
         this.setState({ isFetchingData: false });
@@ -50,7 +49,7 @@ class App extends Component {
   }
   handleSubmitDrawing(drawingData) {
     this.setState({ drawingData: drawingData });
-    console.log(drawingData);
+    // console.log(drawingData);
   }
   handleSubmitDescription(drawingDescription) {
     if (drawingDescription) {
@@ -65,7 +64,7 @@ class App extends Component {
           drawingDescription: drawingDescription,
           drawingData: this.state.drawingData
         };
-        console.log("Sending to backend.");
+        // console.log("Sending to backend.");
         fetch(
           "https://baron-von-tessan-backend.herokuapp.com/api/v1/add-drawing-to-db",
           {
@@ -78,10 +77,10 @@ class App extends Component {
         )
           .then(response => response.json())
           .then(data => {
-            console.log("Success:", data.success);
+            // console.log("Success:", data.success);
           })
           .catch(error => {
-            console.error("Error:", error);
+            // console.error("Error:", error);
           });
       }
     }
@@ -96,7 +95,6 @@ class App extends Component {
           const id = this.state.response1[index]._id;
           _ids.push(id);
         }
-        console.log("Sending to backend.");
         const data = { _ids: _ids };
         fetch(
           "https://baron-von-tessan-backend.herokuapp.com/api/v1/increment-likes",
@@ -110,10 +108,10 @@ class App extends Component {
         )
           .then(response => response.json())
           .then(data => {
-            console.log("Success:", data.success);
+            // console.log("Success:", data.success);
           })
           .catch(error => {
-            console.error("Error:", error);
+            // console.error("Error:", error);
           });
       }
     }

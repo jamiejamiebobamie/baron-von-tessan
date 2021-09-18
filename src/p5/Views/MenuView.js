@@ -36,6 +36,8 @@ export default class MenuView {
     if (this.drawing) {
       if (this.drawing.strokes && !this.drawing.userIsDrawingOrErasing) {
         this.drawing.strokes = [];
+        this.drawing.drawingHasBeenDrawn = false;
+        this.drawing.submittedStrokeIndex = 0;
       }
     }
   }
