@@ -110,14 +110,13 @@ export default class MenuView {
     let parameters;
     /// ---- ******** BEGIN WIREFRAME OBJECTS
     // wireframe objects are not drawn to screen.
-    wildcard = { shrinkAmountWidth: 1, shrinkAmountHeight: 1 };
+    wildcard = { shrinkAmountWidth: 0.99, shrinkAmountHeight: 0.99 };
     parameters = {
       p: p,
       windowWidth: w,
       windowHeight: h,
-      // width: w > 800 ? 800 : w
       width: w > h ? w : h,
-      offsetX: 0, //w > 800 ? (w - 800) / 2 : 0,
+      offsetX: 0,
       row: true,
       wildcard: wildcard
     };
@@ -216,7 +215,6 @@ export default class MenuView {
     // _ui objects are drawn to screen and mirror a wireframe object
     const instantiateBackgroundDrawings = () => {
       if (REACT_APP.state.response1.length) {
-        // const lengthOfResponse = REACT_APP.state.response.length
         for (let i = 0; i < objectsTotest.length; i++) {
           let drawingHasBeenDrawn = false;
           let strokeIndex = 0;
@@ -238,7 +236,7 @@ export default class MenuView {
             wildcard = {
               windowResized: windowResized,
               drawingHasBeenDrawn: drawingHasBeenDrawn
-            }; //,strokeColor:objectsTotest[i].color}
+            };
             parameters = {
               p: p,
               w: w,
@@ -250,7 +248,7 @@ export default class MenuView {
               height: height,
               wildcard: wildcard,
               lerpSpeed: 0.01
-            }; //,color:"lightgrey"}
+            };
             this.backgroundDrawing1 = new DisplayDrawingContainer(parameters);
             this.backgroundDrawing1.setLengthOfDrawingSquare(
               objectsTotest[i].width
@@ -324,7 +322,7 @@ export default class MenuView {
             wildcard = {
               windowResized: windowResized,
               drawingHasBeenDrawn: drawingHasBeenDrawn
-            }; //,strokeColor:objectsTotest[i].color}
+            };
             parameters = {
               p: p,
               w: w,
@@ -336,7 +334,7 @@ export default class MenuView {
               height: height,
               wildcard: wildcard,
               lerpSpeed: 0.01
-            }; //,color:"lightgrey"}
+            };
             this.backgroundDrawing3 = new DisplayDrawingContainer(parameters);
             this.backgroundDrawing3.setLengthOfDrawingSquare(
               objectsTotest[i].width
@@ -420,12 +418,14 @@ export default class MenuView {
       w: w,
       h: h,
       color: "white",
-      lerpSpeed: windowResized ? 0.3 : 0.1
+      // lerpSpeed: windowResized ? 0.3 : 0.1
+      lerpSpeed: 1
     };
     // BACKGROUND_DRAW
     this.drawing = new DrawingContainer(parameters);
     this.drawing.setCurrentStroke(currentStroke);
     this.drawing.setStrokes(strokes);
+    // this.drawing.setStroke(true);
     this.drawing.setFill(true);
     this.drawing.setLengthOfDrawingSquare(menuContainer.width);
     let performClickOnce = false;

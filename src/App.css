@@ -6,17 +6,19 @@ body {
   overflow: hidden;
   position: relative;
   background-color: white;
+  margin: 0;
   /* should disable double tapping zoom action on mobile */
   touch-action: manipulation;
 }
 
 .sketch-holder {
-  position: absolute;
+  /* position: absolute;
   display: flex;
   flex-direction: column;
-  align-self: center;
-  margin-left: -45vw;
-  margin-top: 3vh;
-  margin-bottom: auto;
-  height: 100%;
+  align-self: center; */
+  /* margin-left: -45vw; */
+  /* margin-top: 3vh; */
+  /* margin-bottom: auto; */
+  /* height: 100%; */
+  /* left: -100px; */
 }

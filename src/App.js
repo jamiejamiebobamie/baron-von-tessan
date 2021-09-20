@@ -16,20 +16,15 @@ class App extends Component {
       isMobile: isMobile,
       flaggedIndices: [],
       isUsingSimulatedData: true,
-      shouldFetchData: false,
-      isFetchingData: false
+      shouldFetchData: false
     };
     this.myRef = React.createRef();
     // passing in a reference to the app's scope.
     // binding 'this' isn't necessary for callbacks.
     this.SketchWrapper = new Sketch(this);
     this.Sketch = this.SketchWrapper.sketch;
-    // this.fetchDrawings(6);
   }
   fetchDrawings(number) {
-    this.setState({ shouldFetchData: false });
-
-    this.setState({ isFetchingData: true });
     const url =
       "https://baron-von-tessan-backend.herokuapp.com/api/v1/random-drawings/" +
       number;
@@ -38,14 +33,15 @@ class App extends Component {
       .then(data => {
         this.setState({ response1: data.drawing_data });
         this.setState({ isUsingSimulatedData: false });
-        this.setState({ isFetchingData: false });
+        // this.setState({ shouldFetchData: false });
       })
       .catch(error => {
         // console.error("Error:", error);
         this.setState({ response1: simulatedResponse.data });
         this.setState({ isUsingSimulatedData: true });
-        this.setState({ isFetchingData: false });
+        // this.setState({ shouldFetchData: false });
       });
+    this.setState({ shouldFetchData: false });
   }
   handleSubmitDrawing(drawingData) {
     this.setState({ drawingData: drawingData });
@@ -76,12 +72,8 @@ class App extends Component {
           }
         )
           .then(response => response.json())
-          .then(data => {
-            // console.log("Success:", data.success);
-          })
-          .catch(error => {
-            // console.error("Error:", error);
-          });
+          .then(data => {})
+          .catch(error => {});
       }
     }
   }
@@ -107,12 +99,8 @@ class App extends Component {
           }
         )
           .then(response => response.json())
-          .then(data => {
-            // console.log("Success:", data.success);
-          })
-          .catch(error => {
-            // console.error("Error:", error);
-          });
+          .then(data => {})
+          .catch(error => {});
       }
     }
   }
@@ -138,7 +126,7 @@ class App extends Component {
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevState.shouldFetchData !== this.state.shouldFetchData) {
-      if (this.state.shouldFetchData && !this.state.isFetchingData) {
+      if (this.state.shouldFetchData) {
         this.fetchDrawings(6);
       }
     }

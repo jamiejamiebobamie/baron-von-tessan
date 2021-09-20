@@ -69,6 +69,7 @@ export default class Sketch {
   // one of the options on the menu view other than 'ENTER SITE'.
   // othewise views proceed in sequence.
   changeView(desiredViewIndex, lengthOfViews) {
+    console.log(this.REACT_APP.state.shouldFetchData);
     if (lengthOfViews !== undefined) {
       this.lengthOfViews = lengthOfViews;
     }
@@ -113,8 +114,8 @@ export default class Sketch {
       this.font = p.loadFont("fonts/PrintClearly.otf");
     };
     p.setup = () => {
-      w = p.windowWidth - p.windowWidth / 10;
-      h = p.windowHeight - p.windowHeight / 10;
+      w = p.windowWidth > 1500 ? 1500 : p.windowWidth; // - p.windowWidth / 10;
+      h = p.windowHeight > 1500 ? 1500 : p.windowHeight; //- p.windowHeight / 10;
       p.createCanvas(w, h);
       p.frameRate(24);
       p.textAlign(p.CENTER, p.CENTER);
@@ -133,8 +134,8 @@ export default class Sketch {
       );
     };
     p.windowResized = () => {
-      w = p.windowWidth - p.windowWidth / 10;
-      h = p.windowHeight - p.windowHeight / 10;
+      w = p.windowWidth > 1500 ? 1500 : p.windowWidth; // - p.windowWidth / 10;
+      h = p.windowHeight > 1500 ? 1500 : p.windowHeight; //- p.windowHeight / 10;
       p.resizeCanvas(w, h);
       let windowResized = true;
       let previousUI = this.views[this.currentViewIndex].getUI();

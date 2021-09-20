@@ -93,12 +93,11 @@ export default class FlagInappropriateContentView {
       parent: topThirdOfScreen
     };
     let submitButtonArea = new Wireframe(parameters);
-
     wildcard = { shrinkAmountWidth: 1, shrinkAmountHeight: 1 };
     parameters = {
       p: p,
       windowWidth: w,
-      windowHeight: (h * 2) / 3,
+      windowHeight: (h * 1.75) / 3,
       offsetY: (h * 1) / 3,
       color: "green",
       wildcard: wildcard
