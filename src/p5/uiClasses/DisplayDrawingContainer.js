@@ -70,14 +70,16 @@ export default class DisplayDrawingContainer extends Mirror {
       if (this.drawingHasBeenDrawn) {
         for (let i = 0; i < this.submittedStrokes.length; i++) {
           if (this.toLocation.length) {
-            driftX = this.toLocation[i].x;
-            driftY = this.toLocation[i].y;
+            driftX = this.toLocation[i] ? this.toLocation[i].x : -1;
+            driftY = this.toLocation[i] ? this.toLocation[i].y : -1;
           }
           this.p.ellipse(
-            this.submittedStrokes[i].x * this.lengthOfDrawingSquare +
+            (this.submittedStrokes[i] ? this.submittedStrokes[i].x : -1) *
+              this.lengthOfDrawingSquare +
               driftX +
               this.x,
-            this.submittedStrokes[i].y * this.lengthOfDrawingSquare +
+            (this.submittedStrokes[i] ? this.submittedStrokes[i].y : -1) *
+              this.lengthOfDrawingSquare +
               driftY +
               this.y,
             this.lengthOfDrawingSquare * 0.025,
@@ -88,21 +90,23 @@ export default class DisplayDrawingContainer extends Mirror {
         for (let i = 0; i < this.submittedStrokeIndex; i++) {
           if (this.toLocation.length) {
             driftX = this.p.lerp(
-              this.fromLocation[i].x,
-              this.toLocation[i].x,
+              this.fromLocation[i] ? this.fromLocation[i].x : -1,
+              this.toLocation[i] ? this.toLocation[i].x : -1,
               0.2
             );
             driftY = this.p.lerp(
-              this.fromLocation[i].y,
-              this.toLocation[i].y,
+              this.fromLocation[i] ? this.fromLocation[i].y : -1,
+              this.toLocation[i] ? this.toLocation[i].y : -1,
               0.2
             );
           }
           this.p.ellipse(
-            this.submittedStrokes[i].x * this.lengthOfDrawingSquare +
+            (this.submittedStrokes[i] ? this.submittedStrokes[i].x : -1) *
+              this.lengthOfDrawingSquare +
               driftX +
               this.x,
-            this.submittedStrokes[i].y * this.lengthOfDrawingSquare +
+            (this.submittedStrokes[i] ? this.submittedStrokes[i].y : -1) *
+              this.lengthOfDrawingSquare +
               driftY +
               this.y,
             this.lengthOfDrawingSquare * 0.025,

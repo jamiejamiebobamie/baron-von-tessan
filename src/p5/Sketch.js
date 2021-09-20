@@ -69,7 +69,6 @@ export default class Sketch {
   // one of the options on the menu view other than 'ENTER SITE'.
   // othewise views proceed in sequence.
   changeView(desiredViewIndex, lengthOfViews) {
-    console.log(this.REACT_APP.state.shouldFetchData);
     if (lengthOfViews !== undefined) {
       this.lengthOfViews = lengthOfViews;
     }
